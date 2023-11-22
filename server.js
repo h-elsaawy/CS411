@@ -63,40 +63,139 @@ app.get("/topchannels", (req,res) => {
     })
 })
 
-app.get("/", (req,res) => {
-    const q1 = `SELECT  channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
-                FROM distinct_videos v JOIN categories c USING (category_id, region_id)
-                WHERE c.title = ?
-                GROUP BY channel_title
-                ORDER BY num_videos DESC
-                LIMIT 5; 
-                `
-    const q2 = `SELECT  channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
-                FROM distinct_videos v JOIN categories c USING (category_id, region_id)
-                WHERE c.title = ?
-                GROUP BY channel_title
-                ORDER BY num_videos DESC
-                LIMIT 5; 
-                `
-    var topChannels = []
-        const fetchTopChannels = () => { 
-            try{ 
-                const res1 =  app.get("/topchannels");
-                console.log(res1)
-                // return res1
-            } catch(err) {
-                console.log(err)
-            }
-        }
-        fetchTopChannels()
-        console.log(topChannels)
-    db.query(q1 + q2, [topChannels] , (err,data) => {
-        if (err) return res.json(err)
-        
-        return res.json(data)
-    })
-})
+// app.get("/", (req,res) => {
 
+//     const q1 = `SELECT  channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
+//                 FROM distinct_videos v JOIN categories c USING (category_id, region_id)
+//                 WHERE c.title = ?
+//                 GROUP BY channel_title
+//                 ORDER BY num_videos DESC
+//                 LIMIT 5; 
+//                 `
+//     const q2 = `SELECT  channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
+//                 FROM distinct_videos v JOIN categories c USING (category_id, region_id)
+//                 WHERE c.title = ?
+//                 GROUP BY channel_title
+//                 ORDER BY num_videos DESC
+//                 LIMIT 5; 
+//                 `
+//     db.query(q1 + q2, topChannels, (err,data) => {
+//         if (err) return res.json(err)
+        
+//         return res.json(data)
+//     })
+// })
+
+// app.get("/", (req, res) => {
+//     const q1 = `SELECT c.category_id
+//                 FROM distinct_videos v JOIN categories c USING (category_id) 
+//                 GROUP BY c.category_id 
+//                 ORDER BY SUM(views) DESC 
+//                 LIMIT 5;`;
+
+//     db.query(q1, (err, data) => {
+//         if (err) return res.json(err);
+
+//         // Create an object to organize the results by category
+//         const organizedData = {};
+
+//         // Iterate through the results and organize them by category
+//         data.forEach((row) => {
+//             const category = row.category_id;
+//             if (!organizedData[category]) {
+//                 organizedData[category] = [];
+//             }
+//         });
+
+//         // Use the result to refine the next query
+//         const q2 = `SELECT channel_title, c.category_id, COUNT(video_id) AS num_videos, SUM(views) as num_views
+//                     FROM distinct_videos v LEFT JOIN categories c USING (category_id, region_id)
+//                     WHERE c.category_id IN (?) 
+//                     GROUP BY channel_title, c.category_id
+//                     ORDER BY num_videos DESC
+//                     LIMIT 5;`;
+//         for (let i = 0; i < 5; i++ ) {
+//             console.log(Object.keys(organizedData)[2])
+//             db.query(q2, [Object.keys(organizedData)[i]], (err, data) => {
+//                 if (err) return res.json(err);
+
+//                 // Iterate through the results and add them to the organizedData object
+//                 data.forEach((row) => {
+//                     const category = row.category_id;
+//                     organizedData[category].push({
+//                         channel_title: row.channel_title,
+//                         category_id: row.category_id,
+//                         num_videos: row.num_videos,
+//                         num_views: row.num_views,
+//                     });
+//                 });
+        
+//             });
+//         }
+//         return res.json(organizedData);
+
+//     });
+// });
+
+app.get("/", async (req, res) => {
+    const q1 = `SELECT c.category_id
+                FROM distinct_videos v JOIN categories c USING (category_id) 
+                GROUP BY c.category_id 
+                ORDER BY SUM(views) DESC 
+                LIMIT 5;`;
+
+    try {
+        const data = await new Promise((resolve, reject) => {
+            db.query(q1, (err, data) => {
+                if (err) reject(err);
+                resolve(data);
+            });
+        });
+
+        // Create an object to organize the results by category
+        const organizedData = {};
+
+        // Iterate through the results and organize them by category
+        data.forEach((row) => {
+            const category = row.category_id;
+            if (!organizedData[category]) {
+                organizedData[category] = [];
+            }
+        });
+
+        // Use the result to refine the next query
+        const q2 = `SELECT channel_title, c.category_id, COUNT(video_id) AS num_videos, SUM(views) as num_views
+                    FROM distinct_videos v LEFT JOIN categories c USING (category_id, region_id)
+                    WHERE c.category_id = ? 
+                    GROUP BY channel_title, c.category_id
+                    ORDER BY num_videos DESC
+                    LIMIT 5;`;
+
+        // Iterate through the keys and execute the query for each category
+        for (const category of Object.keys(organizedData)) {
+            const results = await new Promise((resolve, reject) => {
+                db.query(q2, [category], (err, data) => {
+                    if (err) reject(err);
+                    resolve(data);
+                });
+            });
+
+            // Add the results to the organizedData object
+            results.forEach((row) => {
+                organizedData[category].push({
+                    channel_title: row.channel_title,
+                    category_id: row.category_id,
+                    num_videos: row.num_videos,
+                    num_views: row.num_views,
+                });
+            });
+        }
+
+        return res.json(organizedData);
+    } catch (err) {
+        return res.json(err);
+    }
+});
 
 app.listen(8800, () => {
     console.log('Connected to backend!')
