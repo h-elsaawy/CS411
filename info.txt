@@ -1,0 +1,8 @@
+to start, navigate to this folder and type:
+first make sure nodejs from nodejs.org
+after that in command prompt 
+
+then install package dependancies in both (server and client) should default to installing what is in package.json
+
+then in each of the client and server, open a new command prompt and run:
+client$> npm start
