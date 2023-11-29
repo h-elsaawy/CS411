@@ -10,7 +10,7 @@ With the repository cloned, and nodejs installed, complete the following steps f
 
 After installing the node modules, you can now run the server and client by: 
   - cd into the directory folder (client or server) and type:
-  - directory$> npm start  (this starts the application. In the client, this will automatically open the site, you can also navigate to it using the browser by navigating to localhost:8800/ or localhost:3000)
+  - `directory$> npm start`  (this starts the application. In the client, this will automatically open the site, you can also navigate to it using the browser by navigating to localhost:8800/ or localhost:3000)
 
 
 ## Available Scripts
