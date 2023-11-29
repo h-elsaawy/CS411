@@ -1,8 +1,8 @@
 import express from 'express'
 import mysql from 'mysql'
 import cors from "cors"
- 
-import axios from "axios"
+import bodyParser from 'body-parser'
+ import JWT from 'jsonwebtoken' 
 // var path = require('path');
  
 const app = express()
@@ -16,10 +16,19 @@ const db = mysql.createConnection({
 })
 // IF THERE IS AUTHENTICATION ISSUE:
 // ALTER USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'Test1234';
- 
+
+//middleware for comms between front and backend
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  };
+  
+app.use(cors(corsOptions));
+
 // Allows sending client requests using JSON.
 app.use(express.json())
-app.use(cors())
+app.use(bodyParser.json());
+
  
 // app.set('views', path.join(__dirname, 'views'));
  
@@ -27,6 +36,22 @@ app.use(cors())
 //     res.json("hello this is the backend.")
 // })
  
+ 
+app.get("/getwatchlists/:username", (req, res) => {
+    const username = req.params.username
+    console.log("hi");
+    const q = `SELECT watchlist_id, title, json_arrayagg(channel_id), json_arrayagg(comments)
+                FROM Watchlist
+                WHERE username = ?
+                GROUP BY watchlist_id, title;
+                `;
+
+    db.query(q, [username], (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+    
 app.post("/user", (req,res) => {
     const q = "INSERT INTO users (`username`, `name`, `password`, `email`, `region_id`, `role`) VALUES (?)";
     const values = [
@@ -42,117 +67,40 @@ app.post("/user", (req,res) => {
         return res.json("User created successfully.");
     })
 })
- 
-app.get("/getwatchlists/:username", (req, res) => {
-    const username = req.params.username
-    console.log("hi");
-    const q2 = `SELECT watchlist_id, title, json_arrayagg(channel_id), json_arrayagg(comments)
-                FROM Watchlist
-                WHERE username = ?
-                GROUP BY watchlist_id, title;
-                `;
 
-    db.query(q2, [username], (err, data) => {
-        if (err) return res.json(err);
-        return res.json(data);
-    });
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+
+    // Insert user into the database
+    const result = await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password]);
+
+    // Handle result and send response
+    res.json({ success: true, message: 'User registered successfully' });
 });
+
+app.post("/login", async (req, res) => {
+
+    const { username, password } = req.body;
+    // Retrieve user from the database
+    db.query('SELECT username, password FROM users WHERE username = ?', [username], (err,data) => {
+        if (err) return res.json(err);
+
+        // user.length === 0 means no user tied to the username. 
+        if (data[0].username === "" || data[0].password != password) {
+            return res.json({ success: false, message: 'Invalid username or password' });
+        } else {
+
+        res.json({ success: true, username });   
+        }
     
-
-app.get("/checkUser", (req, res) => {
-    const q1 = `SELECT username
-                FROM user 
-                WHERE username = ?
-                `
-    username = req.body.user;
-    // password = req.body.pass;
-
-    db.query(q1, [username], (err, data) => {
-        if (err) reject(err);
-        resolve(data);
+  
     });
 
-    return res.send(data)
-})
+
+});
 
 
-    // try {
-    //     const data = await new Promise((resolve, reject) => {
-    //         db.query(q2, (err, data) => {
-    //             if (err) reject(err);
-    //             resolve(data);
-    //         });
-    //     });
-
-    //     console.log(data);
-
-    //     // Iterate through the results and organize them by category
-    //     data.forEach((row) => {
-    //         const category = row.category_id;
-    //         if (!organizedData[category]) {
-    //             organizedData[category] = [];
-    //             categoryOrder.push(category);
-    //         }
-    //     });
-
-
-
-
-    //     // Use the result to refine the next query
-    //     const q2 = `SELECT channel_title, c.category_id, COUNT(video_id) AS num_videos, SUM(views) as num_views
-    //                 FROM distinct_videos v LEFT JOIN categories c USING (category_id, region_id)
-    //                 WHERE c.category_id = ? 
-    //                 GROUP BY channel_title, c.category_id
-    //                 ORDER BY num_videos DESC
-    //                 LIMIT 5;`;
-
-    //     // Iterate through the keys and execute the query for each category
-    //     for (const category of Object.keys(organizedData)) {
-    //         const results = await new Promise((resolve, reject) => {
-    //             db.query(q2, [category], (err, data) => {
-    //                 if (err) reject(err);
-    //                 resolve(data);
-    //             });
-    //         });
-
-    //         // Add the results to the organizedData object
-    //         results.forEach((row) => {
-    //             organizedData[category].push({
-    //                 channel_title: row.channel_title,
-    //                 category_id: row.category_id,
-    //                 num_videos: row.num_videos,
-    //                 num_views: row.num_views,
-    //             });
-    //         });
-    //     }
-
-    //     organizedData["order"] = categoryOrder;
-
-    //     return res.json(organizedData);
-    // } catch (err) {
-    //     return res.json(err);
-    // }
-
- 
-app.get("/topchannels", (req,res) => {
-    const q1 = `SELECT c.title
-                FROM distinct_videos v JOIN categories c USING (category_id) 
-                GROUP BY c.title, category_id 
-                ORDER BY SUM(views) DESC 
-                LIMIT 2;
-                `
-    db.query(q1, (err,data) => {
-        if (err) return res.json(err)
- 
-            var result = [];
-            var keys = Object.keys(data);
-            keys.forEach(function(key){
-                result.push(data[key].title);
-            });
-            // console.log(result)
-        return res.send(result)
-    })
-})
 app.get("/topchannels", (req,res) => {
     const q1 = `SELECT c.title
                 FROM distinct_videos v JOIN categories c USING (category_id) 
@@ -189,16 +137,18 @@ app.get("/", async (req, res) => {
             });
         });
 
-        // Create an object to organize the results by category
-        const organizedData = {};
+       // Create an object to organize the results by category
+       const organizedData = {};
+       const categoryOrder = [];
 
-        // Iterate through the results and organize them by category
-        data.forEach((row) => {
-            const category = row.title;
-            if (!organizedData[category]) {
-                organizedData[category] = [];
-            }
-        });
+       // Iterate through the results and organize them by category
+       data.forEach((row) => {
+           const category = row.title;
+           if (!organizedData[category]) {
+               organizedData[category] = [];
+               categoryOrder.push(category);
+           }
+       });
 
         // Use the result to refine the next query
         const q2 = `SELECT channel_title, c.title, COUNT(video_id) AS num_videos, SUM(views) as num_views
@@ -228,7 +178,9 @@ app.get("/", async (req, res) => {
                 });
             });
         }
-        // organizedData['Order'] = [1,2,3,4]
+
+        organizedData["order"] = categoryOrder;
+
         return res.json(organizedData);
     } catch (err) {
         return res.json(err);
@@ -236,5 +188,5 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(8800, () => {
-    console.log('Connected to backend!')
+    console.log('Connected to backend on http://localhost:8800')
 })

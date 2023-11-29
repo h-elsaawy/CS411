@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
 import axios from "axios"
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);

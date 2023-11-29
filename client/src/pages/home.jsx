@@ -17,7 +17,6 @@ const Home = () => {
             try{ 
                 const res = await axios.get("http://localhost:8800/");
  
-                const setChannels = [setChannels1, setChannels2, setChannels3, setChannels4, setChannels5]
                 let orders = res.data["order"];
                 console.log(orders);
                 setChannels1(res.data[orders[0]]);
@@ -39,7 +38,7 @@ const Home = () => {
         <div>
             <button><Link to="/add">Add a new category</Link></button>
             <button><Link to="/videos">Search Videos</Link></button>
-            <button><Link to="/add">Sign In</Link></button>
+            <button><Link to="/login">Sign In</Link></button>
  
             <h1>Top Trending Channels</h1>
  

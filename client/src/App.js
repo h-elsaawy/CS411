@@ -8,7 +8,7 @@ import './App.css';
 import Home from "./pages/home.jsx"
 import Watchlists from "./pages/watchlists.jsx"
 import Videos from "./pages/videos.jsx"
-import Login from "./container/Login";
+import Login from "./container/Login.js";
 
 
 function App() {

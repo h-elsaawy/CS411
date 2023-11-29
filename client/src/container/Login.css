@@ -6,3 +6,10 @@
     justify-content: center;
     text-align: center;
   }
+  .submit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding:20px;
+  
+  }
