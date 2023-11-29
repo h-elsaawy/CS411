@@ -1,6 +1,17 @@
-# Getting Started with Create React App
+# Getting Started with the App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+First, ensure nodejs is installed from nodejs.org
+
+Next, if this is the first time cloning the reporsitory, do a git clone to your desired desitination directory.
+This should clone the two folders (client [frontend] and server [backend]) into your directory
+With the repository cloned, and nodejs installed, complete the following steps for each directory (client, and server) 
+  - cd into the directory folder (client or server) and type:
+  - directory$> npm install  (this installs all the node modules dependancies required by the package.json)
+
+After installing the node modules, you can now run the server and client by: 
+  - cd into the directory folder (client or server) and type:
+  - directory$> npm start  (this starts the application. In the client, this will automatically open the site, you can also navigate to it using the browser by navigating to localhost:8800/ or localhost:3000)
+
 
 ## Available Scripts
 
