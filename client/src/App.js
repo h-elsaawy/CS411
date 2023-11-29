@@ -18,6 +18,7 @@ function App() {
           <Route path="/" element={<Home/>}></Route>
           <Route path="/videos" element={<Videos/>}></Route>
           <Route path="/watchlists/:username" element={<Watchlists/>}></Route>
+          <Route path="/login" element={ <Login/>}></Route>
 
         </Routes>
       </BrowserRouter>
