@@ -11,6 +11,24 @@ const Home = () => {
     const [channels5, setChannels5] = useState([])
  
     const [orders, setOrders] = useState([])
+    const renderCategory = (order, channels) => (
+        <>
+          <h2>{order}</h2>
+          <div className="categories">
+            {channels.map((channel) => (
+              <div className="category" key={channel.channel_title}>
+                <img src="\yt_image.png" alt=""/>
+                <h3>{channel.channel_title}</h3>
+                <p>
+                  {channel.num_videos} videos<br/>
+                  {channel.num_views} views
+                </p>
+                <button className="follow">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</button>
+              </div>
+            ))}
+          </div>
+        </>
+      );
  
     useEffect( () => {
         const fetchTopChannels = async () => { 
@@ -31,74 +49,27 @@ const Home = () => {
                 console.log(err)
             }
         }
-        fetchTopChannels()
- 
+        fetchTopChannels();
+        //var hasUsername = sessionStorage.getItem("username");
+        
     }, [])
     return (
         <div>
             <div className="menuBar">
-                <button className="menu"><Link to="/watchlist">Watchlist</Link></button>
+                <button className="menu">{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlist</Link>) : (<Link to="/login">Watchlist</Link>)}</button>
                 <button className="menu"><Link to="/videos">Search Videos</Link></button>
                 <button className="menu"><Link to="/login">Sign In</Link></button>
+
             </div>
             <h1>Top Trending Channels</h1>
- 
-            <h2>{orders[0]}</h2>
-            <div className="categories" >
-                {channels1.map( (channels1) => (
-                    <div className="category" key={channels1.channel_title}>
-                        <img src="\yt_image.png" alt="" />
-                        <h3>{channels1.channel_title}</h3>
-                        <p>{channels1.num_videos} videos<br></br> {channels1.num_views} views</p>
-                        <button className="follow">Follow</button>
-                    </div>
-                ))}
-            </div>
- 
-            <h2>{orders[1]}</h2>
-            <div className="categories" >
-            {channels2.map( (channels2) => (
-                    <div className="category" key={channels2.channel_title}>
-                        <img src="\yt_image.png" alt="" />
-                        <h3>{channels2.channel_title}</h3>
-                        <p>{channels2.num_videos} videos<br></br> {channels2.num_views} views</p>
-                        <button className="follow">Follow</button>
-                    </div>
-            ))}
-            </div>
-            <h2>{orders[2]}</h2>
-            <div className="categories" >
-            {channels3.map( (channels3) => (
-                    <div className="category" key={channels3.channel_title}>
-                        <img src="\yt_image.png"  alt=""/>
-                        <h3>{channels3.channel_title}</h3>
-                        <p>{channels3.num_videos} videos<br></br> {channels3.num_views} views</p>
-                        <button className="follow">Follow</button>
-                    </div>
-            ))}
-            </div>
-            <h2>{orders[3]}</h2>
-            <div className="categories" >
-            {channels4.map( (channels4) => (
-                    <div className="category" key={channels4.channel_title}>
-                        <img src="\yt_image.png"  alt=""/>
-                        <h3>{channels4.channel_title}</h3>
-                        <p>{channels4.num_videos} videos<br></br> {channels4.num_views} views</p>
-                        <button className="follow">Follow</button>
-                    </div>
-            ))}
-            </div>
-            <h2>{orders[4]}</h2>
-            <div className="categories" >
-            {channels5.map( (channels5) => (
-                    <div className="category" key={channels5.channel_title}>
-                        <img src="\yt_image.png"  alt="" />
-                        <h3>{channels5.channel_title}</h3>
-                        <p>{channels5.num_videos} videos<br></br> {channels5.num_views} views</p>
-                        <button className="follow">Follow</button>
-                    </div>
-            ))}
-            </div>
+                <>
+                {renderCategory(orders[0], channels1)}
+                {renderCategory(orders[1], channels2)}
+                {renderCategory(orders[2], channels3)}
+                {renderCategory(orders[3], channels4)}
+                {renderCategory(orders[4], channels5)}
+                </>
+
         </div>
     )
 }
