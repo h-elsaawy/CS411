@@ -20,7 +20,7 @@ const Home = () => {
             {channels.map((channel) => (
               <div className="category" key={channel.channel_title}>
                 <img src="\yt_image.png" alt=""/>
-                <h3>{channel.channel_title}</h3>
+                <h3>{channel.channel_title} <img classname="likes"></img></h3>
                 <p>
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views

@@ -3,7 +3,7 @@ import './App.css';
 
 import Home from "./pages/home.jsx"
 import Watchlists from "./pages/watchlists.jsx"
-import Videos from "./pages/videos.jsx"
+import Search from "./pages/search.jsx"
 import Login from "./container/Login.js"
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
-          <Route path="/videos" element={<Videos/>}></Route>
+          <Route path="/search" element={<Search/>}></Route>
           <Route path="/watchlist" element={<Watchlists/>}></Route>
           <Route path="/login" element={ <Login/>}></Route>
 

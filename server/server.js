@@ -35,8 +35,13 @@ app.use(bodyParser.json());
 // app.get("/", (req,res) =>{
 //     res.json("hello this is the backend.")
 // })
- 
- 
+
+app.post("/search", (req, res) => {
+    
+        console.log("Hello, there is no functionality here");
+
+});
+
 app.get("/getwatchlists/:username", (req, res) => {
     const username = req.params.username
 
@@ -45,6 +50,7 @@ app.get("/getwatchlists/:username", (req, res) => {
                 WHERE username = ?
                 GROUP BY watchlist_id, title;
                 `;
+
 
     db.query(q, [username], (err, data) => {
         if (err) return res.json(err);
@@ -94,10 +100,7 @@ app.post("/login", async (req, res) => {
         res.json({ success: true, username });   
         }
     
-  
     });
-
-
 });
 
 
