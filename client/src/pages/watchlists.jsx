@@ -2,7 +2,8 @@ import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
 import axios from "axios"
-//import { useParams } from "react-router-dom";
+import Header from "./header.jsx"
+
 
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);
@@ -25,6 +26,9 @@ const Watchlists = () => {
 
     return (
         <div>
+            <>
+            {Header()}
+            </>
             <h1> Watchlists for {username}: </h1>
             <div className="watchlists">
                 {watchlists.map((watchlist) => (

@@ -1,16 +1,30 @@
 .App {
   text-align: left;
-  padding: 5px 15px;
+  padding: 5px 10px;
   display: flex;
-  align-items: center;
+  align-items: right;
   justify-content: center;
-  text-align: center;
   gap: 0px;
+}
+
+button{
+  margin: 0 5px;
+}
+
+.pageTitle {
+  text-align: center;
+
+}
+
+.CategoryTitle {
+  text-align: left;
+  text-decoration: underline;
 }
 
 .categories {
   display: flex;
-  align-items: center;
+  align-items: top;
+  text-align: center;
   gap: 10px;
   padding:0px;
 

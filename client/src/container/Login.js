@@ -1,30 +1,32 @@
 import React from 'react';
 import { useState } from "react"
-import './Login.css';
+import { Navigate } from "react-router-dom";
+import Header from "../pages/header.jsx"
+// import './Login.css';
 
 export default function Login() {
   const [username, setUserName] = useState([]);
   const [password, setPassword] = useState([]);
-  
   
   const handleSubmit = async e => {
     // e.preventDefault();
     let credentials = {username, password}
     if (username === "" || password === "") {
       alert("Username and Password cannot be blank!")
+
     } else {
+      const res = await loginUser(credentials);
 
-    const res = await loginUser(credentials);
-
-    console.log(res)
-    console.log(sessionStorage.getItem('token'))
-    if (res !== true) {
-      alert("Invalid username or password.")}
-    
-    else {
-      alert(sessionStorage.getItem('username') + " is logged in")}
+      if (res !== true) {
+        alert("Invalid username or password.")
+      
+      
+      } else {
+        alert(sessionStorage.getItem('username') + " is logged in");
+        return <Navigate replace to="http://localhost:3000/" />
+      }
     }
-  }
+  };
 
   async function loginUser(credentials) {
     try {
@@ -44,6 +46,7 @@ export default function Login() {
         sessionStorage.setItem('username', data.username);
         
         console.log("token written successfully", sessionStorage.getItem('username'))
+        
         return true;
       } else {
         // Handle login failure
@@ -58,7 +61,11 @@ export default function Login() {
 
 
   return(
+
     <div className="login-wrapper">
+        <>
+          {Header()}
+        </>
       <h1>Please Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>

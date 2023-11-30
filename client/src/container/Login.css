@@ -1,11 +1,16 @@
 .Login {
     text-align: left;
-    padding: 5px 15px;
+    padding: 5px 0px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
   }
+.menuBar {
+  align-items: right;
+  justify-content: right;
+  text-align: right;
+}
   .submit {
     display: flex;
     align-items: center;

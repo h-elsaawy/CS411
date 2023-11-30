@@ -2,7 +2,9 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
- 
+
+import Header from "./header.jsx"
+
 const Home = () => {
     const [channels1, setChannels1] = useState([])
     const [channels2, setChannels2] = useState([])
@@ -13,7 +15,7 @@ const Home = () => {
     const [orders, setOrders] = useState([])
     const renderCategory = (order, channels) => (
         <>
-          <h2>{order}</h2>
+          <h2 className="CategoryTitle">{order}</h2>
           <div className="categories">
             {channels.map((channel) => (
               <div className="category" key={channel.channel_title}>
@@ -55,13 +57,9 @@ const Home = () => {
     }, [])
     return (
         <div>
-            <div className="menuBar">
-                <button className="menu">{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlist</Link>) : (<Link to="/login">Watchlist</Link>)}</button>
-                <button className="menu"><Link to="/videos">Search Videos</Link></button>
-                <button className="menu"><Link to="/login">Sign In</Link></button>
-
-            </div>
-            <h1>Top Trending Channels</h1>
+            <>{Header()}</>
+            
+            <h1 className="pageTitle">Top Trending Channels</h1>
                 <>
                 {renderCategory(orders[0], channels1)}
                 {renderCategory(orders[1], channels2)}
