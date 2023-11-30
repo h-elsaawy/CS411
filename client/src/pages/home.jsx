@@ -36,10 +36,11 @@ const Home = () => {
     }, [])
     return (
         <div>
-            <button><Link to="/add">Add a new category</Link></button>
-            <button><Link to="/videos">Search Videos</Link></button>
-            <button><Link to="/login">Sign In</Link></button>
- 
+            <div className="menuBar">
+                <button className="menu"><Link to="/watchlist">Watchlist</Link></button>
+                <button className="menu"><Link to="/videos">Search Videos</Link></button>
+                <button className="menu"><Link to="/login">Sign In</Link></button>
+            </div>
             <h1>Top Trending Channels</h1>
  
             <h2>{orders[0]}</h2>

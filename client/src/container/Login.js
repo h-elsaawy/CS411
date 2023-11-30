@@ -3,8 +3,8 @@ import { useState } from "react"
 import './Login.css';
 
 export default function Login() {
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUserName] = useState([]);
+  const [password, setPassword] = useState([]);
   
   
   const handleSubmit = async e => {
@@ -13,6 +13,7 @@ export default function Login() {
     if (username === "" || password === "") {
       alert("Username and Password cannot be blank!")
     } else {
+
     const res = await loginUser(credentials);
 
     console.log(res)
