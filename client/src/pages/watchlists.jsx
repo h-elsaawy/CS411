@@ -2,15 +2,14 @@ import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
 import axios from "axios"
-import { useParams } from "react-router-dom";
+//import { useParams } from "react-router-dom";
 
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);
-    const { username } = useParams();
+    const username = sessionStorage.getItem('username');
     useEffect(() => {
         const fetchAllWatchlists = async () => {
             try{
-
                 const url = "http://localhost:8800/getwatchlists/" + username
                 const res = await axios.get(url);
                 setWatchlists(res.data);
