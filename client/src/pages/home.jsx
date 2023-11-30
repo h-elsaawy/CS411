@@ -57,7 +57,8 @@ const Home = () => {
         <div>
             <div className="menuBar">
                 <button className="menu">{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlist</Link>) : (<Link to="/login">Watchlist</Link>)}</button>
-                <button className="menu"><Link to="/videos">Search Videos</Link></button>
+                <button className="menu"><Link to="/search">Search</Link></button>
+                <button className="menu"><Link to="/videos">Videos</Link></button>
                 <button className="menu"><Link to="/login">Sign In</Link></button>
 
             </div>
