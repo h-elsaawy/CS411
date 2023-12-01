@@ -15,6 +15,7 @@ function App() {
           <Route path="/search" element={<Search/>}></Route>
           <Route path="/watchlist" element={<Watchlists/>}></Route>
           <Route path="/login" element={ <Login/>}></Route>
+          
 
         </Routes>
       </BrowserRouter>
