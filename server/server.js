@@ -59,14 +59,23 @@ app.post("/register", async (req,res) => {
         req.body.name,
         req.body.password, 
         req.body.email,
-        req.body.region_id, 
+        req.body.region, 
         req.body.role];
- 
-    const result = await db.query(q,[values], (err, data) => {
-        if (err) {return res.json(err);
+    console.log(values);
+
+    db.query(q, [values], (err, data) => {
+        if (err) {
+            console.log("there's an error")
+            return res.json(err)
         } else {
-            console.log(data)
-            return res.json({ success: true, message: "Something Happened" });
+            console.log("Response: " +data[0][0].user_set_code)
+            if (data[0][0].user_set_code === "username"){
+                return res.json({ success: false, message: data[0][0].user_set_code })
+            } else if (data[0][0].user_set_code === "email") {
+                return res.json({success: false, message: data[0][0].user_set_code})
+            } else {
+                return res.json({success: true, message: data[0][0].user_set_code})
+            }
         }
     })
 })
@@ -93,7 +102,6 @@ app.post("/login", async (req, res) => {
         }
     });
 });
-
 
 // Get the top 25 trending channels from a specific category.
 app.get("/topchannels/:category", (req,res) => {

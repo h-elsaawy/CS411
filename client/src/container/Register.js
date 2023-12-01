@@ -26,13 +26,13 @@ const Register = () => {
           if (response.data.success) {
             // Save the token (e.g., in sessionStorage) for subsequent requests
             // sessionStorage.setItem('username', response.data.username);
-            console.log("Transaction went through.")
-            return true;
+            console.log("User account created successfully")
+            return {success: true, message: "User account created sucessfully"};
     
           } else {
             // Handle login failure
-            console.error("Transaction failed.");
-            return false;
+            console.log("Transaction failed due to " + response.data.message);
+            return {success: false, message: "User account creation failed because the provided " + response.data.message +  " already exists"};
           }
         } catch (error) {
           console.error('Error in the Fetch function', error);
@@ -41,19 +41,17 @@ const Register = () => {
       }
   
     const handleSubmit = async e => {
-        // e.preventDefault();
+        e.preventDefault();
 
         if (username === "") {
             alert("Username cannot be blank!")
-        // } else if (password === "" || password.length < 5) {
-        } else if (password === "") {
-            alert("Password must be greater than 6 charachters!")
+        } else if (password === "" || password.length < 2) {
+            alert("Password must be greater than 2 charachters!")
         } else if (firstName === "" ) {
             alert("First Name cannot be blank!")
         } else if (lastName === "" ) {
             alert("Last Name cannot be blank!")
-        }else if (email === ""  ) {
-            // || !email.includes("@")
+        }else if (email === ""  || !email.includes("@")) {
             alert("Please enter a valid Email!")
         } else {
             if (role === "") {setRole(0)} 
@@ -64,17 +62,17 @@ const Register = () => {
                             email: email,
                             region: region,
                             role: role}
-            alert(userInfo)
+
             const res = await createUser(userInfo);
   
-//         if (res !== true) {
-//           alert("Invalid username or password.")
+        if (res.success !== true) {
+          alert(res.message)
         
-//         } else {
-//           alert(`Welcome to Creator Capital Index @${sessionStorage.getItem('username')}. 
-// You will automatically be directed to the Sign In page.`);
-//           return navigate("/");
-//         }
+        } else {
+          alert(`Welcome to Creator Capital Index @${sessionStorage.getItem('username')}. 
+You will automatically be directed to the Sign In page.`);
+          return navigate("/login");
+        }
       }
     };
   
