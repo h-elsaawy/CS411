@@ -15,7 +15,6 @@ function App() {
           <Route path="/videos" element={<Videos/>}></Route>
           <Route path="/watchlist" element={<Watchlists/>}></Route>
           <Route path="/login" element={ <Login/>}></Route>
-          sdfghfgh
 
         </Routes>
       </BrowserRouter>

@@ -39,8 +39,6 @@ app.use(bodyParser.json());
  
 app.get("/getwatchlists/:username", (req, res) => {
     const username = req.params.username
-    console.log("hi");
-    console.log("bye");
     const q = `SELECT watchlist_id, title, json_arrayagg(channel_id), json_arrayagg(comments)
                 FROM Watchlist
                 WHERE username = ?

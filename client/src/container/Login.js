@@ -1,10 +1,8 @@
 import React from 'react';
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
 import './Login.css';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [username, setUserName] = useState([]);
   const [password, setPassword] = useState([]);
   
@@ -23,21 +21,13 @@ export default function Login() {
     if (res !== true) {
       alert("Invalid username or password.")}
     
-    // Inside the successful login block
     else {
-      console.log(sessionStorage.getItem('username') + " is logged in");
-      navigate("/");
-
-      // Log the current route after the navigation
-      console.log("Current route after navigation:", window.location.pathname);
-    }
-      
+      alert(sessionStorage.getItem('username') + " is logged in")}
     }
   }
 
   async function loginUser(credentials) {
     try {
-      console.log("Sending login request...");
       const response = await fetch('http://localhost:8800/login', {
         credentials: 'include',
         method: 'POST',
@@ -46,14 +36,17 @@ export default function Login() {
         },
         body: JSON.stringify(credentials),
       });
-  
+
       const data = await response.json();
-  
+
       if (data.success) {
+        // Save the token (e.g., in sessionStorage) for subsequent requests
         sessionStorage.setItem('username', data.username);
-        console.log("Login successful!");
+        
+        console.log("token written successfully", sessionStorage.getItem('username'))
         return true;
       } else {
+        // Handle login failure
         console.error("Invalid Username or Password", data.message);
         return false;
       }
