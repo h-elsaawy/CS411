@@ -1,20 +1,24 @@
-import React from 'react';
-import { useState } from "react"
-import { Navigate } from "react-router-dom";
+import { React, useState } from "react"
+import { Route, useNavigate } from "react-router-dom";
+import axios from 'axios'
 import Header from "../pages/header.jsx"
 // import './Login.css';
 
 export default function Login() {
-  const [username, setUserName] = useState([]);
-  const [password, setPassword] = useState([]);
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   
+  const navigate = useNavigate();
+
   const handleRegistration = () => {
     // Use Navigate to redirect to the registration page
-    return <Navigate to="/register" />;
+    return navigate('/register');
   };
   const handleSubmit = async e => {
-    // e.preventDefault();
-    let credentials = {username, password}
+    e.preventDefault();
+    console.log(username, password)
+    let credentials = {username: username, password: password}
+
     if (username === "" || password === "") {
       alert("Username and Password cannot be blank!")
 
@@ -27,34 +31,32 @@ export default function Login() {
       
       } else {
         alert(sessionStorage.getItem('username') + " is logged in");
-        return <Navigate replace to="http://localhost:3000/" />
+        return navigate("/");
       }
     }
   };
 
   async function loginUser(credentials) {
     try {
-      const response = await fetch('http://localhost:8800/login', {
-        credentials: 'include',
-        method: 'POST',
+      const response = await axios.post("http://localhost:8800/login", credentials, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
+  
+      console.log(response.data)
 
-      if (data.success) {
+      if (response.data.success) {
         // Save the token (e.g., in sessionStorage) for subsequent requests
-        sessionStorage.setItem('username', data.username);
+        sessionStorage.setItem('username', response.data.username);
         
         console.log("token written successfully", sessionStorage.getItem('username'))
         
         return true;
       } else {
         // Handle login failure
-        console.error("Invalid Username or Password", data.message);
+        console.error("Invalid Username or Password", response.data.success);
         return false;
       }
     } catch (error) {
@@ -81,11 +83,11 @@ export default function Login() {
         <div>
           <br></br>
           <button type="submit" onClick={handleSubmit}>Submit</button>  
-          <button type="register" onclick={handleRegistration}>Register</button>
+          <button type="register" onClick={handleRegistration}>Register</button>
           
         </div>
       </form>
-      <Register />
+
     </div>
   )
 }
