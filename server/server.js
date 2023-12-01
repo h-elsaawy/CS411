@@ -72,10 +72,10 @@ app.post("/register", async (req,res) => {
 app.post("/login", async (req, res) => {
     const user = req.body.username
     const pass = req.body.password
-    console.log("username:", user, "password:", pass)
+    
     // Retrieve user from the database
     db.query('SELECT username, password FROM users WHERE username = ?', [user], (err,data) => {
-        console.log(data)
+
         if (err) {
             return res.json(err);
         } else if (data[0] == undefined) {

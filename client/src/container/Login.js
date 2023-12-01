@@ -14,6 +14,7 @@ export default function Login() {
     // Use Navigate to redirect to the registration page
     return navigate('/register');
   };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
@@ -21,14 +22,14 @@ export default function Login() {
       alert("Username and Password cannot be blank!")
 
     } else {
-      let credentials = {username: username, password: password}
+      let credentials = {username: username.trim(), password: password}
       const res = await loginUser(credentials);
 
       if (res !== true) {
         alert("Invalid username or password.")
       
       } else {
-        alert(sessionStorage.getItem('username') + " is logged in");
+        alert("Welcome @" + sessionStorage.getItem('username') + ". You will automatically be directed to home page.");
         return navigate("/");
       }
     }
@@ -42,13 +43,13 @@ export default function Login() {
         },
       });
 
+      // Send boolean of login status to handle next steps.
       if (response.data.success) {
         // Save the token (e.g., in sessionStorage) for subsequent requests
         sessionStorage.setItem('username', response.data.username);
-        
-        console.log("token written successfully", sessionStorage.getItem('username'))
-        
+        console.log("User logged in, token written successfully.")
         return true;
+
       } else {
         // Handle login failure
         console.error("Invalid Username or Password", response.data.success);
@@ -70,7 +71,7 @@ export default function Login() {
       <h1>Please Log In</h1>
       <form >
         <label>
-          <p>Username: <input type="text" onChange={e => setUserName(e.target.value)}/> </p>
+          <p>Username: <input type="text" autoFocus onChange={e => setUserName(e.target.value)}/> </p>
         </label>
         <label>
           <p>Password:   <input type="password" onChange={e => setPassword(e.target.value)}/> </p>
