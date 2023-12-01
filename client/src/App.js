@@ -5,6 +5,8 @@ import Home from "./pages/home.jsx"
 import Watchlists from "./pages/watchlists.jsx"
 import Search from "./pages/search.jsx"
 import Login from "./container/Login.js"
+import Register from "./container/Register.js"
+
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
           <Route path="/search" element={<Search/>}></Route>
           <Route path="/watchlist" element={<Watchlists/>}></Route>
           <Route path="/login" element={ <Login/>}></Route>
+          <Route path="/register" element={ <Register/>}></Route>
           
 
         </Routes>

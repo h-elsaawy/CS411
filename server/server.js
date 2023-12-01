@@ -22,7 +22,6 @@ const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
   };
-  
 app.use(cors(corsOptions));
 
 // Allows sending client requests using JSON.
@@ -30,15 +29,9 @@ app.use(express.json())
 app.use(bodyParser.json());
 
  
-// app.set('views', path.join(__dirname, 'views'));
- 
-// app.get("/", (req,res) =>{
-//     res.json("hello this is the backend.")
-// })
-
 app.post("/search", (req, res) => {
     
-        console.log("Hello, there is no functionality here");
+    console.log("Hello, there is no functionality here");
 
 });
 
@@ -58,19 +51,22 @@ app.get("/getwatchlists/:username", (req, res) => {
     });
 });
     
-app.post("/user", (req,res) => {
-    const q = "INSERT INTO users (`username`, `name`, `password`, `email`, `region_id`, `role`) VALUES (?)";
+app.post("/newuser", async (req,res) => {
+    const q = `START TRANSACTION;
+                INSERT INTO users (username, name, password, email, region_id, role) 
+                VALUES (?)`
+                
     const values = [
         req.body.username,
         req.body.name,
         req.body.password, 
         req.body.email,
         req.body.region_id, 
-        req.body.role];
+        0];
  
-    db.query(q,[values], (err, data) => {
+    const result = await db.query(q,[values], (err, data) => {
         if (err) return res.json(err);
-        return res.json("User created successfully.");
+        return res.json({ success: true, message: "User created successfully." });
     })
 })
 

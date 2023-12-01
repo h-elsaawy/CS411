@@ -39,22 +39,96 @@ LIMIT 5;
 
 --
 
+-- Testing the JSON_ARRARYAGG function
+-- SELECT watchlist_id, title, JSON_ARRAYAGG( channel_id)
+-- FROM watchlist
+-- WHERE username = "abailey"
+-- group by watchlist_id, title;
 
-`
-SELECT c.title, v.channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
-FROM distinct_videos v JOIN (SELECT c1.category_id, c1.title
-                            FROM distinct_videos v1 JOIN categories c1 USING (region_id, category_id) 
-                            GROUP BY c1.category_id, c1.title
-                            ORDER BY SUM(views) DESC 
-                            LIMIT 5) as c USING (category_id)
-GROUP BY c.title, channel_title
-ORDER BY c.title, num_videos DESC
-LIMIT 25; 
-`
-
-
- SELECT watchlist_id, title, JSON_ARRAYAGG( channel_id)
-     FROM watchlist
-     WHERE username = "abailey"
-  group by watchlist_id, title;
+-- Search stored procedure 
+-- We need two stored procedures
  
+-- wordcount(str TEXT)       
+-- SQL SECURITY INVOKER
+--     NO SQL
+-- DELIMITER //
+-- CREATE FUNCTION wordcount(str TEXT)
+--         RETURNS INT
+--         DETERMINISTIC
+
+--     BEGIN
+--         DECLARE wordCnt, i, maxI INT DEFAULT 0;
+--         DECLARE currChar, prevChar BOOL DEFAULT 0;
+--         SET maxI=char_length(str);
+--         WHILE i < maxI DO
+--             SET currChar=SUBSTRING(str, i, 1) RLIKE '[[:alnum:]]';
+--             IF NOT prevChar AND currChar THEN
+--                 SET wordCnt=wordCnt+1;
+--             END IF;
+--             SET prevChar=currChar;
+--             SET i=i+1;
+--         END WHILE;
+--         RETURN wordCnt;
+--     END
+-- //
+-- DELIMITER ;
+
+-- DELIMITER //
+
+-- CREATE PROCEDURE search_channels(IN searchString VARCHAR(255))
+--     BEGIN
+--         -- Start by doing a search of the entire string
+--         SELECT DISTINCT c.youtuber
+--         FROM channels c
+--         WHERE LOWER(c.youtuber) LIKE CONCAT('%',LOWER(searchString),'%');
+
+--         UNION
+
+--         SELECT DISTINCT v.channel_title
+--         FROM videos v
+--     END
+-- //
+-- DELIMITER ;
+
+DROP PROCEDURE IF EXISTS set_user;
+
+DELIMITER //
+CREATE PROCEDURE set_user(
+    IN user_in VARCHAR(30),
+    IN name_in VARCHAR(30),
+    IN password_in VARCHAR(30),
+    IN email_in VARCHAR(255),
+    IN region_id_in VARCHAR(2),
+    IN role_in TINYINT(1),
+    OUT user_set_code INT
+)
+BEGIN
+    
+    -- Check to make sure username or email is not already used.
+    IF EXISTS (SELECT u.username FROM users u WHERE u.username LIKE user_in ) THEN
+        SET user_set_code = 0;
+    ELSEIF EXISTS (SELECT u.email FROM users u WHERE u.email LIKE email_in ) THEN
+        SET user_set_code = 1;
+    ELSE
+        START TRANSACTION;
+        BEGIN
+            INSERT INTO users (username, name, password, email, region_id, role)
+            VALUES (user_in, name_in, password_in, email_in, region_id_in, role_in);
+            COMMIT;
+            SET user_set_code = 10;
+        END;
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL set_user(
+    "haadi",
+    "haadi elsaawy",
+    "test1234",
+    "haadi@hotmail.com",
+    "US",
+    0, 
+    @return_code
+);
+SELECT @retrun_code;
