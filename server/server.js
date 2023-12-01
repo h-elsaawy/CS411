@@ -63,8 +63,11 @@ app.post("/register", async (req,res) => {
         req.body.role];
  
     const result = await db.query(q,[values], (err, data) => {
-        if (err) return res.json(err);
-        return res.json({ success: true, message: "User created successfully." });
+        if (err) {return res.json(err);
+        } else {
+            console.log(data)
+            return res.json({ success: true, message: "Something Happened" });
+        }
     })
 })
 
@@ -72,7 +75,7 @@ app.post("/register", async (req,res) => {
 app.post("/login", async (req, res) => {
     const user = req.body.username
     const pass = req.body.password
-    
+
     // Retrieve user from the database
     db.query('SELECT username, password FROM users WHERE username = ?', [user], (err,data) => {
 

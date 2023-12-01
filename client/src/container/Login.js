@@ -2,7 +2,7 @@ import { React, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import Header from "../pages/header.jsx"
-// import './Login.css';
+import './Login.css';
 
 export default function Login() {
   const [username, setUserName] = useState("");
@@ -68,7 +68,7 @@ export default function Login() {
         <>
           {Header()}
         </>
-      <h1>Please Log In</h1>
+      <h2>Please Log In</h2>
       <form >
         <label>
           <p>Username: <input type="text" autoFocus onChange={e => setUserName(e.target.value)}/> </p>
