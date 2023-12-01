@@ -24,25 +24,24 @@ const Register = () => {
           console.log(response)
           // Send boolean of login status to handle next steps.
           if (response.data.success) {
-            // Save the token (e.g., in sessionStorage) for subsequent requests
-            // sessionStorage.setItem('username', response.data.username);
             console.log("User account created successfully")
             return {success: true, message: "User account created sucessfully"};
     
           } else {
-            // Handle login failure
+            // Handle account creation failures failure
             console.log("Transaction failed due to " + response.data.message);
             return {success: false, message: `User account creation failed, ${response.data.message} already exists.`};
           }
         } catch (error) {
-          console.error('Error in the Fetch function', error);
-          return false;
+            // handles failures with the axios fetch
+            console.error('Error in the Fetch function', error);
+            return false;
         }
       }
   
     const handleSubmit = async e => {
         e.preventDefault();
-
+        // Enforce user info requirements
         if (username === "") {
             alert("Username cannot be blank!")
         } else if (password === "" || password.length < 2) {
