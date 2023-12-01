@@ -13,7 +13,7 @@ const Watchlists = () => {
                 const res = await axios.get(url);
                 setWatchlists(res.data);
 
-                console.log(watchlists[0]["json_arrayagg(channel_id)"]);
+                // console.log(watchlists[0]["json_arrayagg(channel_id)"]);
             } catch (err){
                 console.log(err);
             }
