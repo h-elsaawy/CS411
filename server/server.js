@@ -34,6 +34,7 @@ app.post("/search", (req, res) => {
 
 });
 
+// Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {
     const username = req.params.username
 
@@ -43,16 +44,15 @@ app.get("/getwatchlists/:username", (req, res) => {
                 GROUP BY watchlist_id, title;
                 `;
 
-
     db.query(q, [username], (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
     });
 });
     
-app.post("/newuser", async (req,res) => {
-    const q = `
-                `
+//handles new user registration.
+app.post("/register", async (req,res) => {
+    const q = `CALL set_user(?)`
                 
     const values = [
         req.body.username,
@@ -60,7 +60,7 @@ app.post("/newuser", async (req,res) => {
         req.body.password, 
         req.body.email,
         req.body.region_id, 
-        0];
+        req.body.role];
  
     const result = await db.query(q,[values], (err, data) => {
         if (err) return res.json(err);
@@ -68,51 +68,48 @@ app.post("/newuser", async (req,res) => {
     })
 })
 
+// Handles the user login requests.
 app.post("/login", async (req, res) => {
-    console.log(typeof req.body.username)
     const user = req.body.username
     const pass = req.body.password
     console.log("username:", user, "password:", pass)
     // Retrieve user from the database
     db.query('SELECT username, password FROM users WHERE username = ?', [user], (err,data) => {
+        console.log(data)
         if (err) {
             return res.json(err);
-        } else if (data =[]) {
-            console.log(data)
+        } else if (data[0] == undefined) {
             return res.json({ success: false, message: 'Invalid username or password' } )
         } else {
-            if (data[0].password != password) {
+
+            if (data[0].password != pass) {
                 return res.json({ success: false, message: 'Invalid username or password' });
             } else {
-                return res.json({ success: true, username });   
+                return res.json({ success: true, username: user });   
             }
         }
-    
     });
 });
 
 
-app.get("/topchannels", (req,res) => {
-    const q1 = `SELECT c.title
+// Get the top 25 trending channels from a specific category.
+app.get("/topchannels/:category", (req,res) => {
+    const selected_cat = req.params.category
+    const q1 = `SELECT v.channel_title, c.title, COUNT(v.video_id) AS num_videos, SUM(views) as num_views
                 FROM distinct_videos v JOIN categories c USING (category_id) 
-                GROUP BY c.title
+                GROUP BY c.title, v.channel_title
+                HAVING c.title LIKE ?
                 ORDER BY SUM(views) DESC 
-                LIMIT 2;
+                LIMIT 25;
                 `
-    db.query(q1, (err,data) => {
+    db.query(q1,[selected_cat], (err,data) => {
         if (err) return res.json(err)
 
-            var result = [];
-            var keys = Object.keys(data);
-            keys.forEach(function(key){
-                result.push(data[key].title);
-            });
-            // console.log(result)
-        return res.send(result)
+        return res.send(data)
     })
-})
+});
 
-
+// Return the top channels in the top categories, limit of 5 per category.
 app.get("/", async (req, res) => {
     const q1 = `SELECT c.title
                 FROM distinct_videos v JOIN categories c USING (category_id) 

@@ -1,5 +1,5 @@
 import { React, useState } from "react"
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import Header from "../pages/header.jsx"
 // import './Login.css';
@@ -16,18 +16,16 @@ export default function Login() {
   };
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(username, password)
-    let credentials = {username: username, password: password}
 
     if (username === "" || password === "") {
       alert("Username and Password cannot be blank!")
 
     } else {
+      let credentials = {username: username, password: password}
       const res = await loginUser(credentials);
 
       if (res !== true) {
         alert("Invalid username or password.")
-      
       
       } else {
         alert(sessionStorage.getItem('username') + " is logged in");
@@ -43,9 +41,6 @@ export default function Login() {
           "Content-Type": "application/json",
         },
       });
-
-  
-      console.log(response.data)
 
       if (response.data.success) {
         // Save the token (e.g., in sessionStorage) for subsequent requests
