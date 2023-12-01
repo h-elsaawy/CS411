@@ -19,8 +19,7 @@ const db = mysql.createConnection({
 
 //middleware for comms between front and backend
 const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true,
+    origin: 'http://localhost:3000'
   };
 app.use(cors(corsOptions));
 
@@ -52,9 +51,8 @@ app.get("/getwatchlists/:username", (req, res) => {
 });
     
 app.post("/newuser", async (req,res) => {
-    const q = `START TRANSACTION;
-                INSERT INTO users (username, name, password, email, region_id, role) 
-                VALUES (?)`
+    const q = `
+                `
                 
     const values = [
         req.body.username,
@@ -70,30 +68,24 @@ app.post("/newuser", async (req,res) => {
     })
 })
 
-
-app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-
-    // Insert user into the database
-    const result = await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password]);
-
-    // Handle result and send response
-    res.json({ success: true, message: 'User registered successfully' });
-});
-
 app.post("/login", async (req, res) => {
-
-    const { username, password } = req.body;
+    console.log(typeof req.body.username)
+    const user = req.body.username
+    const pass = req.body.password
+    console.log("username:", user, "password:", pass)
     // Retrieve user from the database
-    db.query('SELECT username, password FROM users WHERE username = ?', [username], (err,data) => {
-        if (err) return res.json(err);
-
-        // user.length === 0 means no user tied to the username. 
-        if (data[0].username === "" || data[0].password != password) {
-            return res.json({ success: false, message: 'Invalid username or password' });
+    db.query('SELECT username, password FROM users WHERE username = ?', [user], (err,data) => {
+        if (err) {
+            return res.json(err);
+        } else if (data =[]) {
+            console.log(data)
+            return res.json({ success: false, message: 'Invalid username or password' } )
         } else {
-
-        res.json({ success: true, username });   
+            if (data[0].password != password) {
+                return res.json({ success: false, message: 'Invalid username or password' });
+            } else {
+                return res.json({ success: true, username });   
+            }
         }
     
     });
