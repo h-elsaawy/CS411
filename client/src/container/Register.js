@@ -32,7 +32,7 @@ const Register = () => {
           } else {
             // Handle login failure
             console.log("Transaction failed due to " + response.data.message);
-            return {success: false, message: "User account creation failed because the provided " + response.data.message +  " already exists"};
+            return {success: false, message: `User account creation failed, ${response.data.message} already exists.`};
           }
         } catch (error) {
           console.error('Error in the Fetch function', error);

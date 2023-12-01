@@ -61,14 +61,13 @@ app.post("/register", async (req,res) => {
         req.body.email,
         req.body.region, 
         req.body.role];
-    console.log(values);
 
     db.query(q, [values], (err, data) => {
         if (err) {
             console.log("there's an error")
             return res.json(err)
         } else {
-            console.log("Response: " +data[0][0].user_set_code)
+            console.log("Response: " + data[0][0].user_set_code)
             if (data[0][0].user_set_code === "username"){
                 return res.json({ success: false, message: data[0][0].user_set_code })
             } else if (data[0][0].user_set_code === "email") {
