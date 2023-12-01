@@ -8,6 +8,10 @@ export default function Login() {
   const [username, setUserName] = useState([]);
   const [password, setPassword] = useState([]);
   
+  const handleRegistration = () => {
+    // Use Navigate to redirect to the registration page
+    return <Navigate to="/register" />;
+  };
   const handleSubmit = async e => {
     // e.preventDefault();
     let credentials = {username, password}
@@ -67,7 +71,7 @@ export default function Login() {
           {Header()}
         </>
       <h1>Please Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form >
         <label>
           <p>Username: <input type="text" onChange={e => setUserName(e.target.value)}/> </p>
         </label>
@@ -76,10 +80,12 @@ export default function Login() {
         </label>
         <div>
           <br></br>
-          <button type="submit">Submit</button>  <button type="register">Register</button>
+          <button type="submit" onClick={handleSubmit}>Submit</button>  
+          <button type="register" onclick={handleRegistration}>Register</button>
           
         </div>
       </form>
+      <Register />
     </div>
   )
 }
