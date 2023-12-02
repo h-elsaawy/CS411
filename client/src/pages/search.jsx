@@ -4,22 +4,26 @@ import axios from 'axios'
 import Header from "../pages/header.jsx"
 
 const Search = () => {
-    const [search_str, setSearchStr] = useState([]);
+    const [search_str, setSearchStr] = useState("");
     const [results, setResults] = useState([]);
     const navigate = useNavigate();
 
 
     const handleSubmit = async e => {
         // e.preventDefault();
-        try{
-            const url = "http://localhost:8800/search/" + search_str
-            const res = await axios.get(url);
+        if (search_str === "") {
+            setResults([])
+        } else {
+            try{
+                const url = "http://localhost:8800/search/" + search_str
+                const res = await axios.get(url);
 
-            setResults(res.data);
+                setResults(res.data);
 
-            console.log(results);
-        } catch (err){
-            console.log(err);
+                console.log(results);
+            } catch (err){
+                console.log(err);
+            }
         }
 
   }
