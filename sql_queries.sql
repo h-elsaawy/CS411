@@ -132,3 +132,39 @@ CALL set_user(
     @return_code
 );
 SELECT @retrun_code;
+
+DELIMITER //
+
+CREATE PROCEDURE variablesearch (
+    IN searchTerm VARCHAR(255),
+    IN searchType VARCHAR(10)
+)
+BEGIN
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS NewTable (
+        channel VARCHAR(255) PRIMARY KEY
+    );
+
+    IF searchType = "youtuber" THEN
+        searchString = "%"+searchTerm+"%"
+        INSERT INTO NewTable  
+            (SELECT youtuber FROM channels WHERE youtuber LIKE searchString
+                UNION 
+             SELECT channel_title FROM videos WHERE youtuber LIKE searchString);
+
+    ELSEIF searchType = "channel" THEN
+    
+        INSERT INTO NewTable (channel) SELECT channel_title FROM videos WHERE channel_title LIKE "%searchTerm%";
+    ELSEIF searchType = "title" THEN
+        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE title LIKE "%searchTerm%";
+    ELSEIF searchType = "tags" THEN
+        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE tags LIKE "%searchTerm%";
+    END IF;
+
+    SELECT channel FROM NewTable;
+
+    DROP TEMPORARY TABLE IF EXISTS NewTable;
+    
+END //
+
+DELIMITER ;

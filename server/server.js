@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 app.use(express.json())
 app.use(bodyParser.json());
 
- 
+ // Basic search functionality
 app.get("/search/:string", (req,res) => {
 
     const string = req.params.string; //replace w/keywords list ?
@@ -108,7 +108,17 @@ app.post("/login", async (req, res) => {
             if (data[0].password != pass) {
                 return res.json({ success: false, message: 'Invalid username or password' });
             } else {
-                return res.json({ success: true, username: user });   
+                // create a second query that pulls all the user's watchlist channels.
+                var user_channels;
+                db.query('SELECT channel_id FROM watchlist WHERE username LIKE ?;', [user], (err, data2) => {
+                    if (err) { 
+                        return res.json(err);
+                    } else {
+                        console.log(data2)
+                        user_channels = data2[0];
+                    }
+                })
+                return res.json({ success: true, username: user, channels: user_channels});   
             }
         }
     });
