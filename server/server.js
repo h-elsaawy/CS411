@@ -46,6 +46,33 @@ app.get("/search/:string", (req,res) => {
     // return res.json({message: "hi", body: req.body})
 })
 
+// Add channel to watchlist
+app.post("/follow", async (req,res) => {
+    const q = `INSERT INTO watchlist("username", "watchlist_id", "channel_id")
+                `
+                
+    const values = [
+        req.body.username,
+        req.body.channel_id,
+        req.body.watchlist_id];
+
+    db.query(q, [values], (err, data) => {
+        if (err) {
+            console.log("there's an error")
+            return res.json(err)
+        } else {
+            console.log("Response: " + data[0][0].user_set_code)
+            if (data[0][0].user_set_code === "username"){
+                return res.json({ success: false, message: data[0][0].user_set_code })
+            } else if (data[0][0].user_set_code === "email") {
+                return res.json({success: false, message: data[0][0].user_set_code})
+            } else {
+                return res.json({success: true, message: data[0][0].user_set_code})
+            }
+        }
+    })
+})
+
 // Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {
     const username = req.params.username
@@ -89,7 +116,7 @@ app.post("/register", async (req,res) => {
             }
         }
     })
-})
+});
 
 // Handles the user login requests.
 app.post("/login", async (req, res) => {
