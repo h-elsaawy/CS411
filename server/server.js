@@ -28,11 +28,23 @@ app.use(express.json())
 app.use(bodyParser.json());
 
  
-app.post("/search", (req, res) => {
-    
-    console.log("Hello, there is no functionality here");
+app.get("/search/:string", (req,res) => {
 
-});
+    const string = req.params.string; //replace w/keywords list ?
+    // console.log(req, req.params.string)
+
+    const q = `SELECT youtuber as channel FROM channels WHERE youtuber LIKE "%${string}%"
+                UNION
+               SELECT channel_title as channel FROM videos WHERE channel_title LIKE "%${string}%";` ;
+    console.log(q)
+
+    db.query(q, [string], (err, data) => {
+        if (err) return res.json(err);
+        console.log(data)
+        return res.send(data)
+    })
+    // return res.json({message: "hi", body: req.body})
+})
 
 // Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {
