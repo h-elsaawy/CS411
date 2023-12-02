@@ -42,7 +42,7 @@ const Watchlists = () => {
 
                         } */}
                         
-                    </div>
+                </div>
                 ))}
             </div>
             

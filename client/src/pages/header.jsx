@@ -17,7 +17,7 @@ export default function Header() {
             <button className="menu"><Link to="/">Top Trending Channels</Link></button>
             <button className="menu">{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlist</Link>) : (<Link to="/login">Watchlist</Link>)}</button>
             <button className="menu"><Link to="/search">Search Videos</Link></button>
-            <button className="menu"><Link to="/login">Sign In</Link></button>
+            <button className="menu">{sessionStorage.getItem("username") ? (<Link to="/dashboard">My Account</Link>) : (<Link to="/login">Sign In</Link>)}</button>
         </menu>
         {/* </div> */}
         
