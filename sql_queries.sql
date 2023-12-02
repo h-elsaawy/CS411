@@ -131,4 +131,33 @@ CALL set_user(
     0, 
     @return_code
 );
-SELECT @retrun_code;
+SELECT @return_code;
+
+DROP PROCEDURE IF EXISTS variablesearch;
+CREATE PROCEDURE variablesearch (
+    IN searchTerm VARCHAR(255),
+    IN searchType VARCHAR(10)
+)
+BEGIN
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS NewTable (
+        channel VARCHAR(255) PRIMARY KEY
+    );
+
+    IF searchType = "youtuber" THEN
+        INSERT INTO NewTable (channel) SELECT youtuber FROM channels WHERE youtuber LIKE CONCAT('%', searchTerm, '%');
+    ELSEIF searchType = "channel" THEN
+        INSERT INTO NewTable (channel) SELECT channel_title AS ch FROM videos WHERE channel_title LIKE CONCAT('%', searchTerm, '%')
+                                       UNION 
+                                       SELECT title AS ch FROM channels WHERE title LIKE CONCAT('%', searchTerm, '%');
+    ELSEIF searchType = "title" THEN
+        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE title LIKE CONCAT('%', searchTerm, '%');
+    ELSEIF searchType = "tags" THEN
+        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE tags LIKE CONCAT('%', searchTerm, '%');
+    END IF;
+
+    SELECT channel FROM NewTable;
+
+    DROP TEMPORARY TABLE IF EXISTS NewTable;
+    
+END;

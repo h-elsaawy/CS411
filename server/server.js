@@ -36,11 +36,18 @@ app.get("/search/:string", (req,res) => {
     const q = `SELECT youtuber as channel FROM channels WHERE youtuber LIKE "%${string}%"
                 UNION
                SELECT channel_title as channel FROM videos WHERE channel_title LIKE "%${string}%";` ;
-    console.log(q)
+    const q2 = `CALL variablesearch(${string}, "youtuber")`
+    // console.log(q2)
+
+    db.query(q2, [string], (err, data) => {
+        // if (err) return res.json(err);
+        console.log(data)
+
+    })
 
     db.query(q, [string], (err, data) => {
         if (err) return res.json(err);
-        console.log(data)
+        //console.log(data)
         return res.send(data)
     })
     // return res.json({message: "hi", body: req.body})
