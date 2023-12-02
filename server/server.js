@@ -61,17 +61,10 @@ app.post("/follow", async (req,res) => {
             console.log("there's an error")
             return res.json(err)
         } else {
-            console.log("Response: " + data[0][0].user_set_code)
-            if (data[0][0].user_set_code === "username"){
-                return res.json({ success: false, message: data[0][0].user_set_code })
-            } else if (data[0][0].user_set_code === "email") {
-                return res.json({success: false, message: data[0][0].user_set_code})
-            } else {
-                return res.json({success: true, message: data[0][0].user_set_code})
+            console.log("Response: " + data)
             }
         }
-    })
-})
+    )})
 
 // Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {

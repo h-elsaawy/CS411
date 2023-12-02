@@ -1,5 +1,4 @@
-import React, { useEffect } from "react"
-import { useState } from "react"
+import  {React, useState, useEffect } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
 
@@ -15,9 +14,38 @@ const Home = () => {
     const [orders, setOrders] = useState([])
 
     const handleFollow = (channel_title) => {
+
+      const fetchAllWatchlists = async () => {
+        try{
+            const url = "http://localhost:8800/getwatchlists/" + sessionStorage.getItem("username")
+            const res = await axios.get(url);
+            setWatchlists(res.data);
+
+            // console.log(watchlists[0]["json_arrayagg(channel_id)"]);
+        } catch (err){
+            console.log(err);
+        }
+      }
+      fetchAllWatchlists();
+
+      const addChannel = async () => {
+        try{
+            const url = "http://localhost:8800/follow/"
+            const body = {
+              username: sessionStorage.getItem("username"),
+              channel_id: channel_title,
+              title: "watchlist 1",
+              watchlist_id: 1};
+            const res = await axios.get(url);
+            setWatchlists(res.data);
+
+            // console.log(watchlists[0]["json_arrayagg(channel_id)"]);
+        } catch (err){
+            console.log(err);
+        }
+      }
       console.log("Button clicked for " + channel_title)
       
-
     }
     const renderCategory = (order, channels) => (
         <>
