@@ -7,12 +7,12 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import './card.css';
 
-export default function MediaCard(size, title, subs, views,uploads, channel_type,created_year, high_yr, high_mon) {
-    const data = [subs, views,uploads, channel_type,created_year, high_yr, high_mon];
-    const labels = ['Subscribers: ', 'Views: ','Uploads: ', 'Channel Type: ', 'Year Created: ', 'Highest Yearly Earnings: ', 'Highest Monthly Earnings: '] 
+export default function MediaCard(size, title, ...data) {
+    const labels = ['Subscribers: ', 'Views: ','Uploads: ', 'Country Rank: ','Channel Type: ', 'Year Created: ', 'Highest Yearly Earnings: ', 'Highest Monthly Earnings: '] 
 
     const listItems = data.map( function(x, i){
-        return <li><strong>{labels[i]}</strong>{x}</li>        
+        if(labels[i])
+            return <li><strong>{labels[i]}</strong>{x}</li>        
     }.bind(this));
   
   return (
