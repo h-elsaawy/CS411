@@ -134,6 +134,7 @@ CALL set_user(
 SELECT @return_code;
 
 DROP PROCEDURE IF EXISTS variablesearch;
+DELIMITER //
 CREATE PROCEDURE variablesearch (
     IN searchTerm VARCHAR(255),
     IN searchType VARCHAR(10)
@@ -161,3 +162,4 @@ BEGIN
     DROP TEMPORARY TABLE IF EXISTS NewTable;
     
 END;
+DELIMITER ;
