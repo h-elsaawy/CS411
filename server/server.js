@@ -109,16 +109,21 @@ app.post("/login", async (req, res) => {
                 return res.json({ success: false, message: 'Invalid username or password' });
             } else {
                 // create a second query that pulls all the user's watchlist channels.
-                var user_channels;
+                const user_channels = [];
                 db.query('SELECT channel_id FROM watchlist WHERE username LIKE ?;', [user], (err, data2) => {
                     if (err) { 
                         return res.json(err);
                     } else {
                         console.log(data2)
-                        user_channels = data2[0];
+                        data2.forEach((row) => {
+                            const channel = row.channel_id;
+                            user_channels.push(channel);
+                        });
+                        console.log(user_channels);
+                        return res.json({ success: true, username: user, channels: user_channels});   
+
                     }
                 })
-                return res.json({ success: true, username: user, channels: user_channels});   
             }
         }
     });
