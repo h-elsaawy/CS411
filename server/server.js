@@ -61,6 +61,24 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
+
+app.get("/channel/:channel_title", (req,res) => {
+
+    const channel_title = req.params.channel_title;
+
+    const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
+                    video_views_rank, country_rank, channel_type_rank,
+                    lowest_monthly_earnings,highest_monthly_earnings, 
+                    lowest_yearly_earnings, highest_yearly_earnings,
+                    subscribers_for_last_30_days, video_views_for_the_last_30_days,
+                    created_year, created_month, created_date 
+                    FROM channels WHERE youtuber LIKE "%${channel_title}%" LIMIT 1;`;
+
+    db.query(q, [], (err, data) => {
+        if (err) return res.json(err);
+        return res.send(data)
+    })
+})
     
 //handles new user registration.
 app.post("/register", async (req,res) => {
