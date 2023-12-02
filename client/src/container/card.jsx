@@ -30,7 +30,6 @@ export default function MediaCard(size, title, ...data) {
         <ul>
             {listItems}
         </ul>
-
         </Typography>
       </CardContent>
       {/* <CardActions>

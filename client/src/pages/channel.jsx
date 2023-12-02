@@ -15,8 +15,6 @@ const Channel = () => {
                 const res = await axios.get(url);
                 setChannel(res.data);
 
-                // console.log(res.data);
-
             } catch(err) {
                 console.log(err)
             }
