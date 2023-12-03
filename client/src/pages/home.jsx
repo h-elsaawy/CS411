@@ -2,8 +2,10 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
+import {smallCard} from "../container/card.jsx"
+import Navbar from "../container/Navbar"
+import './home.css';
 
-import Header from "./header.jsx"
 
 const Home = () => {
     const [channels1, setChannels1] = useState([])
@@ -19,13 +21,7 @@ const Home = () => {
           <div className="categories">
             {channels.map((channel) => (
               <div className="category" key={channel.channel_title}>
-                <img src="\yt_image.png" alt=""/>
-                <h3>{channel.channel_title}</h3>
-                <p>
-                  {channel.num_videos} videos<br/>
-                  {channel.num_views} views
-                </p>
-                <button className="follow">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</button>
+                {smallCard(270, channel.channel_title, channel.num_videos,channel.num_views)}
               </div>
             ))}
           </div>
@@ -57,7 +53,7 @@ const Home = () => {
     }, [])
     return (
         <div>
-            <>{Header()}</>
+            <>{Navbar()}</>
             
             <h1 className="pageTitle">Top Trending Channels</h1>
                 <>

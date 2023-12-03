@@ -1,21 +1,19 @@
-import { React, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { React, useState } from 'react'
 import axios from 'axios'
-import Header from "../pages/header.jsx"
+import Navbar from '../container/Navbar.jsx'
 
 const Search = () => {
-    const [search_str, setSearchStr] = useState("");
+    const [search_str, setSearchStr] = useState('');
     const [results, setResults] = useState([]);
-    const navigate = useNavigate();
 
 
     const handleSubmit = async e => {
         // e.preventDefault();
-        if (search_str === "") {
+        if (search_str === '') {
             setResults([])
         } else {
             try{
-                const url = "http://localhost:8800/search/" + search_str
+                const url = 'http://localhost:8800/search/' + search_str
                 const res = await axios.get(url);
 
                 setResults(res.data);
@@ -29,16 +27,16 @@ const Search = () => {
   }
     return (
         <div>
-            <>{Header()}</>
+            <>{Navbar()}</>
             <p>
                 <label>Search: 
-                <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
-                <button type="submit" onClick={handleSubmit}>Submit</button>  
+                <input type='text' autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
+                <button type='submit' onClick={handleSubmit}>Submit</button>  
             </p>
             <p></p>
-            <div className="channels">
+            <div className='channels'>
                 {results.map((results) => (
-                    <div key={results.channel} className="channel">
+                    <div key={results.channel} className='channel'>
                         <h2>{results.channel}</h2>
                     </div>
                 ))}

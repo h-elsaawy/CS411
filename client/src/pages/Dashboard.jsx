@@ -1,10 +1,10 @@
 import React from "react"
-import Header from "./header.jsx"
+import Navbar from "../container/Navbar.jsx"
 
 const Dashboard = () => {
     return (
         <div>
-            <> {Header()} </>
+            <> {Navbar()} </>
             User Account
         </div>
     )

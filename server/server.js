@@ -2,7 +2,7 @@ import express from 'express'
 import mysql from 'mysql'
 import cors from "cors"
 import bodyParser from 'body-parser'
- import JWT from 'jsonwebtoken' 
+import JWT from 'jsonwebtoken' 
 // var path = require('path');
  
 const app = express()
@@ -63,7 +63,6 @@ app.get("/getwatchlists/:username", (req, res) => {
 });
 
 app.get("/channel/:channel_title", (req,res) => {
-
     const channel_title = req.params.channel_title;
 
     const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
@@ -79,6 +78,8 @@ app.get("/channel/:channel_title", (req,res) => {
         return res.send(data)
     })
 })
+
+
     
 //handles new user registration.
 app.post("/register", async (req,res) => {

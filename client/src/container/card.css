@@ -1,5 +1,20 @@
-li {
-    
+.cards {
+    vertical-align: middle;
+    align-content: center;
+}
+img {
+    max-width:min-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    text-decoration: none;
+
+}
+
+.btn {
+    margin-top: 1rem;
 }
 
 ul {

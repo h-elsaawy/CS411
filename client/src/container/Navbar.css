@@ -9,6 +9,7 @@
 
 .nav {
     background-color: red;
+    min-width: 1209.99px;
     color: black;
     display: flex;
     justify-content: space-between;

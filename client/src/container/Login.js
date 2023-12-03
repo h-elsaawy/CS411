@@ -1,7 +1,7 @@
 import { React, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
-import Header from "../pages/header.jsx"
+import Navbar from "./Navbar.jsx"
 import './Login.css';
 
 export default function Login() {
@@ -66,7 +66,7 @@ export default function Login() {
 
     <div className="login-wrapper">
         <>
-          {Header()}
+          {Navbar()}
         </>
       <h2>Please Log In</h2>
       <form >
