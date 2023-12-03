@@ -46,26 +46,6 @@ app.get("/search/:string", (req,res) => {
     // return res.json({message: "hi", body: req.body})
 })
 
-// Add channel to watchlist
-app.post("/follow", async (req,res) => {
-    const q = `INSERT INTO watchlist("username", "watchlist_id", "channel_id")
-                `
-                
-    const values = [
-        req.body.username,
-        req.body.channel_id,
-        req.body.watchlist_id];
-
-    db.query(q, [values], (err, data) => {
-        if (err) {
-            console.log("there's an error")
-            return res.json(err)
-        } else {
-            console.log("Response: " + data)
-            }
-        }
-    )})
-
 // Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {
     const username = req.params.username
@@ -81,24 +61,6 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
-
-app.get("/channel/:channel_title", (req,res) => {
-
-    const channel_title = req.params.channel_title;
-
-    const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
-                    video_views_rank, country_rank, channel_type_rank,
-                    lowest_monthly_earnings,highest_monthly_earnings, 
-                    lowest_yearly_earnings, highest_yearly_earnings,
-                    subscribers_for_last_30_days, video_views_for_the_last_30_days,
-                    created_year, created_month, created_date 
-                    FROM channels WHERE youtuber LIKE "%${channel_title}%" LIMIT 1;`;
-
-    db.query(q, [], (err, data) => {
-        if (err) return res.json(err);
-        return res.send(data)
-    })
-})
     
 //handles new user registration.
 app.post("/register", async (req,res) => {
@@ -127,7 +89,7 @@ app.post("/register", async (req,res) => {
             }
         }
     })
-});
+})
 
 // Handles the user login requests.
 app.post("/login", async (req, res) => {
@@ -147,16 +109,21 @@ app.post("/login", async (req, res) => {
                 return res.json({ success: false, message: 'Invalid username or password' });
             } else {
                 // create a second query that pulls all the user's watchlist channels.
-                var user_channels;
+                const user_channels = [];
                 db.query('SELECT channel_id FROM watchlist WHERE username LIKE ?;', [user], (err, data2) => {
                     if (err) { 
                         return res.json(err);
                     } else {
                         console.log(data2)
-                        user_channels = data2[0];
+                        data2.forEach((row) => {
+                            const channel = row.channel_id;
+                            user_channels.push(channel);
+                        });
+                        console.log(user_channels);
+                        return res.json({ success: true, username: user, channels: user_channels});   
+
                     }
                 })
-                return res.json({ success: true, username: user, channels: user_channels});   
             }
         }
     });
