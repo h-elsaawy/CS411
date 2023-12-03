@@ -21,7 +21,11 @@ const Home = () => {
               <div className="category" key={channel.channel_title}>
                 <img className="channelCover" src="\yt_image.png" alt=""/>
                 <h3 id="channelTitle">
-                {sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<>{channel.channel_title} ❤️</>) : (<>{channel.channel_title}</>)} </h3>
+                {sessionStorage.getItem("watchlist") ?
+                  (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<>{channel.channel_title} ❤️</>) : (<>{channel.channel_title}</>))
+                  : (<>{channel.channel_title}</>)
+                }
+            </h3>
                 <p>
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
