@@ -9,6 +9,7 @@ const Watchlist = () => {
     const [watchlist, setWatchlist] = useState();
     const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
+
     const [refresh, setRefresh] = useState(false); // Add a state for refreshing
     const handleFollow = async (channel_title) => {
         console.log("Clicked to unfollow: " + channel_title)
@@ -95,6 +96,10 @@ const Watchlist = () => {
                     <tr>
                         <th>Channel Name</th>
                         <th>Comments</th>
+                        <th></th>
+                        <th>Channel Name</th>
+                        <th>Comments</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,10 +107,14 @@ const Watchlist = () => {
                         <tr key={channel.channel_name} className="watchlists-row">
                             <td>
                                 <a href={`/channel/${channel.channel_name}`}>
+                            <td><button onClick={() => handleFollow(channel.channel_name)}>Unfollow ❌</button></td>
+                            <td>
+                            <a href={`/channel/${channel.channel_name}`}>
                                     {channel.channel_name}
                                 </a>
                             </td>
                             <td>{channel.comments}</td>
+                            <td><button onClick={() => handleEditComment(channel.channel_name)}>Edit Comment 📝</button></td>
                         </tr>
                     ))}
                 </tbody>

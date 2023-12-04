@@ -2,7 +2,7 @@ import { React, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
-import Header from "./header.jsx"
+import Navbar from "../container/Navbar.jsx"
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -15,6 +15,7 @@ const Dashboard = () => {
     const handleSignOut = () => {
 
         sessionStorage.removeItem('username'); 
+        sessionStorage.removeItem('watchlist');
         alert("You have been succesfully signed out. You will automatically be directed to home page.");
         return navigate("/login");
     }
@@ -73,7 +74,7 @@ const Dashboard = () => {
 
     return (
         <div>
-            <> {Header()} </>
+            <> {Navbar()} </>
             <div id="dashboard">
                 {changingPassword ? (
                     <div>

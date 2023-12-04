@@ -1,0 +1,24 @@
+.cards {
+    vertical-align: middle;
+    align-content: center;
+}
+img {
+    max-width:min-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    text-decoration: none;
+    /* height: 23px; */
+    /* font-size: large; */
+}
+.follow {
+    height: 100;
+    padding: 1;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

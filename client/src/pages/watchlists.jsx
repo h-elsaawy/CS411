@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios"
-import Header from "./header.jsx"
+import Navbar from "../container/Navbar.jsx"
+
 
 
 
@@ -23,13 +24,13 @@ const Watchlists = () => {
             }
         }
         fetchAllWatchlists();
-    }, []);
+    });
 
 
     return (
         <div>
             <>
-            {Header()}
+            {Navbar()}
             </>
             <h1> Watchlists for {username}: </h1>
             <div className="watchlists">
