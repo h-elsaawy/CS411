@@ -91,6 +91,29 @@ app.post("/register", async (req,res) => {
     })
 })
 
+// Handles user changing password.
+app.post("/changePass", (req, res) => {
+    const user = req.body.username
+    const pass = req.body.password
+    const q = `UPDATE users
+        SET password = ?
+        WHERE username LIKE ?;`
+    
+    db.query(q,[pass, user] ,(err,data) => {
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows == 1)  {
+            // if affected rows does not equal 1, no rows were changed.
+            console.log(`@${user}'s password sucessfully changed.`);
+            return res.json({ success: true, username: user, message:`@${user}'s password sucessfully changed.`});  
+        } else {
+            console.log(`@${user}'s password change failed.`);
+            return res.json({ success: false, username: user, message:`@${user}'s password change failed.`});  
+        }
+    });
+});
+
 // Handles the user login requests.
 app.post("/login", async (req, res) => {
     const user = req.body.username
@@ -114,12 +137,12 @@ app.post("/login", async (req, res) => {
                     if (err) { 
                         return res.json(err);
                     } else {
-                        console.log(data2)
+                        // console.log(data2)
                         data2.forEach((row) => {
                             const channel = row.channel_id;
                             user_channels.push(channel);
                         });
-                        console.log(user_channels);
+                        // console.log(user_channels);
                         return res.json({ success: true, username: user, channels: user_channels});   
 
                     }
