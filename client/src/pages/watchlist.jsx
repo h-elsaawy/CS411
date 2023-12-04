@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios"
-import Header from "./header.jsx"
+import Navbar from "../container/Navbar"
 import { useParams } from "react-router-dom";
 
 const Watchlist = () => {
@@ -54,7 +54,7 @@ const Watchlist = () => {
     return (
         <div>
             <>
-                {Header()}
+                {Navbar()}
             </>
             <h1>{username}, here is information on your watchlist titled:</h1>
             <h1>{watchlist_title}</h1>

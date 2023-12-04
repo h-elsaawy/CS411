@@ -112,7 +112,7 @@ export function MediaCard(size, channel_title, ...data) {
       </CardContent>
       <CardActions>
         <Button variant="outlined">{sessionStorage.getItem("username") ? (<Link to=".">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
-        <BasicSelect current_channel_title={channel_title}></BasicSelect>
+
         </CardActions>
     </Card>
   );
