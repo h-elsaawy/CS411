@@ -9,6 +9,12 @@ const Watchlist = () => {
     const [watchlist, setWatchlist] = useState();
     const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
+    const handleFollow = (channel_title) => {
+        console.log("Clicked to unfollow: " + channel_title)
+      }
+    const handleEditComment = (channel_title) => {
+        console.log("Clicked to edit comment for: " + channel_title)
+    }
 
     useEffect(() => {
         const fetchWatchlistInfo = async () => {
@@ -55,19 +61,23 @@ const Watchlist = () => {
             <table className="watchlists-table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Channel Name</th>
                         <th>Comments</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
+                            <td><button onClick={() => handleFollow(channel.channel_name)}>Unfollow ❌</button></td>
                             <td>
-                                <a href={`/channel/${channel.channel_name}`}>
+                            <a href={`/channel/${channel.channel_name}`}>
                                     {channel.channel_name}
                                 </a>
                             </td>
                             <td>{channel.comments}</td>
+                            <td><button onClick={() => handleEditComment(channel.channel_name)}>Edit Comment 📝</button></td>
                         </tr>
                     ))}
                 </tbody>
