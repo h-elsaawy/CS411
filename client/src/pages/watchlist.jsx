@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios"
-import Header from "./header.jsx"
+import Header from "container/Navbar.jsx"
 import { useParams } from "react-router-dom";
 
 const Watchlist = () => {
