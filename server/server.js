@@ -2,7 +2,7 @@ import express from 'express'
 import mysql from 'mysql'
 import cors from "cors"
 import bodyParser from 'body-parser'
- import JWT from 'jsonwebtoken' 
+import JWT from 'jsonwebtoken' 
 // var path = require('path');
  
 const app = express()
@@ -43,7 +43,6 @@ app.get("/search/:string", (req,res) => {
         console.log(data)
         return res.send(data)
     })
-    // return res.json({message: "hi", body: req.body})
 })
 
 // Return the watchlists a user has. 
@@ -120,6 +119,23 @@ app.post("/editComment", (req, res) => {
             console.log(`@${user}' unable to add comment ${comment} for channel ${channel}`);
             return res.json({ success: false, username: user, message:`@${user}' unable to add comment ${comment} for channel ${channel}`});  
         }
+
+app.get("/channel/:channel_title", (req,res) => {
+
+    const channel_title = req.params.channel_title;
+
+    const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
+                    video_views_rank, country_rank, channel_type_rank,
+                    lowest_monthly_earnings,highest_monthly_earnings, 
+                    lowest_yearly_earnings, highest_yearly_earnings,
+                    subscribers_for_last_30_days, video_views_for_the_last_30_days,
+                    created_year, created_month, created_date 
+                    FROM channels WHERE youtuber LIKE "%${channel_title}%" LIMIT 1;`;
+
+    db.query(q, [username, id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+
     });
 });
     

@@ -1,7 +1,7 @@
 import { React, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
-import Header from "../pages/header.jsx"
+import Navbar from "./Navbar.jsx"
 
 const Register = () => {
     const [username, setUserName] = useState("");
@@ -25,6 +25,7 @@ const Register = () => {
           // Send boolean of login status to handle next steps.
           if (response.data.success) {
             console.log("User account created successfully")
+            sessionStorage.setItem('username', username)
             return {success: true, message: "User account created sucessfully"};
     
           } else {
@@ -79,7 +80,7 @@ You will automatically be directed to the Sign In page.`);
   
       <div className="login-wrapper">
           <>
-            {Header()}
+            {Navbar()}
           </>
         <h2>Create New Account</h2>
         <form >

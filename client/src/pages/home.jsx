@@ -2,8 +2,11 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
+import {smallCard} from "../container/card.jsx"
+import Navbar from "../container/Navbar"
+import './home.css';
 
-import Header from "./header.jsx"
+import follow from "../functions/follow.jsx"
 
 const Home = () => {
     const [channels1, setChannels1] = useState([])
@@ -13,6 +16,12 @@ const Home = () => {
     const [channels5, setChannels5] = useState([])
  
     const [orders, setOrders] = useState([])
+
+
+
+    const handleRemove = (channel_title) => {
+      console.log("Clicked unfollow for channel: " + channel_title)
+    }
     const renderCategory = (order, channels) => (
         <>
           <h2 className="CategoryTitle">{order}</h2>
@@ -30,7 +39,12 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
-                <button className="follow">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</button>
+
+                  {sessionStorage.getItem("username")  ?
+                            (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
+                                    (<button onClick={() => handleRemove(channel.channel_title)}>Remove</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
+                            : (<button><Link to="/login">Follow 👆</Link></button>)}
+
               </div>
             ))}
           </div>
@@ -43,7 +57,7 @@ const Home = () => {
                 const res = await axios.get("http://localhost:8800/");
  
                 let orders = res.data["order"];
-                console.log(orders);
+
                 setChannels1(res.data[orders[0]]);
                 setChannels2(res.data[orders[1]]);
                 setChannels3(res.data[orders[2]]);
@@ -51,7 +65,7 @@ const Home = () => {
                 setChannels5(res.data[orders[4]]);
  
                 setOrders(res.data["order"]);
-                console.log(orders);
+
             } catch(err) {
                 console.log(err)
             }
@@ -62,7 +76,7 @@ const Home = () => {
     }, [])
     return (
         <div>
-            <>{Header()}</>
+            <>{Navbar()}</>
             
             <h1 className="pageTitle">Top Trending Channels</h1>
                 <>

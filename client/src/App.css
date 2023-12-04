@@ -5,9 +5,10 @@
   align-items: right;
   justify-content: center;
   gap: 0px;
+  text-decoration: none;
 }
 
-button{
+Button{
   margin: 0 5px;
 }
 

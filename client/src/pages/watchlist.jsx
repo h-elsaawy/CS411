@@ -1,6 +1,8 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios"
-import Header from "container/Navbar.jsx"
+
+import Navbar from "../container/Navbar"
+
 import { useParams } from "react-router-dom";
 
 const Watchlist = () => {
@@ -9,6 +11,7 @@ const Watchlist = () => {
     const [watchlist, setWatchlist] = useState();
     const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
+
     const [refresh, setRefresh] = useState(false); // Add a state for refreshing
     const handleFollow = async (channel_title) => {
         console.log("Clicked to unfollow: " + channel_title)
@@ -48,6 +51,7 @@ const Watchlist = () => {
         }
     };
 
+
     useEffect(() => {
         const fetchWatchlistInfo = async () => {
             try {
@@ -86,26 +90,37 @@ const Watchlist = () => {
     return (
         <div>
             <>
-                {Header()}
+
+                {Navbar()}
+
             </>
             <h1>{username}, here is information on your watchlist titled:</h1>
             <h1>{watchlist_title}</h1>
             <table className="watchlists-table">
                 <thead>
                     <tr>
+
+                        <th></th>
                         <th>Channel Name</th>
                         <th>Comments</th>
+                        <th></th>
+
                     </tr>
                 </thead>
                 <tbody>
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
+
+                            <td><button onClick={() => handleFollow(channel.channel_name)}>Unfollow ❌</button></td>
                             <td>
-                                <a href={`/channel/${channel.channel_name}`}>
+                            <a href={`/channel/${channel.channel_name}`}>
+
                                     {channel.channel_name}
                                 </a>
                             </td>
                             <td>{channel.comments}</td>
+
+                            <td><button onClick={() => handleEditComment(channel.channel_name)}>Edit Comment 📝</button></td>
                         </tr>
                     ))}
                 </tbody>
