@@ -119,6 +119,8 @@ app.post("/editComment", (req, res) => {
             console.log(`@${user}' unable to add comment ${comment} for channel ${channel}`);
             return res.json({ success: false, username: user, message:`@${user}' unable to add comment ${comment} for channel ${channel}`});  
         }
+    });
+});
 
 app.get("/channel/:channel_title", (req,res) => {
 
