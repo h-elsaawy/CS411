@@ -15,6 +15,7 @@ const Dashboard = () => {
     const handleSignOut = () => {
 
         sessionStorage.removeItem('username'); 
+        sessionStorage.removeItem('watchlist');
         alert("You have been succesfully signed out. You will automatically be directed to home page.");
         return navigate("/login");
     }

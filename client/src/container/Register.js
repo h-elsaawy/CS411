@@ -25,6 +25,7 @@ const Register = () => {
           // Send boolean of login status to handle next steps.
           if (response.data.success) {
             console.log("User account created successfully")
+            sessionStorage.setItem('username', username)
             return {success: true, message: "User account created sucessfully"};
     
           } else {

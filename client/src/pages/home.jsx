@@ -30,6 +30,7 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
+                
                 <button className="follow">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</button>
               </div>
             ))}
@@ -43,7 +44,7 @@ const Home = () => {
                 const res = await axios.get("http://localhost:8800/");
  
                 let orders = res.data["order"];
-                console.log(orders);
+
                 setChannels1(res.data[orders[0]]);
                 setChannels2(res.data[orders[1]]);
                 setChannels3(res.data[orders[2]]);
@@ -51,7 +52,7 @@ const Home = () => {
                 setChannels5(res.data[orders[4]]);
  
                 setOrders(res.data["order"]);
-                console.log(orders);
+
             } catch(err) {
                 console.log(err)
             }
