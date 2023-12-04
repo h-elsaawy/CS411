@@ -4,6 +4,7 @@ import Navbar from "../container/Navbar.jsx"
 
 
 
+
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);
     const username = sessionStorage.getItem('username');
