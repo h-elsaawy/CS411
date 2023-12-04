@@ -1,49 +1,54 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios"
 import Header from "./header.jsx"
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Watchlist = () => {
     const { id } = useParams();
     const username = sessionStorage.getItem('username');
     const [watchlist, setWatchlist] = useState();
-    const [channels, setChannelsInWatchList] = useState();
+    const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
-    
 
     useEffect(() => {
         const fetchWatchlistInfo = async () => {
-            try{
-                const url = "http://localhost:8800/getwatchlists/" + username + "/"+ id
+            try {
+                const url = "http://localhost:8800/getwatchlists/" + username + "/" + id;
                 const res = await axios.get(url);
-                console.log(res);
-                setWatchlist(res.data[0]);
-                console.log("gets res data");
-                console.log(res.data[0]);
-                console.log("stored in watchlist variable:");
-                console.log(watchlist);
-                setWatchlistTitle(watchlist["title"]);
-                const channels_followed = JSON.parse(watchlist["json_arrayagg(channel_id)"]);
-                const comments = JSON.parse(watchlist["json_arrayagg(comments)"]);
-                const channels_in_watch_list = []
-                for(let i = 0; i < channels_followed.length; i++){
-                    channels_in_watch_list.push({"channel_name": channels_followed[i], "comments": comments[i]});
-                }
-                setChannelsInWatchList(channels_in_watch_list);
-                console.log(channels);
-                console.log();
+                const watchlistData = res.data[0];
+                setWatchlist(watchlistData);
 
-            } catch (err){
+                // Ensure that watchlistData is not undefined before accessing its properties
+                if (watchlistData) {
+                    setWatchlistTitle(watchlistData["title"]);
+                    const channels_followed = JSON.parse(watchlistData["json_arrayagg(channel_id)"]);
+                    const comments = JSON.parse(watchlistData["json_arrayagg(comments)"]);
+                    const channels_in_watch_list = channels_followed.map((channel, index) => ({
+                        "channel_name": channel,
+                        "comments": comments[index]
+                    }));
+                    setChannelsInWatchList(channels_in_watch_list);
+                }
+
+            } catch (err) {
                 console.log(err);
             }
-        }
+        };
+
         fetchWatchlistInfo();
     }, []);
+
+    // Use useEffect to update watchlist_title whenever watchlist changes
+    useEffect(() => {
+        if (watchlist) {
+            setWatchlistTitle(watchlist["title"]);
+        }
+    }, [watchlist]);
 
     return (
         <div>
             <>
-            {Header()}
+                {Header()}
             </>
             <h1>{username}, here is information on your watchlist titled:</h1>
             <h1>{watchlist_title}</h1>
@@ -67,11 +72,8 @@ const Watchlist = () => {
                     ))}
                 </tbody>
             </table>
-            
-            
-                
         </div>
-    )
-}
+    );
+};
 
-export default Watchlist
+export default Watchlist;
