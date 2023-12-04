@@ -2,9 +2,11 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
+import {smallCard} from "../container/card.jsx"
+import Navbar from "../container/Navbar"
+import './home.css';
 
 import follow from "../functions/follow.jsx"
-import Header from "./header.jsx"
 
 const Home = () => {
     const [channels1, setChannels1] = useState([])
@@ -74,7 +76,7 @@ const Home = () => {
     }, [])
     return (
         <div>
-            <>{Header()}</>
+            <>{Navbar()}</>
             
             <h1 className="pageTitle">Top Trending Channels</h1>
                 <>
