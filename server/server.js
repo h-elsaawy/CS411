@@ -60,6 +60,22 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
+
+app.get("/getwatchlists/:username/:id", async (req, res) => {
+    const username = req.params.username
+    const id = req.params.id
+
+    const q = `SELECT watchlist_id, title, json_arrayagg(channel_id), json_arrayagg(comments)
+                FROM Watchlist
+                WHERE username = ? AND watchlist_id = ?
+                GROUP BY watchlist_id, title;
+                `;
+
+    db.query(q, [username, id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
     
 //handles new user registration.
 app.post("/register", async (req,res) => {
