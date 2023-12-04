@@ -77,6 +77,51 @@ app.get("/getwatchlists/:username/:id", async (req, res) => {
         return res.json(data);
     });
 });
+
+// Unfollows channel
+app.post("/unfollow", (req, res) => {
+    const user = req.body.username
+    const channel = req.body.channel_title
+    const q = `DELETE FROM watchlist
+        WHERE username = ? and channel_id = ?;`
+    
+    db.query(q,[user, channel] ,(err,data) => {
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows == 1)  {
+            console.log(`@${user}' unfollowed ${channel}`);
+            return res.json({ success: true, username: user, message:`@${user}' unfollowed ${channel}`});  
+        } else {
+            console.log(`@${user}' unfollowing ${channel} failed`);
+            return res.json({ success: false, username: user, message:`@${user}' unfollowing ${channel} failed`});  
+        }
+    });
+});
+
+// Edit Comment for Watchlist
+app.post("/editComment", (req, res) => {
+    const comment = req.body.newComment
+    const user = req.body.username
+    const channel = req.body.channel_title
+    
+    const q = `UPDATE watchlist
+        SET comments = ?
+        WHERE username = ? and channel_id = ?;`
+    
+    db.query(q,[comment, user, channel] ,(err,data) => {
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows == 1)  {
+            console.log(`@${user}' added comment ${comment} for channel ${channel}`);
+            return res.json({ success: true, username: user, message:`@${user}' added comment ${comment} for channel ${channel}`});  
+        } else {
+            console.log(`@${user}' unable to add comment ${comment} for channel ${channel}`);
+            return res.json({ success: false, username: user, message:`@${user}' unable to add comment ${comment} for channel ${channel}`});  
+        }
+    });
+});
     
 //handles new user registration.
 app.post("/register", async (req,res) => {

@@ -9,6 +9,44 @@ const Watchlist = () => {
     const [watchlist, setWatchlist] = useState();
     const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
+    const [refresh, setRefresh] = useState(false); // Add a state for refreshing
+    const handleFollow = async (channel_title) => {
+        console.log("Clicked to unfollow: " + channel_title)
+        try{
+            const url = "http://localhost:8800/unfollow";
+            const res = await axios.post(url, {username, channel_title});
+            console.log(res);
+            setChannelsInWatchList((prevChannels) => {
+                const updatedChannels = prevChannels.filter((channel) => channel.channel_name !== channel_title);
+                return updatedChannels;
+            });
+        } catch (err) {
+            console.log("Error unfollowing:", err);
+        }
+    };
+    const handleEditComment = async (channel_title) => {
+        console.log("Clicked to edit comment for: " + channel_title)
+        try {
+            // Replace this URL with your actual edit comment API endpoint
+            const editCommentUrl = "http://localhost:8800/editComment";
+            const newComment = prompt("Enter new comment:"); // You may use a more sophisticated UI for this
+            if (newComment !== null) {
+                await axios.post(editCommentUrl, { username, channel_title, newComment });
+                // Refreshes the state of watchlist
+                setChannelsInWatchList((prevChannels) => {
+                    const updatedChannels = prevChannels.map((channel) => {
+                        if (channel.channel_name === channel_title) {
+                            return { ...channel, comments: newComment };
+                        }
+                        return channel;
+                    });
+                    return updatedChannels;
+                });
+            }
+        } catch (err) {
+            console.error("Error editing comment:", err);
+        }
+    };
 
     useEffect(() => {
         const fetchWatchlistInfo = async () => {
