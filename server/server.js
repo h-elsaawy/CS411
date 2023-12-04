@@ -60,6 +60,7 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
+
 app.get("/getwatchlists/:username/:id", async (req, res) => {
     const username = req.params.username
     const id = req.params.id
@@ -123,6 +124,28 @@ app.post("/register", async (req,res) => {
     })
 })
 
+// Handles Follow request
+app.post("/follow", (req, res) => {
+    const channel = req.body.username
+    const pass = req.body.password
+    const q = `UPDATE users
+        SET password = ?
+        WHERE username LIKE ?;`
+    
+    db.query(q,[pass, user] ,(err,data) => {
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows == 1)  {
+            // if affected rows does not equal 1, no rows were changed.
+            console.log(`@${user}'s password sucessfully changed.`);
+            return res.json({ success: true, username: user, message:`@${user}'s password sucessfully changed.`});  
+        } else {
+            console.log(`@${user}'s password change failed.`);
+            return res.json({ success: false, username: user, message:`@${user}'s password change failed.`});  
+        }
+    });
+});
 // Handles user changing password.
 app.post("/changePass", (req, res) => {
     const user = req.body.username
