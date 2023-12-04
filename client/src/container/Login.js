@@ -47,7 +47,8 @@ export default function Login() {
       if (response.data.success) {
         // Save the token (e.g., in sessionStorage) for subsequent requests
         sessionStorage.setItem('username', response.data.username);
-        console.log("User logged in, token written successfully.")
+        sessionStorage.setItem('watchlist', JSON.stringify(response.data.channels));
+        console.log("User logged in, token written successfully." )
         return true;
 
       } else {

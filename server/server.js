@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 app.use(express.json())
 app.use(bodyParser.json());
 
- 
+ // Basic search functionality
 app.get("/search/:string", (req,res) => {
 
     const string = req.params.string; //replace w/keywords list ?
@@ -43,7 +43,6 @@ app.get("/search/:string", (req,res) => {
         console.log(data)
         return res.send(data)
     })
-    // return res.json({message: "hi", body: req.body})
 })
 
 // Return the watchlists a user has. 
@@ -61,8 +60,24 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
+app.get("/getwatchlists/:username/:id", async (req, res) => {
+    const username = req.params.username
+    const id = req.params.id
+
+    const q = `SELECT watchlist_id, title, json_arrayagg(channel_id), json_arrayagg(comments)
+                FROM Watchlist
+                WHERE username = ? AND watchlist_id = ?
+                GROUP BY watchlist_id, title;
+                `;
+
+    db.query(q, [username, id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
 
 app.get("/channel/:channel_title", (req,res) => {
+
     const channel_title = req.params.channel_title;
 
     const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
@@ -73,11 +88,11 @@ app.get("/channel/:channel_title", (req,res) => {
                     created_year, created_month, created_date 
                     FROM channels WHERE youtuber LIKE "%${channel_title}%" LIMIT 1;`;
 
-    db.query(q, [], (err, data) => {
+    db.query(q, [username, id], (err, data) => {
         if (err) return res.json(err);
-        return res.send(data)
-    })
-})
+        return res.json(data);
+    });
+});
     
 //handles new user registration.
 app.post("/register", async (req,res) => {
@@ -108,6 +123,29 @@ app.post("/register", async (req,res) => {
     })
 })
 
+// Handles user changing password.
+app.post("/changePass", (req, res) => {
+    const user = req.body.username
+    const pass = req.body.password
+    const q = `UPDATE users
+        SET password = ?
+        WHERE username LIKE ?;`
+    
+    db.query(q,[pass, user] ,(err,data) => {
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows == 1)  {
+            // if affected rows does not equal 1, no rows were changed.
+            console.log(`@${user}'s password sucessfully changed.`);
+            return res.json({ success: true, username: user, message:`@${user}'s password sucessfully changed.`});  
+        } else {
+            console.log(`@${user}'s password change failed.`);
+            return res.json({ success: false, username: user, message:`@${user}'s password change failed.`});  
+        }
+    });
+});
+
 // Handles the user login requests.
 app.post("/login", async (req, res) => {
     const user = req.body.username
@@ -125,7 +163,22 @@ app.post("/login", async (req, res) => {
             if (data[0].password != pass) {
                 return res.json({ success: false, message: 'Invalid username or password' });
             } else {
-                return res.json({ success: true, username: user });   
+                // create a second query that pulls all the user's watchlist channels.
+                const user_channels = [];
+                db.query('SELECT channel_id FROM watchlist WHERE username LIKE ?;', [user], (err, data2) => {
+                    if (err) { 
+                        return res.json(err);
+                    } else {
+                        // console.log(data2)
+                        data2.forEach((row) => {
+                            const channel = row.channel_id;
+                            user_channels.push(channel);
+                        });
+                        // console.log(user_channels);
+                        return res.json({ success: true, username: user, channels: user_channels});   
+
+                    }
+                })
             }
         }
     });
