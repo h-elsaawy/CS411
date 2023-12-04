@@ -78,8 +78,6 @@ app.get("/channel/:channel_title", (req,res) => {
         return res.send(data)
     })
 })
-
-
     
 //handles new user registration.
 app.post("/register", async (req,res) => {

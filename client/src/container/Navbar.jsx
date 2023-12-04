@@ -17,7 +17,7 @@ const bar = (
                 <Button variant="light"><Link to="/search">Search Videos</Link></Button>{' '}
                 </li>
                 <li className='active'>
-                <Button variant="light">{sessionStorage.getItem("dashboard") ? (<Link to="/dashboard">My Account</Link>) : (<Link to="/login">Sign In</Link>)}</Button>{' '}
+                <Button variant="light" >{sessionStorage.getItem("username") ? (<Link to="/dashboard">My Account</Link>) : (<Link to="/login">Sign In</Link>)}</Button>{' '}
                 </li>
             </ul>
         </nav>

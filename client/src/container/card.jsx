@@ -1,12 +1,13 @@
 import * as React from 'react';
+import { Link } from "react-router-dom";
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
-import Button from 'react-bootstrap/Button';
 import CardActions from '@mui/material/CardActions';
-import { Link } from "react-router-dom";
-import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
+import Button from '@mui/material/Button';
 
 import './card.css';
 
@@ -28,11 +29,8 @@ export function smallCard(size, channel_title, num_videos, num_views){
           {num_videos} videos<br/>
           {num_views} views
         </Typography>
-        <Button size="small">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
-
+        <Button variant="outlined">{sessionStorage.getItem("username") ? (<Link to=".">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
       </CardContent>
-      
-      
     </Card>
   );
 }
@@ -42,7 +40,7 @@ export function RankCard(size, title, ...data) {
 
   const listItems = data.map( function(x, i){
       if(labels[i])
-          return <li key={x}><strong>{labels[i]}</strong>{x}</li>        
+          return <li key={(x,i)}><strong>{labels[i]}</strong>{x}</li>        
   }.bind());
 
 return (
@@ -86,8 +84,8 @@ return (
 }
 
 
-export function MediaCard(size, title, ...data) {
-    const labels = ['Subscribers: ', 'Views: ','Uploads: ','Type: ', 'Region: '] 
+export function MediaCard(size, channel_title, ...data) {
+    const labels = ['Subscribers: ', 'Views: ','Uploads: ','Type: ', 'Region: ',  'Created Date: ', 'Created Month: ', 'Created Year: ' ] 
 
     const listItems = data.map( function(x, i){
         if(labels[i])
@@ -104,7 +102,7 @@ export function MediaCard(size, title, ...data) {
       /> 
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {title}
+          {channel_title}
         </Typography>
         <ul>
         <Typography variant="body2" color="text.secondary">
@@ -113,8 +111,9 @@ export function MediaCard(size, title, ...data) {
         </ul>
       </CardContent>
       <CardActions>
-        <Button size="small">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
-      </CardActions>
+        <Button variant="outlined">{sessionStorage.getItem("username") ? (<Link to=".">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
+        <BasicSelect current_channel_title={channel_title}></BasicSelect>
+        </CardActions>
     </Card>
   );
 }

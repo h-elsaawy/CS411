@@ -9,7 +9,7 @@
 
 .nav {
     background-color: red;
-    min-width: 1209.99px;
+    min-width: 1210px;
     color: black;
     display: flex;
     justify-content: space-between;
@@ -31,16 +31,16 @@
     text-decoration: none;
 }
 
+
 Button:hover {
     background-color: grey;
     color: white;
 }
 
-/* .nav li.active {
-    background-color: white;
-}
-
-.nav li:hover {
-    background-color: black;
-} */
+Button{
+    margin: 0 5px;
+  }
+  
+.btn {
+font-size: large;}
 

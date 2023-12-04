@@ -10,13 +10,13 @@ img {
 
 a {
     text-decoration: none;
-
+    /* height: 23px; */
+    /* font-size: large; */
 }
-
-.btn {
-    margin-top: 1rem;
+.follow {
+    height: 100;
+    padding: 1;
 }
-
 ul {
     list-style: none;
     padding: 0;

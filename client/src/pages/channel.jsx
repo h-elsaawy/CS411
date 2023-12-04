@@ -4,11 +4,12 @@ import Navbar from "../container/Navbar.jsx"
 import { MediaCard, RankCard, StatsCard} from "../container/card.jsx"
 import { useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
+import './home.css';
 
 const Channel = () => {
     const { channel_title } = useParams();
     const [channel, setChannel] = useState([]);
-
+    // const [isClick, setClick] = useState();
 
     useEffect( () => {
         const fetchChannelStats = async () => { 
@@ -16,7 +17,6 @@ const Channel = () => {
                 const url = "http://localhost:8800/channel/" + channel_title
                 const res = await axios.get(url);
                 setChannel(res.data);
-                console.log(res.data);
             } catch(err) {
                 console.log(err);
             }
@@ -35,18 +35,24 @@ const Channel = () => {
             <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={1}>
-                    <>{MediaCard(560, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region)}</>
+                    <>{MediaCard(560, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>
                 </div>
             ))}
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={8}>
+            {channel.map((ch) => (
+                <div key={4} >
+                    <>{StatsCard(460, 'Stats', ch.highest_yearly_earnings, ch.highest_monthly_earnings,ch.lowest_yearly_earnings, ch.lowest_monthly_earnings, ch.subscribers_for_last_30_days, ch.video_views_for_the_last_30_days)}</>
+                </div>
+            ))}
+            </Grid>
+            <Grid item xs={12}>
             {channel.map((ch) => (
                 <div key={2}>
                     <>{RankCard(460, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
                 </div>
             ))}
-            </Grid>
-            
+            </Grid>{/*
             <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={3} >
@@ -60,7 +66,7 @@ const Channel = () => {
                     <>{StatsCard(460, 'Stats', ch.highest_yearly_earnings, ch.highest_monthly_earnings,ch.lowest_yearly_earnings, ch.lowest_monthly_earnings, ch.subscribers_for_last_30_days, ch.video_views_for_the_last_30_days)}</>
                 </div>
             ))}
-            </Grid>
+            </Grid> */}
             </Grid>
             </div>
         </div>
