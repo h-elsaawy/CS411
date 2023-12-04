@@ -43,7 +43,6 @@ app.get("/search/:string", (req,res) => {
         console.log(data)
         return res.send(data)
     })
-    // return res.json({message: "hi", body: req.body})
 })
 
 // Return the watchlists a user has. 

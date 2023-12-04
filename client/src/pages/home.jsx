@@ -3,6 +3,7 @@ import { useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom";
 
+import follow from "../functions/follow.jsx"
 import Header from "./header.jsx"
 
 const Home = () => {
@@ -14,9 +15,7 @@ const Home = () => {
  
     const [orders, setOrders] = useState([])
 
-    const handleFollow = (channel_title) => {
-      console.log("Clicked follow for channel: " + channel_title)
-    }
+
 
     const handleRemove = (channel_title) => {
       console.log("Clicked unfollow for channel: " + channel_title)
@@ -41,7 +40,7 @@ const Home = () => {
 
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<button onClick={() => handleRemove(channel.channel_title)}>Remove</button>) : (<button onClick={() => handleFollow(channel.channel_title)}>Follow 👆</button>))
+                                    (<button onClick={() => handleRemove(channel.channel_title)}>Remove</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
                             : (<button><Link to="/login">Follow 👆</Link></button>)}
 
               </div>
