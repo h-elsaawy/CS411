@@ -13,6 +13,14 @@ const Home = () => {
     const [channels5, setChannels5] = useState([])
  
     const [orders, setOrders] = useState([])
+
+    const handleFollow = (channel_title) => {
+      console.log("Clicked follow for channel: " + channel_title)
+    }
+
+    const handleRemove = (channel_title) => {
+      console.log("Clicked unfollow for channel: " + channel_title)
+    }
     const renderCategory = (order, channels) => (
         <>
           <h2 className="CategoryTitle">{order}</h2>
@@ -30,8 +38,12 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
-                
-                <button className="follow">{sessionStorage.getItem("username") ? (<Link to="/">Follow</Link>) : (<Link to="/login">Follow</Link>)}</button>
+
+                  {sessionStorage.getItem("username")  ?
+                            (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
+                                    (<button onClick={() => handleRemove(channel.channel_title)}>Remove</button>) : (<button onClick={() => handleFollow(channel.channel_title)}>Follow 👆</button>))
+                            : (<button><Link to="/login">Follow 👆</Link></button>)}
+
               </div>
             ))}
           </div>
