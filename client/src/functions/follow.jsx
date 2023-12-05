@@ -4,13 +4,15 @@ import axios from "axios";
 
 const follow = async (channel_title, source_page) => {
     
-    // Create an object to organize the results by category
-    let watchlist_titles = [];
-    let watchlist_ids = [];
+
     console.log(channel_title + ' follow button clicked')
     
     // Fetch user's watchlist
     try {
+        // Create an object to organize the results by category
+        let watchlist_titles = [];
+        let watchlist_ids = [];
+
         const username = sessionStorage.getItem("username");
         const response = await axios.get(`http://localhost:8800/getwatchlists/${username}`);
         console.log(response)
@@ -29,9 +31,7 @@ const follow = async (channel_title, source_page) => {
         let num_watchlists = watchlist_ids.length;
 
         for (let i=0; i<num_watchlists; i++) {
-            console.log(`${watchlist_ids[i]} - ${watchlist_titles[i]} \n`)
             watchlist_str = watchlist_str.concat(`${watchlist_ids[i]} - ${watchlist_titles[i]} \n`)
-
         }
 
         let selected_watchlist = prompt("Please enter which watchlist to add channel to, or to create new watchlist input unique watchlist title: \n\n" + watchlist_str )
@@ -40,8 +40,9 @@ const follow = async (channel_title, source_page) => {
 
         // Check to see if the user's selected watchlist is in the user's watchlists?
         // if user selected an existing watchlist, build the json for the request.
-        let request = {}
+        let request = {};
         if (watchlist_ids.includes(parseInt(selected_watchlist)) || watchlist_titles.includes(selected_watchlist.toLowerCase())) {
+            
             if (watchlist_ids.indexOf(parseInt(selected_watchlist)) > -1 ){
                 let comment = prompt("Input comments: \n")
 
@@ -53,6 +54,7 @@ const follow = async (channel_title, source_page) => {
                     comments: comment
                 }
                 console.log('watchlist requested was an int: ' + JSON.stringify(request))
+
             } else if (watchlist_titles.indexOf(selected_watchlist) > -1) {
                 let comment = prompt("Input comments: \n")
 
@@ -65,15 +67,16 @@ const follow = async (channel_title, source_page) => {
                 }
                 console.log('watchlist requested was a string: ' + JSON.stringify(request))
             } 
+
         // Else, create a new watchlist ID and title for the new watchlist.
-        }else if (parseInt(selected_watchlist.length) > 0) {
-                let selected_watchlist_new = prompt(`Watchlist ID: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
+        }else if (parseInt(selected_watchlist) > 0) {
+                let selected_watchlist_new = prompt(`Watchlist: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
 
                 let comment = prompt("Input comments: \n")
-
+                console.log(Math.max(watchlist_ids))
                 request = {
                     username: sessionStorage.getItem('username'),
-                    watchlist_id: Math.max(watchlist_ids) + 1,
+                    watchlist_id: Math.max(...watchlist_ids) + 1,
                     watchlist_title: selected_watchlist_new,
                     channel: channel_title,
                     comments: comment
@@ -81,7 +84,7 @@ const follow = async (channel_title, source_page) => {
                 console.log('watchlist requested was a new string: ' + JSON.stringify(request))
         };
 
-        if (confirm(`Add ${request.channel} to (${request.watchlist_id})- ${request.watchlist_title}? `)){ // eslint-disable-line no-restricted-globals
+        if (confirm(`Add ${request.channel} to (${request.watchlist_id}) - '${request.watchlist_title}?' `)){ // eslint-disable-line no-restricted-globals
             // Post info to the database 
             const postResponse = await axios.post("http://localhost:8800/follow", request, {
                 headers: {
@@ -90,7 +93,7 @@ const follow = async (channel_title, source_page) => {
             });
             if (postResponse.data.success) {
                 // reload screen so session storage updates
-                window.location.reload(true);
+                // window.location.reload(true);
                 
             } else {
                 // Handle login failure
