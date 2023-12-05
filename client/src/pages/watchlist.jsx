@@ -12,12 +12,11 @@ const Watchlist = () => {
     const [channels, setChannelsInWatchList] = useState([]);
     const [watchlist_title, setWatchlistTitle] = useState();
 
-    const [refresh, setRefresh] = useState(false); // Add a state for refreshing
-    const handleFollow = async (channel_title) => {
+    const handleUnfollow = async (channel_title, watchlist_id) => {
         console.log("Clicked to unfollow: " + channel_title)
         try{
             const url = "http://localhost:8800/unfollow";
-            const res = await axios.post(url, {username, channel_title});
+            const res = await axios.post(url, {username, channel_title, watchlist_id});
             console.log(res);
             setChannelsInWatchList((prevChannels) => {
                 const updatedChannels = prevChannels.filter((channel) => channel.channel_name !== channel_title);
@@ -111,7 +110,7 @@ const Watchlist = () => {
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
 
-                            <td><button onClick={() => handleFollow(channel.channel_name)}>Unfollow ❌</button></td>
+                            <td><button onClick={() => handleUnfollow(channel.channel_name)}>Unfollow ❌</button></td>
                             <td>
                             <a href={`/channel/${channel.channel_name}`}>
 
