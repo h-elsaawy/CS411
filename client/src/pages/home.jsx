@@ -31,12 +31,12 @@ const Home = () => {
           let watchlists_with_channel = ""
           for(let i = 0; i < returned_watchlists.length; i++){
             watchlists_with_channel +=  "\n" + returned_watchlists[i]["watchlist_id"] + " - " + returned_watchlists[i]["title"];
-            valid_watchlist_ids.push(returned_watchlists[i]["watchlist_id"]);
+            valid_watchlist_ids.push(parseInt(returned_watchlists[i]["watchlist_id"]));
           }
-          const watchlist_id = prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`);
-
-          if(watchlist_id in valid_watchlist_ids){
+          const watchlist_id = parseInt(prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`));
+          if(valid_watchlist_ids.includes(watchlist_id)){
             const res = await axios.post(url, {username, channel_title , watchlist_id});
+            window.location.reload(true);
           }
           else if(watchlist_id != null){
             alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
