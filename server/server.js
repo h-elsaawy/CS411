@@ -81,10 +81,11 @@ app.get("/getwatchlists/:username/:id", async (req, res) => {
 app.post("/unfollow", (req, res) => {
     const user = req.body.username
     const channel = req.body.channel_title
+    const id = req.body.watchlist_id
     const q = `DELETE FROM watchlist
-        WHERE username = ? and channel_id = ?;`
+        WHERE username = ? and channel_id = ? and watchlist_id = ?;`
     
-    db.query(q,[user, channel] ,(err,data) => {
+    db.query(q,[user, channel, id] ,(err,data) => {
         if (err) {
             console.log(err)
             return res.json(err);
@@ -119,6 +120,22 @@ app.post("/editComment", (req, res) => {
             console.log(`@${user}' unable to add comment ${comment} for channel ${channel}`);
             return res.json({ success: false, username: user, message:`@${user}' unable to add comment ${comment} for channel ${channel}`});  
         }
+    });
+});
+
+// Get watchlist ids for a specific channel and user
+app.get("/getWatchlistIds/:username/:channel_id", (req, res) => {
+    const username = req.params.username
+    const channel_id = req.params.channel_id
+    console.log(username);
+    console.log(channel_id);
+    const q = `SELECT DISTINCT watchlist_id, title
+        FROM watchlist
+        WHERE username = ? and channel_id = ?;`
+    
+    db.query(q,[username, channel_id] ,(err,data) => {
+        if (err) return res.json(err);
+        return res.json(data);
     });
 });
 

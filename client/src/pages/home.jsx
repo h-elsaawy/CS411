@@ -9,6 +9,7 @@ import './home.css';
 import follow from "../functions/follow.jsx"
 
 const Home = () => {
+    const username = sessionStorage.getItem('username');
     const [channels1, setChannels1] = useState([])
     const [channels2, setChannels2] = useState([])
     const [channels3, setChannels3] = useState([])
@@ -17,11 +18,35 @@ const Home = () => {
  
     const [orders, setOrders] = useState([])
 
+    const handleUnfollow = async (channel_title) => {
+      console.log("Clicked to unfollow: " + channel_title)
+      try{
+          const url = "http://localhost:8800/unfollow";
+
+          const url4watchlists = `http://localhost:8800/getWatchlistIds/${username}/${channel_title}`;
+          const watchlist_id_res = await axios.get(url4watchlists);
+          const returned_watchlists = watchlist_id_res.data
+          
+          let valid_watchlist_ids = []
+          let watchlists_with_channel = ""
+          for(let i = 0; i < returned_watchlists.length; i++){
+            watchlists_with_channel +=  "\n" + returned_watchlists[i]["watchlist_id"] + " - " + returned_watchlists[i]["title"];
+            valid_watchlist_ids.push(returned_watchlists[i]["watchlist_id"]);
+          }
+          const watchlist_id = prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`);
+
+          if(watchlist_id in valid_watchlist_ids){
+            const res = await axios.post(url, {username, channel_title , watchlist_id});
+          }
+          else if(watchlist_id != null){
+            alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
+          }
+      } catch (err) {
+          console.log("Error unfollowing:", err);
+      }
+  };
 
 
-    const handleRemove = (channel_title) => {
-      console.log("Clicked unfollow for channel: " + channel_title)
-    }
     const renderCategory = (order, channels) => (
         <>
           <h2 className="CategoryTitle">{order}</h2>
@@ -42,7 +67,7 @@ const Home = () => {
 
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<button onClick={() => handleRemove(channel.channel_title)}>Remove</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
+                                    (<button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
                             : (<button><Link to="/login">Follow 👆</Link></button>)}
 
               </div>
