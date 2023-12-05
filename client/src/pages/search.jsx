@@ -1,7 +1,8 @@
 import { React, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
-// import Header from "../pages/header.jsx"
+import Navbar from "../container/Navbar"
+
 
 const Search = () => {
     const [search_str, setSearchStr] = useState("");
@@ -42,7 +43,7 @@ const Search = () => {
   }
     return (
         <div>
-            {/* <>{Header()}</> */}
+            <>{Navbar()}</>
             <p>
                 <label>Search: 
                 <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
