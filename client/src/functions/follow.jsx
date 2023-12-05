@@ -35,13 +35,14 @@ const follow = async (channel_title) => {
 
         let selected_watchlist = prompt("Please enter which watchlist to add channel to, or to create new watchlist input unique watchlist title: \n\n" + watchlist_str )
 
-        let comment = prompt("Input comments: \n")
-        // Check to see if the user's selected watchlist is in the user's watchlists?
         watchlist_titles = watchlist_titles.map(title => title.toLowerCase())
 
+        // Check to see if the user's selected watchlist is in the user's watchlists?
+        // if user selected an existing watchlist, build the json for the request.
         if (watchlist_ids.includes(parseInt(selected_watchlist)) || watchlist_titles.includes(selected_watchlist.toLowerCase())) {
-            console.log("this worked")
             if (watchlist_ids.indexOf(parseInt(selected_watchlist)) > -1 ){
+                let comment = prompt("Input comments: \n")
+
                 const request = {
                     username: sessionStorage.getItem('username'),
                     watchlist_id: selected_watchlist,
@@ -51,6 +52,8 @@ const follow = async (channel_title) => {
                 }
                 console.log('watchlist requested was an int: ' + JSON.stringify(request))
             } else if (watchlist_titles.indexOf(selected_watchlist) > -1) {
+                let comment = prompt("Input comments: \n")
+
                 const request = {
                     username: sessionStorage.getItem('username'),
                     watchlist_id: watchlist_ids[watchlist_titles.indexOf(selected_watchlist)],
@@ -59,9 +62,30 @@ const follow = async (channel_title) => {
                     comments: comment
                 }
                 console.log('watchlist requested was a string: ' + JSON.stringify(request))
-            }
+            } 
+        // Else, create a new watchlist ID and title for the new watchlist.
+        }else if (selected_watchlist.length <= 1) {
+                let selected_watchlist = prompt(`Watchlist ID: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
+                console.log(typeof selected_watchlist)
+                let comment = prompt("Input comments: \n")
 
+                const request = {
+                    username: sessionStorage.getItem('username'),
+                    watchlist_id: watchlist_ids.max() + 1,
+                    watchlist_title: selected_watchlist,
+                    channel: channel_title,
+                    comments: comment
+                }
+                console.log('watchlist requested was a new string: ' + JSON.stringify(request))
         }
+        // Post info to the database 
+        const postResponse = await axios.post("http://localhost:8800/follow", request, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+      });
+
+        
 
 
 
