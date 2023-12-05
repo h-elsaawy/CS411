@@ -24,7 +24,7 @@ const Search = () => {
         } else {
             try{
                 const url = "http://localhost:8800/search/" 
-                const res = await axios.get(url, {params: {search:search_str, type: type_str}});
+                const res = await axios.get(url, {params: {search:search_str.trim(), type: type_str}});
                 console.log(res)
                 if (res.data !== undefined) {
                     setResults(res.data);
@@ -87,8 +87,8 @@ const Search = () => {
             <div className="channels">
                 {results.map((results, index) => (
                     <div key={index} className="channel">
-                        <h2>{results.channel_title}</h2>
-                        <a href = {"http://localhost:3000/channel/" + results.channel_title}> {"View channel"}</a>
+                        <h2><a href = {"http://localhost:3000/channel/" + results.channel_title}> {results.channel_title}</a></h2>
+                        
                     </div>
                 ))}
                 
