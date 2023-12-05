@@ -105,7 +105,7 @@ const Watchlist = () => {
             <button onClick={() => deleteWatchlistName(id, watchlist.name, username)}>Delete Watchlist ❌</button>
 
             <br></br><br></br>
-            <table className="watchlists-table" cellpadding="4" cellspacing="2">
+            <table className="watchlists-table" cellPadding="4" cellSpacing="2">
                 
                 <thead>
                     <tr>

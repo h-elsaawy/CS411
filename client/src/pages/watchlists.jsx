@@ -99,7 +99,7 @@ const Watchlists = () => {
                         <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button> 
                         <button onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
                             
-                            <table className="watchlists-table" cellpadding="2" cellSpacing="2">
+                            <table className="watchlists-table" cellPadding="2" cellSpacing="2">
                                 <thead>
                                     <tr>
                                         <th></th>
