@@ -93,14 +93,15 @@ const Watchlists = () => {
             <div className="">
                 {actual_watchlists.map((watchlist, index)=> (
                     <div key = {watchlist.id} className = "">
-                        <h2><button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels:</h2>
+                        <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels: <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button></h2>
+                        
                             
                             <table className="watchlists-table" cellpadding="2" cellSpacing="0">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th width="300">Channel Name</th>
-                                        <th width="600">Comments</th>
+                                        <th width="250">Channel Name</th>
+                                        <th width="550">Comments</th>
                                         <th></th>
                                     </tr>
                                 </thead>
