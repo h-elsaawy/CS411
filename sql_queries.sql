@@ -133,6 +133,8 @@ CALL set_user(
 );
 SELECT @retrun_code;
 
+-- Create the variable search procedure
+DROP PROCEDURE IF EXISTS variablesearch;
 DELIMITER //
 
 CREATE PROCEDURE `variablesearch`(
@@ -141,21 +143,26 @@ CREATE PROCEDURE `variablesearch`(
 )
 BEGIN
 
-
-
     IF searchType = "youtuber" THEN
-        SELECT youtuber AS channel_title, youtuber AS title 
+        -- Searches all the channel titles for the input str
+        SELECT youtuber AS channel_title
         FROM channels 
-        WHERE youtuber LIKE CONCAT('%', searchTerm, '%');
-		UNION
-        SELECT channel_title, title  
+        WHERE youtuber LIKE CONCAT('%', searchTerm, '%')
+     UNION
+        SELECT channel_title 
         FROM videos 
         WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
 
     ELSEIF searchType = "title" THEN
-        SELECT DISTINCT channel_title, title FROM videos WHERE title LIKE CONCAT('%', searchTerm, '%');
+        -- searches all the videos for video_titles that contain the string
+        SELECT DISTINCT channel_title, title as video_title
+        FROM videos 
+        WHERE title LIKE CONCAT('%', searchTerm, '%');
     ELSEIF searchType = "tags" THEN
-        SELECT DISTINCT channel_title, title FROM (videos JOIN tags USING (video_id))  WHERE tags LIKE CONCAT('%', searchTerm, '%');
+        -- searches all the video tags that contain the string
+        SELECT DISTINCT channel_title, title as video_title
+        FROM (videos JOIN tags USING (video_id))  
+        WHERE tags LIKE CONCAT('%', searchTerm, '%');
     END IF;
     
 END //

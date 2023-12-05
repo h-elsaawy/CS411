@@ -37,16 +37,19 @@ app.get("/search/", (req,res) => {
     console.log(req.query)
 
     const q = `CALL variablesearch("${string}", "${type_string}");`
-    console.log(q)
+
 
     db.query(q,  (err, data) => {
-        if (err) return res.json(err);
-        //console.log(data[0])
-        return res.json(data[0])
-
+        if (err) {
+            console.log(err);
+            return res.json(err)
+        } else {            
+            console.log(data[0])
+            return res.json(data[0])
+        }
     })
 
-})
+});
 
 // Return the watchlists a user has. 
 app.get("/getwatchlists/:username", (req, res) => {
