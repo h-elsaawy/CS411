@@ -8,6 +8,7 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import { BarChart } from '@mui/x-charts/BarChart';
 import Button from '@mui/material/Button';
+import Follow from "../functions/follow.jsx"
 
 import Chart from 'chart.js/auto'
 

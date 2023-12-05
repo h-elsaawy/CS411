@@ -5,6 +5,8 @@ import { MediaCard, RankCard, graphCard, StatsCard} from "../container/card.jsx"
 import { useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import './home.css';
+import Follow from "../functions/follow.jsx"
+
 
 const Channel = () => {
     const { channel_title } = useParams();
@@ -33,6 +35,11 @@ const Channel = () => {
             <Grid  container spacing={2} >
             <Grid item xs={2}></Grid>
             <Grid  item xs={3}>
+            {sessionStorage.getItem("username")  ?
+                            (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
+                                    (<><button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
+                                    <button className = "unfollowbutton" onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
+                            : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
             {channel.map((ch) => (
                 <div key={1}>
                     <>{MediaCard(300, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>
