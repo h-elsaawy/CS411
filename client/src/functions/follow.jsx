@@ -2,7 +2,7 @@
 import axios from "axios";
 
 
-const follow = async (channel_title, source_page) => {
+const follow = async (channel_title) => {
     
 
     console.log(channel_title + ' follow button clicked')
@@ -84,7 +84,7 @@ const follow = async (channel_title, source_page) => {
                 }
                 console.log('watchlist requested was a new string: ' + JSON.stringify(request))
         // Handles the case that the user picks a new watchlist title to start, or user has no watchlists (new users)
-        }  else if (Math.max(watchlist_ids) < 0 || watchlist_ids.length == 0) {
+        } else if (Math.max(watchlist_ids) < 0 || watchlist_ids.length == 0) {
             let comment = prompt("Input comments: \n")
 
             request = {
@@ -95,7 +95,7 @@ const follow = async (channel_title, source_page) => {
                 comments: comment
             }
             console.log('watchlist requested was a new string: ' + JSON.stringify(request))
-        }else {
+        } else {
 
             let comment = prompt("Input comments: \n")
 
