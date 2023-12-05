@@ -97,9 +97,10 @@ const Watchlist = () => {
             <>
                 {Navbar()}
             </>
-            <h1>{username}, here is information on your watchlist titled:</h1>
-            <h1>{watchlist_title}</h1>
-            <table className="watchlists-table">
+            <h1>@{username}, here is information on your watchlist titled:</h1>
+            <h2><u>{watchlist_title}</u></h2>
+            <table className="watchlists-table" cellpadding="10" >
+                
                 <thead>
                     <tr>
                         <th></th>

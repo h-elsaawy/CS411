@@ -12,7 +12,7 @@ export default function Navbar() {
                     <Button variant="light"><Link to="/">Top Trending Channels</Link></Button>
                     </li>
                     <li className='active'>
-                    <Button variant="light" >{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlist</Link>) : (<Link to="/login">Watchlist</Link>)}</Button>
+                    <Button variant="light" >{sessionStorage.getItem("username") ? (<Link to="/watchlist">Watchlists</Link>) : (<Link to="/login">Watchlists</Link>)}</Button>
                     </li>
                     <li className='active'>
                     <Button variant="light"><Link to="/search">Search Videos</Link></Button>
