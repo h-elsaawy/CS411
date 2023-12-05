@@ -66,7 +66,7 @@ const follow = async (channel_title, source_page) => {
                 console.log('watchlist requested was a string: ' + JSON.stringify(request))
             } 
         // Else, create a new watchlist ID and title for the new watchlist.
-        }else if (selected_watchlist.length <= 1) {
+        }else if (parseInt(selected_watchlist.length) > 0) {
                 let selected_watchlist_new = prompt(`Watchlist ID: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
 
                 let comment = prompt("Input comments: \n")
@@ -79,22 +79,25 @@ const follow = async (channel_title, source_page) => {
                     comments: comment
                 }
                 console.log('watchlist requested was a new string: ' + JSON.stringify(request))
-        }
-        // Post info to the database 
-        const postResponse = await axios.post("http://localhost:8800/follow", request, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-        });
-        if (postResponse.data.success) {
-            // reload screen so session storage updates
-            window.location.reload(true);
-            
-          } else {
-            // Handle login failure
-            alert(postResponse.data.message);
+        };
 
-          }
+        if (confirm(`Add ${request.channel} to (${request.watchlist_id})- ${request.watchlist_title}? `)){ // eslint-disable-line no-restricted-globals
+            // Post info to the database 
+            const postResponse = await axios.post("http://localhost:8800/follow", request, {
+                headers: {
+                "Content-Type": "application/json",
+                },
+            });
+            if (postResponse.data.success) {
+                // reload screen so session storage updates
+                window.location.reload(true);
+                
+            } else {
+                // Handle login failure
+                alert(postResponse.data.message);
+
+            }
+        } else {alert('Follow request cancelled.')}
 
     } catch (error) {
         console.error("Error fetching watchlists", error);

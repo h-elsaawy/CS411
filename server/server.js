@@ -98,7 +98,14 @@ app.post("/unfollow", (req, res) => {
             return res.json(err);
         } else if (data.affectedRows == 1)  {
             console.log(`@${user}' unfollowed ${channel}`);
-            return res.json({ success: true, username: user, message:`@${user}' unfollowed ${channel}`});  
+            db.query(`CALL updateWatchlistIDsForUser('${user}')`,(err,data) => {
+                if (err) {
+                    console.log(err)
+                    return res.json(err);
+                } else {
+                    // console.log(data)
+                    return res.json({ success: true, username: user, message:`@${user}' unfollowed ${channel}, watchlist_id's updated.`}); 
+                } });
         } else {
             console.log(`@${user}' unfollowing ${channel} failed`);
             return res.json({ success: false, username: user, message:`@${user}' unfollowing ${channel} failed`});  
