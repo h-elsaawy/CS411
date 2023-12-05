@@ -95,7 +95,7 @@ const Watchlists = () => {
                     <div key = {watchlist.id} className = "">
                         <h2><button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels:</h2>
                             
-                            <table className = "">
+                            <table className="watchlists-table" cellpadding="10" >
                                 <thead>
                                     <tr>
                                         <th></th>
