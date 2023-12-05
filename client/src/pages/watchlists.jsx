@@ -94,12 +94,12 @@ const Watchlists = () => {
                     <div key = {watchlist.id} className = "">
                         <h2><a href={`/watchlist/${watchlist.id}`}><u>{watchlist.id})  {watchlist.name}</u></a> has channels:</h2>
                             
-                            <table className="watchlists-table" cellpadding="10" >
+                            <table className="watchlists-table" cellpadding="2" cellSpacing="0">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Channel Name</th>
-                                        <th>Comments</th>
+                                        <th width="300">Channel Name</th>
+                                        <th width="600">Comments</th>
                                         <th></th>
                                     </tr>
                                 </thead>
