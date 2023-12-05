@@ -89,6 +89,7 @@ app.post("/unfollow", (req, res) => {
     const channel = req.body.channel_title
     const id = req.body.watchlist_id
     console.log(user, channel, id);
+    console.log(typeof user, typeof channel, typeof id);
     const q = `DELETE FROM watchlist
         WHERE username = ? and channel_id = ? and watchlist_id = ?;`
     
@@ -118,12 +119,11 @@ app.post("/editComment", (req, res) => {
     const comment = req.body.newComment
     const user = req.body.username
     const channel = req.body.channel_title
-    const id = req.body.id
+    const id = req.body.id.toString()
     
     const q = `UPDATE watchlist
         SET comments = ?
         WHERE username = ? and channel_id = ? and watchlist_id = ?;`
-    
     db.query(q,[comment, user, channel, id] ,(err,data) => {
         if (err) {
             console.log(err)
@@ -132,6 +132,8 @@ app.post("/editComment", (req, res) => {
             console.log(`@${user}' added comment ${comment} for channel ${channel}`);
             return res.json({ success: true, username: user, message:`@${user}' added comment ${comment} for channel ${channel}`});  
         } else {
+            console.log("Asdf");
+            console.log(data);
             console.log(`@${user}' unable to add comment ${comment} for channel ${channel}`);
             return res.json({ success: false, username: user, message:`@${user}' unable to add comment ${comment} for channel ${channel}`});  
         }
