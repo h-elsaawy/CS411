@@ -90,7 +90,21 @@ const Home = () => {
                 setChannels5(res.data[orders[4]]);
  
                 setOrders(res.data["order"]);
-
+                const url = "http://localhost:8800/getwatchlists/" + username;
+                const res2 = await axios.get(url);
+                const watchlistsData = res2.data;
+                console.log();
+                let all_channels = [];
+                for(let i = 0; i < watchlistsData.length; i++){
+                  let channels_list = JSON.parse(watchlistsData[i]["json_arrayagg(channel_id)"]);
+                  for(let j = 0; j < channels_list.length; j ++){
+                    if(!all_channels.includes(channels_list[j])){
+                      all_channels.push(channels_list[j]);
+                    }
+                  }
+                }
+                sessionStorage.setItem("watchlist", JSON.stringify(all_channels));
+                console.log(all_channels);
             } catch(err) {
                 console.log(err)
             }
