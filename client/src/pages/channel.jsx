@@ -8,9 +8,45 @@ import './home.css';
 import Follow from "../functions/follow.jsx"
 
 
+
 const Channel = () => {
     const { channel_title } = useParams();
     const [channel, setChannel] = useState([]);
+    const username = sessionStorage.getItem("username");
+    const handleUnfollow = async (channel_title) => {
+        console.log("Clicked to unfollow: " + channel_title)
+        try{
+            const url = "http://localhost:8800/unfollow";
+  
+            const url4watchlists = `http://localhost:8800/getWatchlistIds/${username}/${channel_title}`;
+            const watchlist_id_res = await axios.get(url4watchlists);
+            const returned_watchlists = watchlist_id_res.data
+            
+            let valid_watchlist_ids = []
+            let watchlists_with_channel = ""
+            for(let i = 0; i < returned_watchlists.length; i++){
+              watchlists_with_channel +=  "\n" + returned_watchlists[i]["watchlist_id"] + " - " + returned_watchlists[i]["title"];
+              valid_watchlist_ids.push(parseInt(returned_watchlists[i]["watchlist_id"]));
+            }
+            let watchlist_id = prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`);
+            if(watchlist_id != null){
+              if(valid_watchlist_ids.includes(parseInt(watchlist_id))){
+                const res = await axios.post(url, {username, channel_title , watchlist_id});
+                window.location.reload(true);
+              }
+              else{
+                alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
+              }
+  
+            }
+            
+        } catch (err) {
+            console.log("Error unfollowing:", err);
+        }
+    };
+    const unloggedinFollowClick = () => {
+        window.location.href = '/login';
+      }
 
     useEffect( () => {
         const fetchChannelStats = async () => { 
@@ -25,6 +61,8 @@ const Channel = () => {
         fetchChannelStats();
     }, []);
 
+    
+
     return (
         <div className="page" >
             <>{Navbar()}</>
@@ -36,7 +74,7 @@ const Channel = () => {
             <Grid item xs={2}></Grid>
             <Grid  item xs={3}>
             {sessionStorage.getItem("username")  ?
-                            (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
+                            (sessionStorage.getItem("watchlist").includes(channel_title) ? 
                                     (<><button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>
                                     <button className = "unfollowbutton" onClick={() => handleUnfollow(channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>)
                             : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
