@@ -135,35 +135,25 @@ SELECT @retrun_code;
 
 DELIMITER //
 
-CREATE PROCEDURE variablesearch (
+CREATE PROCEDURE `variablesearch`(
     IN searchTerm VARCHAR(255),
     IN searchType VARCHAR(10)
 )
 BEGIN
 
-    CREATE TEMPORARY TABLE IF NOT EXISTS NewTable (
-        channel VARCHAR(255) PRIMARY KEY
-    );
+
 
     IF searchType = "youtuber" THEN
-        searchString = "%"+searchTerm+"%"
-        INSERT INTO NewTable  
-            (SELECT youtuber FROM channels WHERE youtuber LIKE searchString
-                UNION 
-             SELECT channel_title FROM videos WHERE youtuber LIKE searchString);
-
-    ELSEIF searchType = "channel" THEN
-    
-        INSERT INTO NewTable (channel) SELECT channel_title FROM videos WHERE channel_title LIKE "%searchTerm%";
+        SELECT youtuber AS channel_title, youtuber AS title FROM channels WHERE youtuber LIKE CONCAT('%', searchTerm, '%')
+		UNION
+        SELECT channel_title, title  FROM videos WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
     ELSEIF searchType = "title" THEN
-        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE title LIKE "%searchTerm%";
+        SELECT DISTINCT channel_title, title FROM videos WHERE title LIKE CONCAT('%', searchTerm, '%');
     ELSEIF searchType = "tags" THEN
-        INSERT INTO NewTable (channel) SELECT title FROM videos WHERE tags LIKE "%searchTerm%";
+        SELECT DISTINCT channel_title, title FROM (videos JOIN tags USING (video_id))  WHERE tags LIKE CONCAT('%', searchTerm, '%');
     END IF;
 
-    SELECT channel FROM NewTable;
 
-    DROP TEMPORARY TABLE IF EXISTS NewTable;
     
 END //
 
