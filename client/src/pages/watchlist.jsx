@@ -102,7 +102,7 @@ const Watchlist = () => {
             <h1>@{username}, here is information on your watchlist titled:</h1>
             <h2><u>{watchlist_title}</u> </h2>
             <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button> 
-            <button onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
+            <button onClick={() => deleteWatchlistName(watchlist.id, watchlist.name, username)}>Delete Watchlist ❌</button>
 
             <br></br><br></br>
             <table className="watchlists-table" cellpadding="4" cellspacing="2">
