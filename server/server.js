@@ -218,10 +218,9 @@ app.post("/follow", (req, res) => {
     const comments = req.body.comments
 
     const q = `INSERT INTO watchlist(username, watchlist_id, title, channel_id, comments)
-                VALUES ('${username}', ${watchlist_id}, '${watchlist_title}', '${channel}', '${comments}')
-                `
+                VALUES (?,?,?,?,?) `
     console.log(q)
-    db.query(q ,(err,data) => {
+    db.query(q, [username, watchlist_id, watchlist_title, channel, comments], (err,data) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 console.log('Attempted to add duplicate entry added to the same watchlist.')
