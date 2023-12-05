@@ -56,7 +56,7 @@ const Home = () => {
                 <img className="channelCover" src="\yt_image.png" alt=""/>
                 <h3 id="channelTitle">
                 {sessionStorage.getItem("watchlist") ?
-                  (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<>{channel.channel_title} ❤️</>) : (<>{channel.channel_title}</>))
+                  (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a> ❤️</>) : (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a></>))
                   : (<>{channel.channel_title}</>)
                 }
             </h3>

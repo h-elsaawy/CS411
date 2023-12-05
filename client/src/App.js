@@ -8,6 +8,7 @@ import Search from "./pages/search.jsx"
 import Dashboard from "./pages/Dashboard.jsx"
 import Login from "./container/Login.js"
 import Register from "./container/Register.js"
+import Channel from "./pages/channel.jsx"
 import Follow from "./functions/follow.jsx"
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/login" element={ <Login/>}></Route>
           <Route path="/register" element={ <Register/>}></Route>
           <Route path="/dashboard" element={ <Dashboard/>}></Route>
+          <Route path="/channel/:channel_title" element={ <Channel/>}></Route>
           <Route path="/follow" element={ <Follow/>}></Route>
 
           

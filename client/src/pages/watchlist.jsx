@@ -112,10 +112,7 @@ const Watchlist = () => {
 
                             <td><button onClick={() => handleUnfollow(channel.channel_name)}>Unfollow ❌</button></td>
                             <td>
-                            <a href={`/channel/${channel.channel_name}`}>
-
-                                    {channel.channel_name}
-                                </a>
+                            <a href={`/channel/${channel.channel_name}`}>{channel.channel_name}</a>
                             </td>
                             <td>{channel.comments}</td>
 
