@@ -6,7 +6,6 @@ import Navbar from "../container/Navbar"
 
 const Search = () => {
     const [search_str, setSearchStr] = useState("");
-    // const type_str = "youtuber"
     const [type_str, setTypeStr] = useState("youtuber");
     const [results, setResults] = useState([]);
 
@@ -14,7 +13,6 @@ const Search = () => {
     const handleTypeChange = (event) => {
         setTypeStr(event.target.value);
       };
-
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -27,7 +25,8 @@ const Search = () => {
                 const res = await axios.get(url, {params: {search:search_str.trim(), type: type_str}});
                 console.log(res)
                 if (res.data !== undefined) {
-                    setResults(res.data);
+                    await setResults(res.data);
+
                 } else {
                     setResults([]);
                 }
@@ -40,11 +39,12 @@ const Search = () => {
     return (
         <div>
             <>{Navbar()}</>
-            <p>
-                <label>Search: 
-                <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
+            <br></br>
+                <form>
+                <label>Search: <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
                 <button type="submit" onClick={handleSubmit}>Submit</button>  
-            </p>
+                </form>
+            <br></br>
             <div>
                 <p>Search for:
                     <label>
