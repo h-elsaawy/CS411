@@ -76,7 +76,7 @@ const Channel = () => {
             {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel_title) ? 
                                     (<><button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>
-                                    <button className = "unfollowbutton" onClick={() => handleUnfollow(channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
+                                    <button className = "unfollowbutton" onClick={() => handleUnfollow(channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>)
                             : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
             {channel.map((ch) => (
                 <div key={1}>
