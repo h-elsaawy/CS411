@@ -88,21 +88,12 @@ const follow = async (channel_title, source_page) => {
         });
         if (postResponse.data.success) {
             // Save the watchlist (e.g., in sessionStorage) for subsequent requests
-            let updated_list = sessionStorage.getItem('watchlist');
-            console.log(updated_list + typeof updated_list)
-            updated_list.concat(',',channel_title);
-            // updated_list.push(channel_title);
-            let list = updated_list.split(',')
-            console.log(list)
-            sessionStorage.setItem('watchlist', list)
-            alert(postResponse.data.message )
-            console.log(postResponse.data.message )
-            // window.location.reload(true);
-            
+            let updated_list = JSON.parse(sessionStorage.getItem('watchlist'));
+            updated_list.push(channel_title);
+            sessionStorage.setItem('watchlist', JSON.stringify(updated_list));           
           } else {
             // Handle login failure
             alert(postResponse.data.message);
-
           }
 
     } catch (error) {
