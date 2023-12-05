@@ -3,8 +3,8 @@ import axios from "axios";
 
 
 const follow = async (channel_title, source_page) => {
-        // Create an object to organize the results by category
     
+    // Create an object to organize the results by category
     let watchlist_titles = [];
     let watchlist_ids = [];
     console.log(channel_title + ' follow button clicked')

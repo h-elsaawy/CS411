@@ -6,7 +6,7 @@ import {smallCard} from "../container/card.jsx"
 import Navbar from "../container/Navbar"
 import './home.css';
 
-import follow from "../functions/follow.jsx"
+import Follow from "../functions/follow.jsx"
 
 const Home = () => {
     const username = sessionStorage.getItem('username');
@@ -50,6 +50,10 @@ const Home = () => {
       }
   };
 
+  const unloggedinFollowClick = () => {
+    window.location.href = '/login';
+  }
+
 
     const renderCategory = (order, channels) => (
         <>
@@ -68,11 +72,12 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
-                <button onClick={() => follow(channel.channel_title)}>Follow 👆</button>
+                
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button>) : "")
-                            : ""}
+                                    (<><button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
+                                    <button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
+                            : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
 
               </div>
             ))}
