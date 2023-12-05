@@ -27,22 +27,29 @@ app.use(cors(corsOptions));
 app.use(express.json())
 app.use(bodyParser.json());
 
- // Basic search functionality
-app.get("/search/:string", (req,res) => {
+//Advanced search functionality
+app.get("/search/", (req,res) => {
 
-    const string = req.params.string; //replace w/keywords list ?
+    const string = req.query.search; 
+
+    
+    const type_string = req.query.type
     // console.log(req, req.params.string)
+    console.log(req.query)
 
     const q = `SELECT youtuber as channel FROM channels WHERE youtuber LIKE "%${string}%"
                 UNION
                SELECT channel_title as channel FROM videos WHERE channel_title LIKE "%${string}%";` ;
-    console.log(q)
+    const q2 = `CALL variablesearch("${string}", "${type_string}");`
+    console.log(q2)
 
-    db.query(q, [string], (err, data) => {
+    db.query(q2,  (err, data) => {
         if (err) return res.json(err);
-        console.log(data)
-        return res.send(data)
+        //console.log(data[0])
+        return res.json(data[0])
+
     })
+
 })
 
 // Return the watchlists a user has. 
