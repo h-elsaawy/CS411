@@ -140,6 +140,32 @@ app.post("/editComment", (req, res) => {
     });
 });
 
+// Edit watchlist name
+app.post("/editWatchlist", (req, res) => {
+    const new_name = req.body.new_name
+    const watchlist_id = req.body.watchlist_id
+    const user = req.body.user
+    console.log(new_name, user, watchlist_id);
+
+    const q = `UPDATE watchlist
+                SET title = ?
+                WHERE username = ? and watchlist_id = ?;`
+
+    db.query(q, [new_name, user, watchlist_id], (err, data) => {
+        console.log(data);
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows >= 1)  {
+            console.log(`@${user}' updated watchlist ${watchlist_id} with name ${new_name}`);
+            return res.json({ success: true, username: user, message:`@${user}' updated watchlist ${watchlist_id} with name ${new_name}`});  
+        } else {
+            console.log(`@${user}' failed to update watchlist ${watchlist_id} with name ${new_name}`);
+            return res.json({ success: false, username: user, message:`@${user}' failed to update watchlist ${watchlist_id} with name ${new_name}`});  
+        }
+    })
+})
+
 // Get watchlist ids for a specific channel and user
 app.get("/getWatchlistIds/:username/:channel_id", (req, res) => {
     const username = req.params.username

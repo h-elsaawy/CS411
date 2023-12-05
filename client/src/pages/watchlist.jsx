@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../container/Navbar";
 import { useParams } from "react-router-dom";
-
+import editWatchlistName from "../functions/editwatchlistname.jsx";
 const Watchlist = () => {
     const { id } = useParams();
     const username = sessionStorage.getItem('username');
@@ -98,7 +98,7 @@ const Watchlist = () => {
                 {Navbar()}
             </>
             <h1>{username}, here is information on your watchlist titled:</h1>
-            <h1>{watchlist_title}</h1>
+            <h1><button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button>{watchlist_title}</h1>
             <table className="watchlists-table">
                 <thead>
                     <tr>
