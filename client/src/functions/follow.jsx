@@ -95,7 +95,7 @@ const follow = async (channel_title, source_page) => {
                 comments: comment
             }
             console.log('watchlist requested was a new string: ' + JSON.stringify(request))
-        }else if (parseInt(selected_watchlist) < 0) {
+        }else {
 
             let comment = prompt("Input comments: \n")
 

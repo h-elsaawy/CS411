@@ -8,6 +8,7 @@ const deletewatchlistName = async (watchlist_id, watchlist_title, user) => {
             if(response.data.success){
                 window.location.reload(true);
                 window.location.href="http://localhost:3000/watchlist/"
+
             } else {
                 alert(response.data.message);
             }
