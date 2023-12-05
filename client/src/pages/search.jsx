@@ -87,7 +87,7 @@ const Search = () => {
                 {results.map((results, index) => (
                     <div key={index} className="channel">
                         <h2>{results.title}</h2>
-                        <a href = {"http://localhost:3000/" + results.channel_title}> {"View channel"}</a>
+                        <a href = {"http://localhost:3000/channel/" + results.channel_title}> {"View channel"}</a>
                     </div>
                 ))}
                 
