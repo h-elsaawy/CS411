@@ -13,7 +13,8 @@ const Watchlist = () => {
     const [watchlist_title, setWatchlistTitle] = useState();
 
     const [refresh, setRefresh] = useState(false); // Add a state for refreshing
-    const handleFollow = async (channel_title) => {
+    
+    const handleUnfollow = async (channel_title) => {
         console.log("Clicked to unfollow: " + channel_title)
         try{
             const url = "http://localhost:8800/unfollow";
@@ -111,7 +112,7 @@ const Watchlist = () => {
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
 
-                            <td><button onClick={() => handleFollow(channel.channel_name)}>Unfollow ❌</button></td>
+                            <td><button onClick={() => handleUnfollow(channel.channel_name)}>Unfollow ❌</button></td>
                             <td>
                             <a href={`/channel/${channel.channel_name}`}>
 

@@ -171,27 +171,57 @@ app.post("/register", async (req,res) => {
 })
 
 // Handles Follow request
-app.post("/follow", (req, res) => {
-    const channel = req.body.username
-    const pass = req.body.password
-    const q = `UPDATE users
-        SET password = ?
-        WHERE username LIKE ?;`
+// app.post("/follow", (req, res) => {
+//     const username = req.body.username
+//     const channel = req.body.channel_title
+//     const watchlist_id = req.body.watchlist_id
+//     const watchlist_title = req.body.watchlist_title
+//     const comments = req.body.comments
+
+//     const q = `INSERT INTO users(username, watchlist_id, title, channel_id, comments)
+//                 VALUES (${username}, ${watchlist_id}, ${watchlist_title}, ${channel}, ${comments})
+//                 `
     
-    db.query(q,[pass, user] ,(err,data) => {
-        if (err) {
-            console.log(err)
-            return res.json(err);
-        } else if (data.affectedRows == 1)  {
-            // if affected rows does not equal 1, no rows were changed.
-            console.log(`@${user}'s password sucessfully changed.`);
-            return res.json({ success: true, username: user, message:`@${user}'s password sucessfully changed.`});  
-        } else {
-            console.log(`@${user}'s password change failed.`);
-            return res.json({ success: false, username: user, message:`@${user}'s password change failed.`});  
-        }
-    });
+//     db.query(q ,(err,data) => {
+//         if (err) {
+//             console.log(err)
+//             return res.json(err);
+//         } else if (data.affectedRows == 1)  {
+//             // if affected rows does not equal 1, no rows were changed.
+//             console.log(`@${username} added ${channel} to watchlist ${watchlist_title}`);
+//             return res.json({ success: true, username: user, message:`@${channel_title} added to watchlist.`});  
+//         } else {
+//             console.log(`Updating watchlist failed.`);
+//             return res.json({ success: false, message:`Watchlist edit  failed.`});  
+//         }
+//     });
+// });
+app.post("/follow", (req, res) => {
+    const username = req.body.username
+    const watchlist_title = req.body.watchlist_title
+    const channel_title = req.body.channel_title
+
+    console.log(`/follow called with the following parameters: ${username}, ${watchlist_title}, ${channel_title}`)
+    return res.json({sucess: true})
+    // const q = `INSERT INTO users(username, watchlist_id, title, channel_id, comments)
+    //             VALUES (${username}, ${watchlist_id}, ${watchlist_title}, ${channel}, ${comments})
+    //             `
+    
+    // db.query(q ,(err,data) => {
+    //     if (err) {
+    //         console.log(err)
+    //         return res.json(err);
+    //     } else if (data.affectedRows == 1)  {
+    //         // if affected rows does not equal 1, no rows were changed.
+    //         console.log(`@${username} added ${channel} to watchlist ${watchlist_title}`);
+    //         return res.json({ success: true, username: user, message:`@${channel_title} added to watchlist.`});  
+    //     } else {
+    //         console.log(`Updating watchlist failed.`);
+    //         return res.json({ success: false, message:`Watchlist edit  failed.`});  
+    //     }
+    // });
 });
+
 // Handles user changing password.
 app.post("/changePass", (req, res) => {
     const user = req.body.username

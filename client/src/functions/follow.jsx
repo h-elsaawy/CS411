@@ -1,60 +1,51 @@
-import {React, useState, useEffect } from "react";
+// follow.jsx
 import axios from "axios";
 
-const Follow = ({ channel_title: channel_title }) => {
-  const [selectedWatchlist, setSelectedWatchlist] = useState("");
-  const [watchlists, setWatchlists] = useState([]);
+const follow = async (channel_title) => {
+        // Create an object to organize the results by category
 
-  // Fetch user's watchlists
-  useEffect(() => {
-    const fetchWatchlists = async () => {
-      try {
-        const response = await axios.get("http://localhost:8800/watchlists");
-        
-        setWatchlists(response.data.watchlists);
-        console.log(watchlists)
-      } catch (error) {
-        console.error("Error fetching watchlists", error);
-      }
-    };
-
-    fetchWatchlists();
-  });
-
-  const handleFollow = async () => {
+    let watchlist_titles = [];
+    let watchlist_ids = [];
+    console.log(channel_title + ' follow button clicked')
+    
+    // Fetch user's watchlist
     try {
-      const response = await axios.post("http://localhost:8800/follow", {
-        channel_title: channel_title,
-        watchlistName: selectedWatchlist,
-      });
+        const username = sessionStorage.getItem("username");
+        const response = await axios.get(`http://localhost:8800/getwatchlists/${username}`);
+        console.log(response)
 
-      if (response.data.success) {
-        console.log(`Successfully followed ${channel_title} to ${selectedWatchlist}`);
-        // Add logic to update UI or handle success
-      } else {
-        console.error(`Failed to follow ${channel_title}`, response.data.message);
-        // Add logic to handle failure
-      }
+
+        // Iterate through the results and organize them by category
+        response.data.forEach((row) => {
+            const id = row.watchlist_id;
+            const title = row.title;
+            watchlist_ids.push(id);
+            watchlist_titles.push(title)
+        });
+        // watchlist_ids = await response.data;
+        console.log(watchlist_ids, watchlist_titles)
+        let watchlist_str = '';
+        let num_watchlists = watchlist_ids.length;
+        console.log(num_watchlists)
+        for (let i=0; i<num_watchlists; i++) {
+            console.log(`${watchlist_ids[i]} - ${watchlist_titles[i]} \n`)
+            watchlist_str = watchlist_str.concat(`${watchlist_ids[i]} - ${watchlist_titles[i]} \n`)
+
+        }
+        console.log(watchlist_str)
+        let watchlist = prompt("Please enter which watchlist to add channel to, or to create new watchlist input unique watchlist title: \n\n" +watchlist_str )
+
     } catch (error) {
-      console.error("Error in follow request", error);
-      // Add logic to handle error
+        console.error("Error fetching watchlists", error);
     }
-  };
 
-  return (
-    <div>
-      <p>Select watchlist:</p>
-      <select value={selectedWatchlist} onChange={(e) => setSelectedWatchlist(e.target.value)}>
-        <option value="">Select watchlist</option>
-        {watchlists.map((watchlist) => (
-          <option key={watchlist} value={watchlist}>
-            {watchlist}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleFollow}>Follow 👆</button>
-    </div>
-  );
+    console.log("outside the function, " + watchlist_ids)
+
+
+    return (
+    //will return the status of the code running
+    true
+    );
 };
 
-export default Follow;
+export default follow;
