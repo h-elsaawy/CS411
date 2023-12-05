@@ -186,56 +186,38 @@ app.post("/register", async (req,res) => {
 })
 
 // Handles Follow request
-// app.post("/follow", (req, res) => {
-//     const username = req.body.username
-//     const channel = req.body.channel_title
-//     const watchlist_id = req.body.watchlist_id
-//     const watchlist_title = req.body.watchlist_title
-//     const comments = req.body.comments
-
-//     const q = `INSERT INTO users(username, watchlist_id, title, channel_id, comments)
-//                 VALUES (${username}, ${watchlist_id}, ${watchlist_title}, ${channel}, ${comments})
-//                 `
-    
-//     db.query(q ,(err,data) => {
-//         if (err) {
-//             console.log(err)
-//             return res.json(err);
-//         } else if (data.affectedRows == 1)  {
-//             // if affected rows does not equal 1, no rows were changed.
-//             console.log(`@${username} added ${channel} to watchlist ${watchlist_title}`);
-//             return res.json({ success: true, username: user, message:`@${channel_title} added to watchlist.`});  
-//         } else {
-//             console.log(`Updating watchlist failed.`);
-//             return res.json({ success: false, message:`Watchlist edit  failed.`});  
-//         }
-//     });
-// });
 app.post("/follow", (req, res) => {
     const username = req.body.username
+    const channel = req.body.channel
+    const watchlist_id = req.body.watchlist_id
     const watchlist_title = req.body.watchlist_title
-    const channel_title = req.body.channel_title
+    const comments = req.body.comments
 
-    console.log(`/follow called with the following parameters: ${username}, ${watchlist_title}, ${channel_title}`)
-    return res.json({sucess: true})
-    // const q = `INSERT INTO users(username, watchlist_id, title, channel_id, comments)
-    //             VALUES (${username}, ${watchlist_id}, ${watchlist_title}, ${channel}, ${comments})
-    //             `
-    
-    // db.query(q ,(err,data) => {
-    //     if (err) {
-    //         console.log(err)
-    //         return res.json(err);
-    //     } else if (data.affectedRows == 1)  {
-    //         // if affected rows does not equal 1, no rows were changed.
-    //         console.log(`@${username} added ${channel} to watchlist ${watchlist_title}`);
-    //         return res.json({ success: true, username: user, message:`@${channel_title} added to watchlist.`});  
-    //     } else {
-    //         console.log(`Updating watchlist failed.`);
-    //         return res.json({ success: false, message:`Watchlist edit  failed.`});  
-    //     }
-    // });
+    const q = `INSERT INTO watchlist(username, watchlist_id, title, channel_id, comments)
+                VALUES ('${username}', ${watchlist_id}, '${watchlist_title}', '${channel}', '${comments}')
+                `
+    console.log(q)
+    db.query(q ,(err,data) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                console.log('Attempted to add duplicate entry added to the same watchlist.')
+                return res.json({ success: false, message:`Channel is already in the selected watchlist.`});  
+            } else {
+                console.log(err)
+                return res.json({ success: false, message:`The database update failed due to a fatal error.`})
+            }
+            
+        } else if (data.affectedRows == 1)  {
+            // if affected rows does not equal 1, no rows were changed.
+            console.log(`@${username} added ${channel} to watchlist ${watchlist_title}`);
+            return res.json({ success: true, message:`@${channel} added to ${watchlist_title}.`});  
+        } else {
+            console.log(`Updating watchlist failed.`);
+            return res.json({ success: false, message:`Channel follow request failed.`});  
+        }
+    });
 });
+
 
 // Handles user changing password.
 app.post("/changePass", (req, res) => {

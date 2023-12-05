@@ -1,9 +1,10 @@
 // follow.jsx
 import axios from "axios";
 
-const follow = async (channel_title) => {
-        // Create an object to organize the results by category
 
+const follow = async (channel_title, source_page) => {
+        // Create an object to organize the results by category
+    
     let watchlist_titles = [];
     let watchlist_ids = [];
     console.log(channel_title + ' follow button clicked')
@@ -39,11 +40,12 @@ const follow = async (channel_title) => {
 
         // Check to see if the user's selected watchlist is in the user's watchlists?
         // if user selected an existing watchlist, build the json for the request.
+        let request = {}
         if (watchlist_ids.includes(parseInt(selected_watchlist)) || watchlist_titles.includes(selected_watchlist.toLowerCase())) {
             if (watchlist_ids.indexOf(parseInt(selected_watchlist)) > -1 ){
                 let comment = prompt("Input comments: \n")
 
-                const request = {
+                request = {
                     username: sessionStorage.getItem('username'),
                     watchlist_id: selected_watchlist,
                     watchlist_title: watchlist_titles[watchlist_ids.indexOf(parseInt(selected_watchlist))],
@@ -54,7 +56,7 @@ const follow = async (channel_title) => {
             } else if (watchlist_titles.indexOf(selected_watchlist) > -1) {
                 let comment = prompt("Input comments: \n")
 
-                const request = {
+                request = {
                     username: sessionStorage.getItem('username'),
                     watchlist_id: watchlist_ids[watchlist_titles.indexOf(selected_watchlist)],
                     watchlist_title: selected_watchlist,
@@ -65,14 +67,14 @@ const follow = async (channel_title) => {
             } 
         // Else, create a new watchlist ID and title for the new watchlist.
         }else if (selected_watchlist.length <= 1) {
-                let selected_watchlist = prompt(`Watchlist ID: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
-                console.log(typeof selected_watchlist)
+                let selected_watchlist_new = prompt(`Watchlist ID: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
+
                 let comment = prompt("Input comments: \n")
 
-                const request = {
+                request = {
                     username: sessionStorage.getItem('username'),
-                    watchlist_id: watchlist_ids.max() + 1,
-                    watchlist_title: selected_watchlist,
+                    watchlist_id: Math.max(watchlist_ids) + 1,
+                    watchlist_title: selected_watchlist_new,
                     channel: channel_title,
                     comments: comment
                 }
@@ -83,11 +85,25 @@ const follow = async (channel_title) => {
             headers: {
               "Content-Type": "application/json",
             },
-      });
+        });
+        if (postResponse.data.success) {
+            // Save the watchlist (e.g., in sessionStorage) for subsequent requests
+            let updated_list = sessionStorage.getItem('watchlist');
+            console.log(updated_list + typeof updated_list)
+            updated_list.concat(',',channel_title);
+            // updated_list.push(channel_title);
+            let list = updated_list.split(',')
+            console.log(list)
+            sessionStorage.setItem('watchlist', list)
+            alert(postResponse.data.message )
+            console.log(postResponse.data.message )
+            // window.location.reload(true);
+            
+          } else {
+            // Handle login failure
+            alert(postResponse.data.message);
 
-        
-
-
+          }
 
     } catch (error) {
         console.error("Error fetching watchlists", error);
