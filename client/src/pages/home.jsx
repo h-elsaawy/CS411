@@ -33,14 +33,18 @@ const Home = () => {
             watchlists_with_channel +=  "\n" + returned_watchlists[i]["watchlist_id"] + " - " + returned_watchlists[i]["title"];
             valid_watchlist_ids.push(parseInt(returned_watchlists[i]["watchlist_id"]));
           }
-          const watchlist_id = parseInt(prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`));
-          if(valid_watchlist_ids.includes(watchlist_id)){
-            const res = await axios.post(url, {username, channel_title , watchlist_id});
-            window.location.reload(true);
+          let watchlist_id = prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`);
+          if(watchlist_id != null){
+            if(valid_watchlist_ids.includes(parseInt(watchlist_id))){
+              const res = await axios.post(url, {username, channel_title , watchlist_id});
+              window.location.reload(true);
+            }
+            else{
+              alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
+            }
+
           }
-          else if(watchlist_id != null){
-            alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
-          }
+          
       } catch (err) {
           console.log("Error unfollowing:", err);
       }
@@ -64,11 +68,11 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
-
+                <button onClick={() => follow(channel.channel_title)}>Follow 👆</button>
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
-                            : (<button><Link to="/login">Follow 👆</Link></button>)}
+                                    (<button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button>) : "")
+                            : ""}
 
               </div>
             ))}
