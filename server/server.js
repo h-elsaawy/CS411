@@ -31,19 +31,15 @@ app.use(bodyParser.json());
 app.get("/search/", (req,res) => {
 
     const string = req.query.search; 
-
-    
     const type_string = req.query.type
     // console.log(req, req.params.string)
+
     console.log(req.query)
 
-    const q = `SELECT youtuber as channel FROM channels WHERE youtuber LIKE "%${string}%"
-                UNION
-               SELECT channel_title as channel FROM videos WHERE channel_title LIKE "%${string}%";` ;
-    const q2 = `CALL variablesearch("${string}", "${type_string}");`
-    console.log(q2)
+    const q = `CALL variablesearch("${string}", "${type_string}");`
+    console.log(q)
 
-    db.query(q2,  (err, data) => {
+    db.query(q,  (err, data) => {
         if (err) return res.json(err);
         //console.log(data[0])
         return res.json(data[0])

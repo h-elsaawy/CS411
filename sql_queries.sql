@@ -144,16 +144,19 @@ BEGIN
 
 
     IF searchType = "youtuber" THEN
-        SELECT youtuber AS channel_title, youtuber AS title FROM channels WHERE youtuber LIKE CONCAT('%', searchTerm, '%')
+        SELECT youtuber AS channel_title, youtuber AS title 
+        FROM channels 
+        WHERE youtuber LIKE CONCAT('%', searchTerm, '%');
 		UNION
-        SELECT channel_title, title  FROM videos WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
+        SELECT channel_title, title  
+        FROM videos 
+        WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
+
     ELSEIF searchType = "title" THEN
         SELECT DISTINCT channel_title, title FROM videos WHERE title LIKE CONCAT('%', searchTerm, '%');
     ELSEIF searchType = "tags" THEN
         SELECT DISTINCT channel_title, title FROM (videos JOIN tags USING (video_id))  WHERE tags LIKE CONCAT('%', searchTerm, '%');
     END IF;
-
-
     
 END //
 

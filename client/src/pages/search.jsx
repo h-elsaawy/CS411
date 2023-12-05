@@ -17,7 +17,7 @@ const Search = () => {
 
 
     const handleSubmit = async e => {
-        // e.preventDefault();
+        e.preventDefault();
 
         if (search_str === "") {
             setResults([])
@@ -68,7 +68,7 @@ const Search = () => {
                         checked={type_str=== 'title'}
                         onChange={handleTypeChange}
                         />
-                        Title
+                        Video Title
                     </label>
 
                     <label>
