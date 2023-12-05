@@ -66,6 +66,17 @@ img{
     gap: 2px;
 }
 
+
+
+.followbutton:hover {
+    background-color: #45a049;
+}
+
+.unfollowbutton:hover {
+    background-color: #a04545;
+}
+
+
 /* Link {
     text-decoration: none;
 } */

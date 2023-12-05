@@ -3,6 +3,7 @@ import axios from "axios";
 import Navbar from "../container/Navbar.jsx";
 import editWatchlistName from "../functions/editwatchlistname.jsx";
 import deleteWatchlistName from "../functions/deletewatchlistname.jsx";
+import './home.css';
 
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);
@@ -97,7 +98,7 @@ const Watchlists = () => {
                     <div key = {watchlist.id} className = "">
                         <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a>: </h2>
                         <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button> 
-                        <button onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
+                        <button className="unfollowbutton" onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
                             
                             <table className="watchlists-table" cellPadding="2" cellSpacing="2">
                                 <thead>
@@ -110,8 +111,8 @@ const Watchlists = () => {
                                 </thead>
                                 <tbody>
                                 {watchlist["channels"].map((channel, ind) => (
-                                    <tr key = {channel} className = "">
-                                        <td><button onClick={() => handleUnfollow(channel, watchlist.id)}>Unfollow ❌</button></td>
+                                    <tr key = {channel} className = "" >
+                                        <td><button className="unfollowbutton" onClick={() => handleUnfollow(channel, watchlist.id)}>Unfollow ❌</button></td>
                                         <td><a href={`/channel/${channel}`}>{channel}</a></td>
                                         <td>{watchlist["comments"][ind]}</td>
                                         <td><button onClick={() => handleEditComment(channel, index+1)}>Edit Comment 📝</button></td>

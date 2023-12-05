@@ -75,8 +75,8 @@ const Home = () => {
                 
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<><button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
-                                    <button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
+                                    (<><button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
+                                    <button className = "unfollowbutton" onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
                             : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
 
               </div>

@@ -4,6 +4,7 @@ import Navbar from "../container/Navbar";
 import { useParams } from "react-router-dom";
 import editWatchlistName from "../functions/editwatchlistname.jsx";
 import deleteWatchlistName from "../functions/deletewatchlistname.jsx";
+import './home.css';
 
 const Watchlist = () => {
     const { id } = useParams();
@@ -119,7 +120,7 @@ const Watchlist = () => {
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
                             <td>
-                                <button onClick={() => handleUnfollow(channel.channel_name, id)}>
+                                <button className="unfollowbutton" onClick={() => handleUnfollow(channel.channel_name, id)}>
                                     Unfollow ❌
                                 </button>
                             </td>
