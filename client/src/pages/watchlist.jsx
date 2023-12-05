@@ -98,7 +98,7 @@ const Watchlist = () => {
                 {Navbar()}
             </>
             <h1>@{username}, here is information on your watchlist titled:</h1>
-            <h2><u>{watchlist_title}</u> <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button></h2>
+            <h2><u>{watchlist_title}</u> <button onClick={() => editWatchlistName(id, username)}>Edit Watchlist Name 📝</button></h2>
             <table className="watchlists-table" cellpadding="4" cellspacing="2">
                 
                 <thead>
