@@ -57,7 +57,7 @@ const Home = () => {
                 <h3 id="channelTitle">
                 {sessionStorage.getItem("watchlist") ?
                   (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a> ❤️</>) : (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a></>))
-                  : (<>{channel.channel_title}</>)
+                  : (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a></>)
                 }
             </h3>
                 <p>
