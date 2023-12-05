@@ -215,8 +215,8 @@ BEGIN
         FROM videos LEFT JOIN channels ON (videos.channel_title = channels.youtuber)
         WHERE videos.title LIKE CONCAT('%', searchTerm, '%')
         GROUP BY channel_title
-        ORDER BY MAX(video_views);
-        
+        ORDER BY count(videos.video_id);
+
     ELSEIF searchType = "tags" THEN
         -- searches all the video tags that contain the string
         SELECT DISTINCT channel_title, title as video_title
