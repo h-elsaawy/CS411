@@ -51,6 +51,53 @@ app.get("/getwatchlists/:username", (req, res) => {
         return res.json(data);
     });
 });
+
+// app.post("/search", (req,res) => {
+    
+//     console.log("searching");
+//     const search_string = req.body.search_string; //replace w/keywords list ?
+//     const type_string = req.body.type_string;
+//     const q = `CALL variablesearch("${search_string}", "${type_string}");`
+ 
+//     db.query(q,  (err, data) => {
+//         if (err) return res.json(err);
+//         console.log(data[0])
+//         return res.json(data[0])
+
+//     })
+// })
+
+
+
+app.get("/search/", (req,res) => {
+
+    const string = req.query.search; //replace w/keywords list ?
+
+    
+    const type_string = req.query.type
+    // console.log(req, req.params.string)
+    console.log(req.query)
+
+    const q = `SELECT youtuber as channel FROM channels WHERE youtuber LIKE "%${string}%"
+                UNION
+               SELECT channel_title as channel FROM videos WHERE channel_title LIKE "%${string}%";` ;
+    const q2 = `CALL variablesearch("${string}", "${type_string}");`
+    console.log(q2)
+
+    db.query(q2,  (err, data) => {
+        if (err) return res.json(err);
+        //console.log(data[0])
+        return res.json(data[0])
+
+    })
+
+    // db.query(q, (err, data) => {
+    //     if (err) return res.json(err);
+    //     console.log(data)
+    //     return res.json(data)
+    // })
+    // return res.json({message: "hi", body: req.body})
+})
     
 app.post("/user", (req,res) => {
     const q = "INSERT INTO users (`username`, `name`, `password`, `email`, `region_id`, `role`) VALUES (?)";

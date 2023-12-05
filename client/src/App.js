@@ -5,7 +5,7 @@ import Home from "./pages/home.jsx"
 import Watchlists from "./pages/watchlists.jsx"
 import Videos from "./pages/videos.jsx"
 import Login from "./container/Login.js"
-import Search from "./components/Search";
+import Search from "./pages/search.jsx";
 
 function App() {
   return (

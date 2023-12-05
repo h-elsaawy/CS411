@@ -40,6 +40,29 @@ LIMIT 5;
 --
 
 
+-- CREATE PROCEDURE `variablesearch`(
+--     IN searchTerm VARCHAR(255),
+--     IN searchType VARCHAR(10)
+-- )
+-- BEGIN
+
+
+
+--     IF searchType = "youtuber" THEN
+--         SELECT youtuber AS channel_title, youtuber AS title FROM channels WHERE youtuber LIKE CONCAT('%', searchTerm, '%')
+-- 		UNION
+--         SELECT channel_title, title  FROM videos WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
+--     ELSEIF searchType = "title" THEN
+--         SELECT DISTINCT channel_title, title FROM videos WHERE title LIKE CONCAT('%', searchTerm, '%');
+--     ELSEIF searchType = "tags" THEN
+--         SELECT DISTINCT channel_title, title FROM (videos JOIN tags USING (video_id))  WHERE tags LIKE CONCAT('%', searchTerm, '%');
+--     END IF;
+
+
+    
+-- END
+
+
 `
 SELECT c.title, v.channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
 FROM distinct_videos v JOIN (SELECT c1.category_id, c1.title
