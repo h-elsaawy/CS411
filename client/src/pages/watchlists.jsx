@@ -115,7 +115,7 @@ const Watchlists = () => {
                                         <td><button className="unfollowbutton" onClick={() => handleUnfollow(channel, watchlist.id)}>Unfollow ❌</button></td>
                                         <td><a href={`/channel/${channel}`}>{channel}</a></td>
                                         <td>{watchlist["comments"][ind]}</td>
-                                        <td><button onClick={() => handleEditComment(channel, index+1)}>Edit Comment 📝</button></td>
+                                        <td><button onClick={() => handleEditComment(channel, watchlist.id)}>Edit Comment 📝</button></td>
                                     </tr>))}
 
                                 </tbody>
