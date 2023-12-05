@@ -14,32 +14,45 @@ const Watchlist = () => {
         console.log("Clicked to unfollow: " + channel_title);
         try {
             const url = "http://localhost:8800/unfollow";
-            await axios.post(url, { username, channel_title, watchlist_id });
-            // Update state only after a successful unfollow
-            setChannelsInWatchList((prevChannels) =>
+            const res3 = await axios.post(url, { username, channel_title, watchlist_id });
+            console.log(res3);
+            if(res3.data.success){
+                setChannelsInWatchList((prevChannels) =>
                 prevChannels.filter((channel) => channel.channel_name !== channel_title)
             );
+            }
+            else{
+                alert(res3.data.message);
+            }
+            // Update state only after a successful unfollow
+            
         } catch (err) {
             console.log("Error unfollowing:", err);
         }
     };
 
-    const handleEditComment = async (channel_title) => {
+    const handleEditComment = async (channel_title, id) => {
         console.log("Clicked to edit comment for: " + channel_title);
         try {
             // Replace this URL with your actual edit comment API endpoint
             const editCommentUrl = "http://localhost:8800/editComment";
             const newComment = prompt("Enter new comment:");
             if (newComment !== null) {
-                await axios.post(editCommentUrl, { username, channel_title, newComment });
-                // Update state only after a successful comment edit
-                setChannelsInWatchList((prevChannels) =>
+                const result = await axios.post(editCommentUrl, { username, channel_title, newComment, id });
+                if(result.data.success){
+                    setChannelsInWatchList((prevChannels) =>
                     prevChannels.map((channel) =>
                         channel.channel_name === channel_title
                             ? { ...channel, comments: newComment }
                             : channel
                     )
                 );
+                }
+                else{
+                    alert(result.data.message);
+                }
+                // Update state only after a successful comment edit
+                
             }
         } catch (err) {
             console.error("Error editing comment:", err);
@@ -99,7 +112,7 @@ const Watchlist = () => {
                     {channels.map((channel) => (
                         <tr key={channel.channel_name} className="watchlists-row">
                             <td>
-                                <button onClick={() => handleUnfollow(channel.channel_name)}>
+                                <button onClick={() => handleUnfollow(channel.channel_name, id)}>
                                     Unfollow ❌
                                 </button>
                             </td>
@@ -110,7 +123,7 @@ const Watchlist = () => {
                             </td>
                             <td>{channel.comments}</td>
                             <td>
-                                <button onClick={() => handleEditComment(channel.channel_name)}>
+                                <button onClick={() => handleEditComment(channel.channel_name, id)}>
                                     Edit Comment 📝
                                 </button>
                             </td>
