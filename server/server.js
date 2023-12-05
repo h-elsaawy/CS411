@@ -89,6 +89,7 @@ app.post("/unfollow", (req, res) => {
     const user = req.body.username
     const channel = req.body.channel_title
     const id = req.body.watchlist_id
+    console.log(user, channel, id);
     const q = `DELETE FROM watchlist
         WHERE username = ? and channel_id = ? and watchlist_id = ?;`
     
@@ -111,12 +112,13 @@ app.post("/editComment", (req, res) => {
     const comment = req.body.newComment
     const user = req.body.username
     const channel = req.body.channel_title
+    const id = req.body.id
     
     const q = `UPDATE watchlist
         SET comments = ?
-        WHERE username = ? and channel_id = ?;`
+        WHERE username = ? and channel_id = ? and watchlist_id = ?;`
     
-    db.query(q,[comment, user, channel] ,(err,data) => {
+    db.query(q,[comment, user, channel, id] ,(err,data) => {
         if (err) {
             console.log(err)
             return res.json(err);
