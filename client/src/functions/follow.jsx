@@ -99,7 +99,7 @@ const follow = async (channel_title, source_page) => {
         
         ;
 
-        if (confirm(`Add ${request.channel} to (${request.watchlist_id}) - '${request.watchlist_title}?' `)){ // eslint-disable-line no-restricted-globals
+        if (confirm(`Add ${request.channel} to '${request.watchlist_title}?' `)){ // eslint-disable-line no-restricted-globals
             // Post info to the database 
             const postResponse = await axios.post("http://localhost:8800/follow", request, {
                 headers: {

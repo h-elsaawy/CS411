@@ -3,6 +3,8 @@ import axios from "axios";
 import Navbar from "../container/Navbar";
 import { useParams } from "react-router-dom";
 import editWatchlistName from "../functions/editwatchlistname.jsx";
+import deleteWatchlistName from "../functions/deletewatchlistname.jsx";
+
 const Watchlist = () => {
     const { id } = useParams();
     const username = sessionStorage.getItem('username');
@@ -98,7 +100,11 @@ const Watchlist = () => {
                 {Navbar()}
             </>
             <h1>@{username}, here is information on your watchlist titled:</h1>
-            <h2><u>{watchlist_title}</u> <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button></h2>
+            <h2><u>{watchlist_title}</u> </h2>
+            <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button> 
+            <button onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
+
+            <br></br><br></br>
             <table className="watchlists-table" cellpadding="4" cellspacing="2">
                 
                 <thead>

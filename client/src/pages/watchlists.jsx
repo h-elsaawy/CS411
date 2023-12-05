@@ -2,6 +2,8 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../container/Navbar.jsx";
 import editWatchlistName from "../functions/editwatchlistname.jsx";
+import deleteWatchlistName from "../functions/deletewatchlistname.jsx";
+
 const Watchlists = () => {
     const [watchlists, setWatchlists] = useState([]);
     const [actual_watchlists, setActualWatchlists] = useState([]);
@@ -93,8 +95,9 @@ const Watchlists = () => {
             <div className="">
                 {actual_watchlists.map((watchlist, index)=> (
                     <div key = {watchlist.id} className = "">
-                        <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels: <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button></h2>
-                        
+                        <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a>: </h2>
+                        <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button> 
+                        <button onClick={() => deleteWatchlistName(watchlist.id,watchlist.name, username)}>Delete Watchlist ❌</button>
                             
                             <table className="watchlists-table" cellpadding="2" cellSpacing="2">
                                 <thead>

@@ -164,6 +164,31 @@ app.post("/editWatchlist", (req, res) => {
             return res.json({ success: false, username: user, message:`@${user}' failed to update watchlist ${watchlist_id} with name ${new_name}`});  
         }
     })
+});
+
+// Delete watchlist
+app.post("/deleteWatchlist", (req, res) => {
+    const watchlist_title = req.body.watchlist_title
+    const watchlist_id = req.body.watchlist_id
+    const user = req.body.user
+    console.log(user, ' requested to delete ', watchlist_id, watchlist_title);
+
+    const q = `DELETE FROM watchlist
+                WHERE username = ? and watchlist_id = ? and title LIKE ?;`
+
+    db.query(q, [user, watchlist_id, watchlist_title], (err, data) => {
+        // console.log(data);
+        if (err) {
+            console.log(err)
+            return res.json(err);
+        } else if (data.affectedRows >= 1)  {
+            console.log(`@${user}' deleted watchlist ${watchlist_id} - ${watchlist_title}`);
+            return res.json({ success: true, username: user, message:`@${user} deleted watchlist ${watchlist_id} - ${watchlist_title}`});  
+        } else {
+            console.log(`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title}`);
+            return res.json({ success: false, username: user, message:`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title}`});  
+        }
+    })
 })
 
 // Get watchlist ids for a specific channel and user
@@ -247,7 +272,7 @@ app.post("/follow", (req, res) => {
 
     const q = `INSERT INTO watchlist(username, watchlist_id, title, channel_id, comments)
                 VALUES (?,?,?,?,?) `
-    console.log(q)
+
     db.query(q, [username, watchlist_id, watchlist_title, channel, comments], (err,data) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
