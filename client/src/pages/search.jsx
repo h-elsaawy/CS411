@@ -1,5 +1,5 @@
 import { React, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import axios from 'axios'
 import Navbar from "../container/Navbar"
 
@@ -9,7 +9,7 @@ const Search = () => {
     // const type_str = "youtuber"
     const [type_str, setTypeStr] = useState("youtuber");
     const [results, setResults] = useState([]);
-    const navigate = useNavigate();
+
 
     const handleTypeChange = (event) => {
         setTypeStr(event.target.value);
@@ -28,19 +28,15 @@ const Search = () => {
                 console.log(res)
                 if (res.data !== undefined) {
                     setResults(res.data);
-                } 
-                else
-                {
+                } else {
                     setResults([]);
                 }
-
-                console.log(results);
-            } catch (err){
+            } catch (err) {
                 console.log(err);
             }
         }
+    }
 
-  }
     return (
         <div>
             <>{Navbar()}</>

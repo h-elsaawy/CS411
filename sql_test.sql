@@ -1,53 +1,39 @@
--- -- Stored procedure to update users.
--- DROP PROCEDURE IF EXISTS set_user;
+-- Create the variable search procedure
+DROP PROCEDURE IF EXISTS variablesearch2;
+DELIMITER //
 
--- DELIMITER //
--- CREATE PROCEDURE set_user(
---     IN user_in VARCHAR(30),
---     IN name_in VARCHAR(30),
---     IN password_in VARCHAR(30),
---     IN email_in VARCHAR(255),
---     IN region_id_in VARCHAR(2),
---     IN role_in TINYINT(1)
--- )
--- BEGIN
---     DECLARE user_set_code VARCHAR(30) DEFAULT(NULL);
---     -- Check to make sure username or email is not already used.
---     IF ((SELECT COUNT(*) FROM users u WHERE u.username LIKE user_in ) > 0) THEN
---         SET user_set_code = "username";
---     ELSEIF (SELECT COUNT(*) FROM users u WHERE u.email LIKE email_in ) > 0 THEN
---         SET user_set_code = "email";
---     ELSE
---         START TRANSACTION;
---         BEGIN
---             INSERT INTO users (username, name, password, email, region_id, role)
---             VALUES (user_in, name_in, password_in, email_in, region_id_in, role_in);
---             COMMIT;
---             SET user_set_code = "created";
---         END;
---     END IF;
---     SELECT user_set_code;
--- END //
--- SHOW WARNINGS //
+CREATE PROCEDURE `variablesearch2`(
+    IN searchTerm VARCHAR(255),
+    IN searchType VARCHAR(10)
+)
+BEGIN
+
+    IF searchType = "youtuber" THEN
+        -- Searches all the channel titles for the input str
+        SELECT youtuber AS channel_title
+        FROM channels
+        WHERE youtuber LIKE CONCAT('%', searchTerm, '%')
+     UNION
+        SELECT channel_title 
+        FROM videos 
+        WHERE channel_title LIKE CONCAT('%', searchTerm, '%');
 
 
--- DELIMITER ;
+    ELSEIF searchType = "title" THEN
+        -- searches all the videos for video_titles that contain the string
+        SELECT DISTINCT channel_title 
+        FROM videos LEFT JOIN channels ON (videos.channel_title = channels.youtuber)
+        WHERE videos.title LIKE CONCAT('%', searchTerm, '%')
+        GROUP BY channel_title
+        ORDER BY MAX(video_views);
+    ELSEIF searchType = "tags" THEN
+        -- searches all the video tags that contain the string
+        SELECT DISTINCT channel_title, title as video_title
+        FROM (videos JOIN tags USING (video_id))  
+        WHERE tags LIKE CONCAT('%', searchTerm, '%');
+    END IF;
+    
+END //
 
--- CALL set_user(
---     "haadi2",
---     "haadi elsaawy",
---     "test1234",
---     "haadi@hotmail.com",
---     "US",
---     0
--- );
--- SHOW WARNINGS ;
-
--- -- SELECT @return_code;
-
-
-
-
-CALL UpdateWatchlistIDsForUser('haadi');
-
-SELECT * FROM watchlist where username = 'haadi' ORDER BY lower(title);
+DELIMITER ;
+CALL variablesearch2('help', 'title');

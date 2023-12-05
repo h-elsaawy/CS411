@@ -69,7 +69,7 @@ const follow = async (channel_title, source_page) => {
                 console.log('watchlist requested was a string: ' + JSON.stringify(request))
             } 
 
-        // Else, create a new watchlist ID and title for the new watchlist.
+        // Else, create a new watchlist ID and title for the new watchlist if user selects a number that isn't a watchlist ID.
         } else if (parseInt(selected_watchlist) > 0) {
                 let selected_watchlist_new = prompt(`Watchlist: ${selected_watchlist} does not exist, please input a title for the new watchlist. \n`)
 
@@ -83,6 +83,7 @@ const follow = async (channel_title, source_page) => {
                     comments: comment
                 }
                 console.log('watchlist requested was a new string: ' + JSON.stringify(request))
+        // Handles the case that the user picks a new watchlist title to start, or user has no watchlists (new users)
         } else if (Math.max(watchlist_ids) < 0 || watchlist_ids.length == 0) {
             let comment = prompt("Input comments: \n")
 
@@ -107,7 +108,7 @@ const follow = async (channel_title, source_page) => {
             });
             if (postResponse.data.success) {
                 // reload screen so session storage updates
-                // window.location.reload(true);
+                window.location.reload(true);
                 
             } else {
                 // Handle login failure
