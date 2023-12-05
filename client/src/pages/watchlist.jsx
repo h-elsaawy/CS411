@@ -99,7 +99,7 @@ const Watchlist = () => {
             </>
             <h1>@{username}, here is information on your watchlist titled:</h1>
             <h2><u>{watchlist_title}</u></h2>
-            <table className="watchlists-table" cellpadding="10" >
+            <table className="watchlists-table" cellpadding="4" cellspacing="2">
                 
                 <thead>
                     <tr>

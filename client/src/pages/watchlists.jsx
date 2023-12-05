@@ -92,7 +92,7 @@ const Watchlists = () => {
             <div className="">
                 {actual_watchlists.map((watchlist, index)=> (
                     <div key = {watchlist.id} className = "">
-                        <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels:</h2>
+                        <h2><a href={`/watchlist/${watchlist.id}`}><u>{watchlist.id})  {watchlist.name}</u></a> has channels:</h2>
                             
                             <table className="watchlists-table" cellpadding="10" >
                                 <thead>
