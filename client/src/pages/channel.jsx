@@ -31,6 +31,7 @@ const Channel = () => {
             <h1>Channel Watch</h1>
 
             <Grid  container spacing={2} >
+            <Grid item xs={2}></Grid>
             <Grid  item xs={3}>
             {channel.map((ch) => (
                 <div key={1}>
@@ -38,13 +39,7 @@ const Channel = () => {
                 </div>
             ))}
             </Grid>
-            <Grid item xs={3}>
-            {channel.map((ch) => (
-                <div key={2}>
-                    <>{RankCard(290, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
-                </div>
-            ))}
-            </Grid>
+            
             <Grid item xs={3}>
             {channel.map((ch) => (
                 <div key={4} >
@@ -59,18 +54,26 @@ const Channel = () => {
                 </div>
             ))}
             </Grid>
-            <Grid item xs={3}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={3}>
+            {channel.map((ch) => (
+                <div key={2}>
+                    <>{RankCard(300, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
+                </div>
+            ))}
+            </Grid>
             <Grid item xs={3}>
             {channel.map((ch) => (
                 <div key={4} >
-                    <>{graphCard(90,400, 'Subs for Last 30 Days', 'Current', 'Gained',ch.subscribers, ch.subscribers_for_last_30_days)}</> 
+                    <>{graphCard(90,300, 'Subs for Last 30 Days', 'Current', 'Gained',ch.subscribers, ch.subscribers_for_last_30_days)}</> 
                 </div>
             ))}
             </Grid>
             <Grid item xs={3}>
             {channel.map((ch) => (
                 <div key={4} > {/* left padding, width, labels, data */}
-                    <>{graphCard(110, 400, 'Views for Last 30 Days', 'Current', 'Gained',ch.video_views, ch.video_views_for_the_last_30_days)}</> 
+                    <>{graphCard(110, 300, 'Views for Last 30 Days', 'Current', 'Gained',ch.video_views, ch.video_views_for_the_last_30_days)}</> 
                 </div>
             ))}
             </Grid>
