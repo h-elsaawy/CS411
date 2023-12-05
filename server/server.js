@@ -120,7 +120,7 @@ app.post("/editComment", (req, res) => {
     const user = req.body.username
     const channel = req.body.channel_title
     const id = req.body.id.toString()
-    
+    console.log(comment, user, channel, id);
     const q = `UPDATE watchlist
         SET comments = ?
         WHERE username = ? and channel_id = ? and watchlist_id = ?;`
