@@ -89,14 +89,14 @@ const Watchlists = () => {
                 {Navbar()}
             </>
             <h1> Watchlists for {username}: </h1>
-            ____________________________________________________________________________________________________________________________________
+            _____________________________________________________________________________________________________________________________________________________________
             <div className="">
                 {actual_watchlists.map((watchlist, index)=> (
                     <div key = {watchlist.id} className = "">
                         <h2><a href={`/watchlist/${watchlist.id}`}>{watchlist.name}</a> has channels: <button onClick={() => editWatchlistName(watchlist.id, username)}>Edit Watchlist Name 📝</button></h2>
                         
                             
-                            <table className="watchlists-table" cellpadding="2" cellSpacing="0">
+                            <table className="watchlists-table" cellpadding="2" cellSpacing="2">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -119,7 +119,7 @@ const Watchlists = () => {
 
 
                             </table>
-                            ____________________________________________________________________________________________________________________________________
+                            _____________________________________________________________________________________________________________________________________________________________
 
 
                             
