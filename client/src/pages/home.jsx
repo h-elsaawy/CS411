@@ -1,8 +1,6 @@
-import React, { useEffect } from "react"
+import { React, useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
-import { Link } from "react-router-dom";
-import {smallCard} from "../container/card.jsx"
 import Navbar from "../container/Navbar"
 import './home.css';
 
@@ -119,7 +117,6 @@ const Home = () => {
             }
         }
         fetchTopChannels();
-        //var hasUsername = sessionStorage.getItem("username");
         
     }, [])
     return (
