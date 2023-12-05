@@ -127,8 +127,6 @@ app.post("/editComment", (req, res) => {
 app.get("/getWatchlistIds/:username/:channel_id", (req, res) => {
     const username = req.params.username
     const channel_id = req.params.channel_id
-    console.log(username);
-    console.log(channel_id);
     const q = `SELECT DISTINCT watchlist_id, title
         FROM watchlist
         WHERE username = ? and channel_id = ?;`
@@ -142,16 +140,16 @@ app.get("/getWatchlistIds/:username/:channel_id", (req, res) => {
 app.get("/channel/:channel_title", (req,res) => {
 
     const channel_title = req.params.channel_title;
-
+    console.log("berfore call");
     const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
                     video_views_rank, country_rank, channel_type_rank,
                     lowest_monthly_earnings,highest_monthly_earnings, 
                     lowest_yearly_earnings, highest_yearly_earnings,
                     subscribers_for_last_30_days, video_views_for_the_last_30_days,
                     created_year, created_month, created_date 
-                    FROM channels WHERE youtuber LIKE "%${channel_title}%" LIMIT 1;`;
-
-    db.query(q, [username, id], (err, data) => {
+                    FROM channels WHERE youtuber LIKE ? LIMIT 1;`;
+    console.log(channel_title);
+    db.query(q, [channel_title], (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
 

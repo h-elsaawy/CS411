@@ -17,6 +17,7 @@ const Channel = () => {
                 const url = "http://localhost:8800/channel/" + channel_title
                 const res = await axios.get(url);
                 setChannel(res.data);
+                console.log("hi");
             } catch(err) {
                 console.log(err);
             }
