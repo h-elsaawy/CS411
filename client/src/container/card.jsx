@@ -6,10 +6,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-
+import { BarChart } from '@mui/x-charts/BarChart';
 import Button from '@mui/material/Button';
 
+import Chart from 'chart.js/auto'
+
+
 import './card.css';
+import { red } from '@mui/material/colors';
 
 export function smallCard(size, channel_title, num_videos, num_views){
 
@@ -59,13 +63,37 @@ return (
 );
 }
 
-export function StatsCard(size, title, ...data) {
-  const labels = ['Highest Yearly Earnings: ', 'Highest Monthly Earnings: ', 'Lowest Yearly Earnings: ', 'Lowest Monthly Earnings: ', 'Subscribers For The Last 30 Days: ', 'Video Views For The Last 30 Days: '] 
+export function graphCard(lp,size, title, label1, label2, ...stats) {
+return (
+  <Card sx={{ maxWidth: size}}>
+    <CardContent>
+      <Typography gutterBottom variant="h5" component="div">
+        {title}
+      </Typography>
+      <BarChart
+          xAxis={[
+            {
+              id: 'earnings',
+              data: [label1,label2],
+              scaleType: 'band',
+            },
+          ]}
+          series={[
+            {
+              data: stats,
+            },
+          ]}
+          width={size}
+          height={300}
+          margin={{top: 50, right: 50, bottom: 50, left: lp}}
+          colors={['#ff0000']}
+        />
+    </CardContent>
+  </Card>
+);
+}
 
-  const listItems = data.map( function(x, i){
-      if(labels[i])
-          return <li key={x}><strong>{labels[i]}</strong>{x}</li>        
-  }.bind());
+export function StatsCard(size, title, label1, label2, label3,...stats) {
 
 return (
   <Card sx={{ maxWidth: size }}>
@@ -73,15 +101,32 @@ return (
       <Typography gutterBottom variant="h5" component="div">
         {title}
       </Typography>
-      <ul>
-      <Typography variant="body2" color="text.secondary">
-          {listItems}
-      </Typography>
-      </ul>
+      <BarChart
+          xAxis={[
+            {
+              id: 'earnings',
+              data: [label1,label2,label3],
+              scaleType: 'band',
+            },
+          ]}
+          series={[
+            {
+              data: stats,
+            },
+          ]}
+          width={size}
+          height={300}
+          margin={{top: 50, right: 50, bottom: 50, left: 90}}
+          colors={['#ff0000']}
+        />
     </CardContent>
   </Card>
 );
 }
+
+
+
+
 
 
 export function MediaCard(size, channel_title, ...data) {
@@ -89,7 +134,7 @@ export function MediaCard(size, channel_title, ...data) {
 
     const listItems = data.map( function(x, i){
         if(labels[i])
-            return <li key={x}><strong>{labels[i]}</strong>{x}</li>        
+            return <li key={(x,i)}><strong >{labels[i]}</strong>{x}</li>        
     }.bind());
   
   return (
@@ -112,7 +157,6 @@ export function MediaCard(size, channel_title, ...data) {
       </CardContent>
       <CardActions>
         <Button variant="outlined">{sessionStorage.getItem("username") ? (<Link to=".">Follow</Link>) : (<Link to="/login">Follow</Link>)}</Button>
-
         </CardActions>
     </Card>
   );
