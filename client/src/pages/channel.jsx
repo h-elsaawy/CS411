@@ -23,7 +23,7 @@ const Channel = () => {
             }
         }
         fetchChannelStats();
-    });
+    }, []);
 
     return (
         <div className="page" >
