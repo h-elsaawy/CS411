@@ -146,8 +146,7 @@ app.get("/getWatchlistIds/:username/:channel_id", (req, res) => {
 
 app.get("/channel/:channel_title", (req,res) => {
 
-    const channel_title = req.params.channel_title;
-    console.log("berfore call");
+    const title = req.params.channel_title;
     const q = `SELECT youtuber as channel_title, subscribers, video_views, uploads, region, channel_type, 
                     video_views_rank, country_rank, channel_type_rank,
                     lowest_monthly_earnings,highest_monthly_earnings, 
@@ -155,11 +154,21 @@ app.get("/channel/:channel_title", (req,res) => {
                     subscribers_for_last_30_days, video_views_for_the_last_30_days,
                     created_year, created_month, created_date 
                     FROM channels WHERE youtuber LIKE ? LIMIT 1;`;
-    console.log(channel_title);
-    db.query(q, [channel_title], (err, data) => {
+    console.log(title);
+    db.query(q, [title], (err, data) => {
         if (err) return res.json(err);
-        return res.json(data);
 
+        if(data[0] === undefined){ // channel DNE in our database
+            data = [{
+                  channel_title: title, subscribers: 'null', video_views: 'null', uploads: 'null',
+                  region: 'null', channel_type: 'null', video_views_rank: 'null', country_rank: 'null',
+                  channel_type_rank: 'null', lowest_monthly_earnings: 'null', highest_monthly_earnings: 'null', 
+                  lowest_yearly_earnings: 'null', highest_yearly_earnings: 'null', subscribers_for_last_30_days: 'null',
+                  video_views_for_the_last_30_days: 'null', created_year: 'null', created_month: 'null', created_date: 'null'
+                }];
+        } 
+        
+        return res.json(data);
     });
 });
     

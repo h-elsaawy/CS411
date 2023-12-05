@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react";
 import Navbar from "../container/Navbar.jsx"
-import { MediaCard, RankCard, StatsCard} from "../container/card.jsx"
+import { MediaCard, RankCard, graphCard, StatsCard} from "../container/card.jsx"
 import { useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import './home.css';
@@ -9,7 +9,6 @@ import './home.css';
 const Channel = () => {
     const { channel_title } = useParams();
     const [channel, setChannel] = useState([]);
-    // const [isClick, setClick] = useState();
 
     useEffect( () => {
         const fetchChannelStats = async () => { 
@@ -17,7 +16,6 @@ const Channel = () => {
                 const url = "http://localhost:8800/channel/" + channel_title
                 const res = await axios.get(url);
                 setChannel(res.data);
-                console.log("hi");
             } catch(err) {
                 console.log(err);
             }
@@ -32,42 +30,50 @@ const Channel = () => {
             <div className="channel">
             <h1>Channel Watch</h1>
 
-            <Grid  container spacing={2}>
-            <Grid item xs={4}>
+            <Grid  container spacing={2} >
+            <Grid  item xs={3}>
             {channel.map((ch) => (
                 <div key={1}>
-                    <>{MediaCard(560, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>
+                    <>{MediaCard(300, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>
                 </div>
             ))}
             </Grid>
-            <Grid item xs={8}>
-            {channel.map((ch) => (
-                <div key={4} >
-                    <>{StatsCard(460, 'Stats', ch.highest_yearly_earnings, ch.highest_monthly_earnings,ch.lowest_yearly_earnings, ch.lowest_monthly_earnings, ch.subscribers_for_last_30_days, ch.video_views_for_the_last_30_days)}</>
-                </div>
-            ))}
-            </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={3}>
             {channel.map((ch) => (
                 <div key={2}>
-                    <>{RankCard(460, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
-                </div>
-            ))}
-            </Grid>{/*
-            <Grid item xs={4}>
-            {channel.map((ch) => (
-                <div key={3} >
-                    <>{MediaCard(800, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.country_rank, ch.channel_type,ch.created_year,ch.highest_yearly_earnings,ch.highest_monthly_earnings)}</>
+                    <>{RankCard(290, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
                 </div>
             ))}
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={3}>
             {channel.map((ch) => (
                 <div key={4} >
-                    <>{StatsCard(460, 'Stats', ch.highest_yearly_earnings, ch.highest_monthly_earnings,ch.lowest_yearly_earnings, ch.lowest_monthly_earnings, ch.subscribers_for_last_30_days, ch.video_views_for_the_last_30_days)}</>
+                    <>{graphCard(90,300, 'Yearly Earnings', 'Highest', 'Lowest',ch.highest_yearly_earnings, ch.lowest_yearly_earnings)}</> 
                 </div>
             ))}
-            </Grid> */}
+            </Grid>
+            <Grid item xs={3}>
+            {channel.map((ch) => (
+                <div key={4} >
+                    <>{graphCard(90, 300, 'Monthly Earnings', 'Highest', 'Lowest',ch.highest_monthly_earnings, ch.lowest_monthly_earnings)}</> 
+                </div>
+            ))}
+            </Grid>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={3}>
+            {channel.map((ch) => (
+                <div key={4} >
+                    <>{graphCard(90,400, 'Subs for Last 30 Days', 'Current', 'Gained',ch.subscribers, ch.subscribers_for_last_30_days)}</> 
+                </div>
+            ))}
+            </Grid>
+            <Grid item xs={3}>
+            {channel.map((ch) => (
+                <div key={4} > {/* left padding, width, labels, data */}
+                    <>{graphCard(110, 400, 'Views for Last 30 Days', 'Current', 'Gained',ch.video_views, ch.video_views_for_the_last_30_days)}</> 
+                </div>
+            ))}
+            </Grid>
             </Grid>
             </div>
         </div>
