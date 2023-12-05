@@ -90,10 +90,13 @@ const follow = async (channel_title, source_page) => {
             // Save the watchlist (e.g., in sessionStorage) for subsequent requests
             let updated_list = JSON.parse(sessionStorage.getItem('watchlist'));
             updated_list.push(channel_title);
-            sessionStorage.setItem('watchlist', JSON.stringify(updated_list));           
+            sessionStorage.setItem('watchlist', JSON.stringify(updated_list));
+            window.location.reload(true);
+            
           } else {
             // Handle login failure
             alert(postResponse.data.message);
+
           }
 
     } catch (error) {
