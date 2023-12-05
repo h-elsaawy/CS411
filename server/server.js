@@ -36,7 +36,7 @@ app.get("/search/", (req,res) => {
 
     console.log(req.query)
 
-    const q = `CALL variablesearch("${string}", "${type_string}");`
+    const q = `CALL variablesearch2("${string}", "${type_string}");`
 
 
     db.query(q,  (err, data) => {
