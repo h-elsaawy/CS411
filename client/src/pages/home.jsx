@@ -6,7 +6,7 @@ import {smallCard} from "../container/card.jsx"
 import Navbar from "../container/Navbar"
 import './home.css';
 
-import follow from "../functions/follow.jsx"
+import Follow from "../functions/follow.jsx"
 
 const Home = () => {
     const username = sessionStorage.getItem('username');
@@ -33,18 +33,26 @@ const Home = () => {
             watchlists_with_channel +=  "\n" + returned_watchlists[i]["watchlist_id"] + " - " + returned_watchlists[i]["title"];
             valid_watchlist_ids.push(parseInt(returned_watchlists[i]["watchlist_id"]));
           }
-          const watchlist_id = parseInt(prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`));
-          if(valid_watchlist_ids.includes(watchlist_id)){
-            const res = await axios.post(url, {username, channel_title , watchlist_id});
-            window.location.reload(true);
+          let watchlist_id = prompt(`Enter the watchlist id # you want to unfollow from: ${watchlists_with_channel}`);
+          if(watchlist_id != null){
+            if(valid_watchlist_ids.includes(parseInt(watchlist_id))){
+              const res = await axios.post(url, {username, channel_title , watchlist_id});
+              window.location.reload(true);
+            }
+            else{
+              alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
+            }
+
           }
-          else if(watchlist_id != null){
-            alert(`Invalid watchlist id #. Valid watchlists that contain ${channel_title} are: ${valid_watchlist_ids}, but you entered ${watchlist_id}.`);
-          }
+          
       } catch (err) {
           console.log("Error unfollowing:", err);
       }
   };
+
+  const unloggedinFollowClick = () => {
+    window.location.href = '/login';
+  }
 
 
     const renderCategory = (order, channels) => (
@@ -64,11 +72,12 @@ const Home = () => {
                   {channel.num_videos} videos<br/>
                   {channel.num_views} views
                 </p>
-
+                
                   {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
-                                    (<button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button>) : (<button onClick={() => follow(channel.channel_title)}>Follow 👆</button>))
-                            : (<button><Link to="/login">Follow 👆</Link></button>)}
+                                    (<><button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
+                                    <button onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
+                            : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
 
               </div>
             ))}
@@ -90,7 +99,21 @@ const Home = () => {
                 setChannels5(res.data[orders[4]]);
  
                 setOrders(res.data["order"]);
-
+                const url = "http://localhost:8800/getwatchlists/" + username;
+                const res2 = await axios.get(url);
+                const watchlistsData = res2.data;
+                console.log();
+                let all_channels = [];
+                for(let i = 0; i < watchlistsData.length; i++){
+                  let channels_list = JSON.parse(watchlistsData[i]["json_arrayagg(channel_id)"]);
+                  for(let j = 0; j < channels_list.length; j ++){
+                    if(!all_channels.includes(channels_list[j])){
+                      all_channels.push(channels_list[j]);
+                    }
+                  }
+                }
+                sessionStorage.setItem("watchlist", JSON.stringify(all_channels));
+                console.log(all_channels);
             } catch(err) {
                 console.log(err)
             }
