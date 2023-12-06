@@ -36,33 +36,33 @@ const searchAPI = ( title ) => {
                 channelId = String(results[0]['snippet']['channelId']); 
                 googleTitle = results[0]['snippet']['channelTitle']
 
-                // youtube.channels.list({
-                //     auth: gkey,
-                //     part: 'statistics',
-                //     id: channelId
-                // },  (err2, res2) => {
-                //     if (err2) {
-                //         console.log('The API returned an error: ' + err2);
-                //         return ;
-                //     }
-                //     const bigResults = res2.data.items;
-                //     if (!bigResults) {
-                //         console.log('No channel found.');
-                //         return ;
-                //     } else {
-                //         if(!bigResults[0]) {
-                //             return data
-                //         }    
+                youtube.channels.list({
+                    auth: gkey,
+                    part: 'statistics',
+                    id: channelId
+                },  (err2, res2) => {
+                    if (err2) {
+                        console.log('The API returned an error: ' + err2);
+                        return ;
+                    }
+                    const bigResults = res2.data.items;
+                    if (!bigResults) {
+                        console.log('No channel found.');
+                        return ;
+                    } else {
+                        if(!bigResults[0]) {
+                            return data
+                        }    
 
-                //         data[0].video_views = bigResults[0]['statistics']['viewCount'];
-                //         data[0].subscribers = bigResults[0]['statistics']['subscriberCount'];
-                //         data[0].uploads = bigResults[0]['statistics']['videoCount'];  
-                //         // call to backend
-                //         const response = axios.get(`http://localhost:8800/google/${title}/${data[0].subscribers}/${data[0].video_views}/${data[0].uploads}`);
+                        data[0].video_views = bigResults[0]['statistics']['viewCount'];
+                        data[0].subscribers = bigResults[0]['statistics']['subscriberCount'];
+                        data[0].uploads = bigResults[0]['statistics']['videoCount'];  
+                        // call to backend
+                        const response = axios.get(`http://localhost:8800/google/${title}/${data[0].subscribers}/${data[0].video_views}/${data[0].uploads}`);
                                   
-                //         console.log(data[0]);  
-                    // }
-                // })
+                        console.log(data[0]);  
+                }
+                })
             }    
         })
     }catch(err) {
