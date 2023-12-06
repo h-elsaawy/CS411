@@ -2,8 +2,6 @@ import express from 'express'
 import mysql from 'mysql'
 import cors from "cors"
 import bodyParser from 'body-parser'
-import JWT from 'jsonwebtoken' 
-// var path = require('path');
  
 const app = express()
  
@@ -26,7 +24,7 @@ app.use(cors(corsOptions));
 // Allows sending client requests using JSON.
 app.use(express.json())
 app.use(bodyParser.json());
-
+// Get a random channel for I'm feeling lucky
 app.get("/randomChannel", (req, res) => {
     const q = `SELECT youtuber 
                 FROM channels
@@ -43,7 +41,6 @@ app.get("/randomChannel", (req, res) => {
         }
     })
 })
-
 
 //Advanced search functionality
 app.get("/search/", (req,res) => {

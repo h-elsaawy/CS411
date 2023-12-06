@@ -30,12 +30,12 @@ LIMIT 5;
 
 -- Find the top trending channels in a category
 --  Top trending categories are 10 , 24, 1, 23, 22
-SELECT  channel_title, COUNT(video_id) AS num_videos, SUM(views) as num_views
-FROM distinct_videos v
-WHERE category_id = 10 
+SELECT  channel_title
+FROM distinct_videos v JOIN categories c using (category_id)
+WHERE c.title LIKE 'Entertainment' 
 GROUP BY channel_title
-ORDER BY num_videos DESC
-LIMIT 5;
+ORDER BY COUNT(video_id) DESC, SUM(views) DESC
+LIMIT 25;
 
 --
 
@@ -146,8 +146,8 @@ BEGIN
     DECLARE new_watchlist_id INT;
     DECLARE username VARCHAR(30);
     DECLARE channel_id VARCHAR(100);
-    DECLARE comments VARCHAR(255);
-    DECLARE watchlist_title VARCHAR(55); 
+    DECLARE comments VARCHAR(1000);
+    DECLARE watchlist_title VARCHAR(255); 
 
     -- declare the cursor
     DECLARE cur_watchlist CURSOR FOR
@@ -168,7 +168,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
     DROP TABLE IF EXISTS temp_watchlist;
-    CREATE TABLE temp_watchlist(watchlist_id INT, username VARCHAR(30), channel_id VARCHAR(100), comments VARCHAR(255), title VARCHAR(55));
+    CREATE TABLE temp_watchlist(watchlist_id INT, username VARCHAR(30), channel_id VARCHAR(100), comments VARCHAR(1000), title VARCHAR(255));
 
     OPEN cur_watchlist;
 
@@ -185,8 +185,12 @@ BEGIN
     END LOOP;
     CLOSE cur_watchlist;
 
-    DELETE FROM watchlist WHERE username = user_in;
-    INSERT INTO watchlist SELECT * FROM temp_watchlist;
+    -- SELECT user_in;
+
+    DELETE FROM watchlist w WHERE w.username LIKE user_in;
+    -- SELECT COUNT(*) FROM Watchlist;
+    INSERT INTO watchlist(watchlist_id, username, channel_id, comments, title) SELECT t.watchlist_id, t.username, t.channel_id, t.comments, t.title FROM temp_watchlist t;
+    -- SELECT * FROM temp_watchlist ORDER BY watchlist_id;
     DROP TABLE IF EXISTS temp_watchlist;
 END //
 DELIMITER ;

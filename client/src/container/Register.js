@@ -39,7 +39,11 @@ const Register = () => {
             return false;
         }
       }
-  
+      
+    const handleCancel = async e => {
+      window.location.href="http://localhost:3000/login/"
+
+    }
     const handleSubmit = async e => {
         e.preventDefault();
         // Enforce user info requirements
@@ -119,6 +123,9 @@ You will automatically be directed to the home page.`);
             
           </div>
         </form>
+        <br></br>
+        <button type="cancel" onClick={handleCancel}>Cancel</button>  
+
       </div>
     )
 }
