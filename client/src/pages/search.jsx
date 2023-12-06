@@ -1,8 +1,8 @@
 import { React, useState } from "react"
 import { useNavigate  } from "react-router-dom";
-import axios from 'axios'
-import Navbar from "../container/Navbar"
-
+import axios from 'axios';
+import Navbar from "../container/Navbar";
+import GetRandomChannel from "../functions/getRandomChannel.jsx";
 
 const Search = () => {
     const [search_str, setSearchStr] = useState("");
@@ -43,6 +43,7 @@ const Search = () => {
                 <form>
                 <label>Search: <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
                 <button type="submit" onClick={handleSubmit}>Submit</button>  
+                <button onClick={GetRandomChannel()}>I'm feelin' lucky!</button>
                 </form>
             <br></br>
             <div>

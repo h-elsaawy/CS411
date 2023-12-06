@@ -6,6 +6,7 @@ import { useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import './home.css';
 import Follow from "../functions/follow.jsx"
+import GetRandomChannel from "../functions/getRandomChannel.jsx";
 
 
 
@@ -69,7 +70,6 @@ const Channel = () => {
 
             <div className="channel">
             <h1>Channel Watch</h1>
-
             <Grid  container spacing={2} >
             <Grid item xs={2}></Grid>
             <Grid  item xs={3}>

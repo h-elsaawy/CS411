@@ -27,6 +27,23 @@ app.use(cors(corsOptions));
 app.use(express.json())
 app.use(bodyParser.json());
 
+app.get("/randomChannel", (req, res) => {
+    const q = `SELECT youtuber 
+                FROM channels
+                WHERE youtuber REGEXP '^[[:alnum:]]+$'
+                ORDER BY RAND()
+                LIMIT 1;`
+
+    db.query(q, (err, data) => {
+        if (err){
+            return res.json(err);
+        }else {
+            return res.json(data[0]);
+        }
+    })
+})
+
+
 //Advanced search functionality
 app.get("/search/", (req,res) => {
 
