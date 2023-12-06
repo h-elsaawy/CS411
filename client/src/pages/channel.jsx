@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import './home.css';
 import Follow from "../functions/follow.jsx";
 import getRandomChannel from "../functions/getRandomChannel.jsx";
+// import searchAPI from "../functions/googleChannel.jsx";
 
 
 
