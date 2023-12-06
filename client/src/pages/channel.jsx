@@ -5,8 +5,9 @@ import { MediaCard, RankCard, graphCard, StatsCard} from "../container/card.jsx"
 import { useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import './home.css';
-import Follow from "../functions/follow.jsx"
-import GetRandomChannel from "../functions/getRandomChannel.jsx";
+import Follow from "../functions/follow.jsx";
+import getRandomChannel from "../functions/getRandomChannel.jsx";
+
 
 
 
@@ -78,6 +79,8 @@ const Channel = () => {
                                     (<><button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>
                                     <button className = "unfollowbutton" onClick={() => handleUnfollow(channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>)
                             : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
+            <button onClick={getRandomChannel}>🍀 I'm feelin' lucky! 🍀</button>
+
             {channel.map((ch) => (
                 <div key={1}>
                     <>{MediaCard(300, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>

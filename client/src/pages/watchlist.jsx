@@ -48,10 +48,8 @@ const Watchlist = () => {
                         channel.channel_name === channel_title
                             ? { ...channel, comments: newComment }
                             : channel
-                    )
-                );
-                }
-                else{
+                    ));
+                } else {
                     alert(result.data.message);
                 }
                 // Update state only after a successful comment edit
@@ -97,9 +95,8 @@ const Watchlist = () => {
 
     return (
         <div>
-            <>
-                {Navbar()}
-            </>
+            <>{Navbar()}</>
+
             <h1>@{username}, here is information on your watchlist titled:</h1>
             <h2><u>{watchlist_title}</u> </h2>
             <button onClick={() => editWatchlistName(id, username)}>Edit Watchlist Name 📝</button> 
