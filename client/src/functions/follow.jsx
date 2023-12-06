@@ -60,7 +60,7 @@ const follow = async (channel_title) => {
             }
         };
 
-        // Ask user for watchlist comments for the new channel.
+        // Ask user for watchlist comments for the new channel only if the preceding watchlist_title assignment worked.
         if (request["watchlist_title"] != null) {
             let comment = prompt("Input comments: \n")
 
