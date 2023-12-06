@@ -44,40 +44,24 @@ const Search = () => {
             <br></br>
                 {/* <form> */}
                 <label>Search: <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
-                {type_str === 'category' && (<label>  Category: 
+                {type_str === 'category' && (<label> 
                 <select id="region" name="region" size="1" onChange={e => setSearchCat(e.target.value)}>
                     <option value="">Select a category</option>
-                    <option value="Action/Adventure">Action/Adventure</option>
-                    <option value="Anime/Animation">Anime/Animation</option>
                     <option value="Autos & Vehicles">Autos & Vehicles</option>
-                    <option value="Classics">Classics</option>
                     <option value="Comedy">Comedy </option>
-                    <option value="Documentary">Documentary</option>
-                    <option value="Drama">Drama</option>
                     <option value="Education">Education</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Family">Family</option>
                     <option value="Film & Animation">Film & Animation</option>
-                    <option value="Foreign">Foreign</option>
                     <option value="Gaming">Gaming</option>
-                    <option value="Horror">Horror</option>
                     <option value="Howto & Style">Howto & Style</option>
-                    <option value="Movies">Movies</option>
                     <option value="Music">Music</option>
                     <option value="News & Politics">News & Politics</option>
                     <option value="Nonprofits & Activism">Nonprofits & Activism</option>
                     <option value="People & Blogs">People & Blogs</option>
                     <option value="Pets & Animals">Pets & Animals</option>
                     <option value="Science & Technology">Science & Technology</option>
-                    <option value="SciFi/Fantasy">SciFi/Fantasy</option>
-                    <option value="Shorts">Shorts</option>
-                    <option value="Short Movies">Short Movies</option>
                     <option value="Shows">Shows</option>
                     <option value="Sports">Sports</option>
-                    <option value="Thriller">Thriller</option>
-                    <option value="Trailers">Trailers</option>
                     <option value="Travel & Events">Travel & Events</option>
-                    <option value="Videoblogging">Videoblogging</option>
                 </select>
             </label> )}
                 <button type="submit" onClick={handleSubmit}>Search 🔎</button>  
