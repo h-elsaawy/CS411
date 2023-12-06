@@ -30,18 +30,9 @@ const follow = async (channel_title) => {
 
         let selected_watchlist = prompt("Please enter which watchlist to add channel to, or to create new watchlist input unique watchlist title: \n\n" + watchlist_str )
         
+        // Build the request packet for the post function to update the user's watchlists.
         let request = {};
-        // if (Math.max(watchlist_ids) < 0 || watchlist_ids.length == 0) {
-        //     let comment = prompt("Input comments: \n")
 
-        //     request = {
-        //         username: sessionStorage.getItem('username'),
-        //         watchlist_id:  1,
-        //         watchlist_title: selected_watchlist,
-        //         channel: channel_title,
-        //         comments: comment
-        //     }
-        // }
         for (let i = 0; i < watchlist_ids.length; i++) {
             if (watchlist_ids[i] == parseInt(selected_watchlist) || watchlist_titles[i].toLowerCase() == selected_watchlist.toLowerCase()) {
                 request = {
@@ -54,10 +45,12 @@ const follow = async (channel_title) => {
         }
         // selected watchlist doesn't exist, user wants a new watchlist.
         if (request["watchlist_id"] == undefined) {
-            console.log('Watchlist is new, entered if statement')
-            while (!isNaN(selected_watchlist) && selected_watchlist != "") {
-                console.log('entered while loop')
-                selected_watchlist = prompt(`Watchlist: ${selected_watchlist} does not exist. Please input a non-numeric title for the new watchlist.`)
+            console.log('Watchlist is new, entered if statement')                
+            console.log('entered while loop: ', selected_watchlist, !isNaN(selected_watchlist))
+
+            while ((!isNaN(selected_watchlist) || selected_watchlist === '') && selected_watchlist != null)  {
+                console.log('entered while loop: ', selected_watchlist, !isNaN(selected_watchlist))
+                selected_watchlist = prompt(`Please input a valid non-numeric title for the new watchlist.`)
             }
             request = {
                 username: sessionStorage.getItem('username'),
@@ -68,35 +61,36 @@ const follow = async (channel_title) => {
         };
 
         // Ask user for watchlist comments for the new channel.
-        let comment = prompt("Input comments: \n")
+        if (request["watchlist_title"] != null) {
+            let comment = prompt("Input comments: \n")
 
-        request["comments"] = comment;
+            request["comments"] = comment;
 
-        console.log('Follow requested for: ' + JSON.stringify(request))
+            console.log('Follow requested for: ' + JSON.stringify(request))
 
 
-        if (confirm(`Add ${request.channel} to '${request.watchlist_title}?' `)){ // eslint-disable-line no-restricted-globals
-            // Post info to the database 
-            const postResponse = await axios.post("http://localhost:8800/follow", request, {
-                headers: {
-                "Content-Type": "application/json",
-                },
-            });
-            if (postResponse.data.success) {
-                // reload screen so session storage updates
-                window.location.reload(true);
-                
-            } else {
-                // Handle follow request failure
-                alert(postResponse.data.message);
+            if (confirm(`Add ${request.channel} to '${request.watchlist_title}?' `)){ // eslint-disable-line no-restricted-globals
+                // Post info to the database 
+                const postResponse = await axios.post("http://localhost:8800/follow", request, {
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                });
+                if (postResponse.data.success) {
+                    // reload screen so session storage updates
+                    window.location.reload(true);
+                    
+                } else {
+                    // Handle follow request failure
+                    alert(postResponse.data.message);
 
-            }
-        } else {alert('Follow request cancelled.')}
+                }
+            } else {alert('Follow request cancelled.')}
+        }
 
     } catch (error) {
         console.error("Error fetching watchlists", error);
     }
-
 
     return (
     //will return the status of the code running
