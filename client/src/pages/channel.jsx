@@ -80,7 +80,7 @@ const Channel = () => {
             <button onClick={getRandomChannel} style={{float: "right",}} >🍀 I'm feelin' lucky! 🍀</button>
             </div>
             <br></br>
-            <Grid  container spacing={2} item style={{width: "1200px"}} >
+            <Grid  container spacing={4} item style={{width: "1200px"}} >
             {/* <Grid item xs={2}></Grid> */}
             <Grid  item xs={4}>
             {channel.map((ch) => (
