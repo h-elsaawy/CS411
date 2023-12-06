@@ -234,7 +234,7 @@ BEGIN
 
     ELSEIF searchType = "tags" THEN
         -- searches all the video tags that contain the string
-        SELECT DISTINCT channel_title, title as video_title
+        SELECT DISTINCT channel_title
         FROM (videos JOIN tags USING (video_id))  
         WHERE tags LIKE CONCAT('%', searchTerm, '%');
     END IF;
