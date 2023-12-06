@@ -38,11 +38,13 @@ const follow = async (channel_title) => {
 
         watchlist_titles = watchlist_titles.map(title => title.toLowerCase())
 
+        const temp_selected_watchlist = selected_watchlist;
+        
         // Check to see if the user's selected watchlist is in the user's watchlists?
         // if user selected an existing watchlist, build the json for the request.
         let request = {};
-        console.log(watchlist_ids.includes(parseInt(selected_watchlist)) || watchlist_titles.includes(selected_watchlist.toLowerCase()))
-        if (watchlist_ids.includes(parseInt(selected_watchlist)) || watchlist_titles.includes(selected_watchlist.toLowerCase())) {
+        console.log(watchlist_ids.includes(parseInt(temp_selected_watchlist)) || watchlist_titles.includes(temp_selected_watchlist.toLowerCase()))
+        if (watchlist_ids.includes(parseInt(temp_selected_watchlist)) || watchlist_titles.includes(temp_selected_watchlist.toLowerCase())) {
             
             if (watchlist_ids.indexOf(parseInt(selected_watchlist)) > -1 ){
                 let comment = prompt("Input comments: \n")
