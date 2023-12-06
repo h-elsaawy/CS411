@@ -101,36 +101,35 @@ app.get("/getwatchlists/:username/:id", async (req, res) => {
     });
 });
 
-// Unfollows channel
+// Unfollows channel using a transaction and then updates the 
 app.post("/unfollow", (req, res) => {
     const user = req.body.username
     const channel = req.body.channel_title
     const id = req.body.watchlist_id
-    console.log(user, channel, id);
-    console.log(typeof user, typeof channel, typeof id);
-    const q = `DELETE FROM watchlist
-        WHERE username = ? and channel_id = ? and watchlist_id = ?;`
-    
-    db.query(q,[user, channel, id] ,(err,data) => {
+
+    // Create Transaction
+    const q = ` START TRANSACTION;
+                    DELETE FROM watchlist
+                    WHERE username = '${user}' and channel_id = '${channel}' and watchlist_id = ${id};
+                    CALL updateWatchlistIDsForUser2('${user}');
+                ROLLBACK;
+                `
+    console.log(q);
+    db.query(q,[user, channel, id, user] ,(err,data) => {
         if (err) {
             console.log(err)
-            return res.json(err);
-        } else if (data.affectedRows == 1)  {
+            return res.json({ success: false, username: user, message:`@${user}' unfollowing ${channel} failed due to Server Error`});  
+        } else if (data[1].affectedRows == 1)  {
             console.log(`@${user}' unfollowed ${channel}`);
-            db.query(`CALL updateWatchlistIDsForUser2('${user}')`,(err,data) => {
-                if (err) {
-                    console.log(err)
-                    return res.json(err);
-                } else {
-                    // console.log(data)
-                    return res.json({ success: true, username: user, message:`@${user}' unfollowed ${channel}, watchlist_id's updated.`}); 
-                } });
+            return res.json({ success: true, username: user, message:`@${user}' unfollowed ${channel}, watchlist_id update complete.`});  
         } else {
             console.log(`@${user}' unfollowing ${channel} failed`);
+            console.log(data[1]);
             return res.json({ success: false, username: user, message:`@${user}' unfollowing ${channel} failed`});  
         }
     });
 });
+
 
 // Edit Comment for Watchlist
 app.post("/editComment", (req, res) => {
@@ -189,29 +188,32 @@ app.post("/deleteWatchlist", (req, res) => {
     const watchlist_title = req.body.watchlist_title
     const watchlist_id = req.body.watchlist_id
     const user = req.body.user
-    console.log(user, ' requested to delete ', watchlist_id, watchlist_title);
+    console.log(`@${user} requested to delete (${watchlist_id})-watchlist_title`);
 
-    const q = `DELETE FROM watchlist
-                WHERE username = ? and watchlist_id = ? and title LIKE ?;`
+    const q = ` START TRANSACTION;
+                    DELETE FROM watchlist
+                    WHERE username = ? AND watchlist_id = ? AND title LIKE ?;
+                    CALL updateWatchlistIDsForUser2(?);
+                ROLLBACK;
+                `
+    // const q = `DELETE FROM watchlist
+    //             WHERE username = ? and watchlist_id = ? and title LIKE ?;`
 
-    db.query(q, [user, watchlist_id, watchlist_title], (err, data) => {
-        // console.log(data);
+    db.query(q, [user, watchlist_id, watchlist_title, user], (err, data) => {
+        console.log(data);
         if (err) {
             console.log(err)
-            return res.json(err);
-        } else if (data.affectedRows >= 1)  {
-            console.log(`@${user}' deleted watchlist ${watchlist_id} - ${watchlist_title}`);
-            db.query(`CALL updateWatchlistIDsForUser2('${user}')`,(err,data) => {
-                if (err) {
-                    console.log(err)
-                    return res.json(err);
-                } else {
-                    // console.log(data)
-                    return res.json({ success: true, username: user, message:`@${user} deleted watchlist ${watchlist_id} - ${watchlist_title}, watchlist_id's updated.`}); 
-                } });
+            return res.json({ success: false, username: user, message:`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title} due to SQL Error.` });  
+        } else if (data[1].affectedRows >= 1)  {
+            console.log(`@${user} deleted watchlist ${watchlist_id} - ${watchlist_title}`);
+            return res.json({success: true, 
+                            username: user, 
+                            message:`@${user} deleted watchlist ${watchlist_id} - ${watchlist_title}, watchlist_id's updated.`}); 
         } else {
             console.log(`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title}`);
-            return res.json({ success: false, username: user, message:`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title}`});  
+            return res.json({success: false, 
+                            username: user, 
+                            message:`failed to delete @${user}'s watchlist ${watchlist_id} - ${watchlist_title}`});  
         }
     })
 })

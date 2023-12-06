@@ -133,46 +133,61 @@ CALL set_user(
 );
 SELECT @retrun_code;
 
+
 -- Create the update watchlist ID's stored procedure and cursor. 
-DROP PROCEDURE if exists updateWatchlistIDsForUser;
+DROP PROCEDURE if exists updateWatchlistIDsForUser2;
 
 DELIMITER //
 
-CREATE PROCEDURE updateWatchlistIDsForUser(IN user_in VARCHAR(30))
+CREATE PROCEDURE updateWatchlistIDsForUser2(IN user_in VARCHAR(30))
 BEGIN
     DECLARE done INT DEFAULT FALSE; -- Break cursor and loop
     DECLARE old_watchlist_id INT;
     DECLARE new_watchlist_id INT;
     DECLARE username VARCHAR(30);
+    DECLARE channel_id VARCHAR(100);
+    DECLARE comments VARCHAR(255);
     DECLARE watchlist_title VARCHAR(55); 
 
     -- declare the cursor
     DECLARE cur_watchlist CURSOR FOR
-        SELECT w.watchlist_id AS old_watchlist_id, temp.new_watchlist_id as new_watchlist_id, w.username as username, temp.title as watchlist_title
-        FROM ( SELECT MIN(watchlist_id) AS watchlist_id, LOWER(title) AS title, ROW_NUMBER() OVER (ORDER BY LOWER(title)) AS new_watchlist_id
+        SELECT w.watchlist_id AS old_watchlist_id, 
+               temp.new_watchlist_id as new_watchlist_id, 
+               w.username as username, 
+               w.channel_id as channel_id,
+               w.comments as comments,
+               w.title as watchlist_title
+        FROM ( SELECT LOWER(w1.title) as title, ROW_NUMBER() OVER (ORDER BY LOWER(w1.title)) AS new_watchlist_id
                 FROM watchlist w1
                 WHERE w1.username = user_in
-                GROUP BY LOWER(title) ) AS temp
-            JOIN watchlist w ON (LOWER(w.title) = temp.title)
+                GROUP BY LOWER(w1.title) ) AS temp
+            JOIN watchlist w ON (LOWER(w.title) = LOWER(temp.title))
         WHERE w.username = user_in
-        ORDER BY temp.title;
+        ORDER BY new_watchlist_id ASC;
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    DROP TABLE IF EXISTS temp_watchlist;
+    CREATE TABLE temp_watchlist(watchlist_id INT, username VARCHAR(30), channel_id VARCHAR(100), comments VARCHAR(255), title VARCHAR(55));
 
     OPEN cur_watchlist;
 
     read_loop: LOOP
-        FETCH cur_watchlist INTO old_watchlist_id, new_watchlist_id, username, watchlist_title;
+        FETCH cur_watchlist INTO old_watchlist_id, new_watchlist_id, username, channel_id, comments, watchlist_title;
 
         IF done THEN
             LEAVE read_loop;
         END IF;
-  
-        UPDATE watchlist
-        SET watchlist_id = new_watchlist_id
-        WHERE username = username AND LOWER(title) = watchlist_title AND watchlist_id = old_watchlist_id;
+
+        INSERT INTO temp_watchlist(watchlist_id, username, channel_id, comments, title)
+        VALUES (new_watchlist_id, username, channel_id, comments, watchlist_title);
+
     END LOOP;
     CLOSE cur_watchlist;
+
+    DELETE FROM watchlist WHERE username = user_in;
+    INSERT INTO watchlist SELECT * FROM temp_watchlist;
+    DROP TABLE IF EXISTS temp_watchlist;
 END //
 DELIMITER ;
 
