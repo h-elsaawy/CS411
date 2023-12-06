@@ -112,7 +112,7 @@ app.post("/unfollow", (req, res) => {
                     DELETE FROM watchlist
                     WHERE username = '${user}' and channel_id = '${channel}' and watchlist_id = ${id};
                     CALL updateWatchlistIDsForUser2('${user}');
-                ROLLBACK;
+                COMMIT;
                 `
     console.log(q);
     db.query(q,[user, channel, id, user] ,(err,data) => {
@@ -192,9 +192,9 @@ app.post("/deleteWatchlist", (req, res) => {
 
     const q = ` START TRANSACTION;
                     DELETE FROM watchlist
-                    WHERE username = ? AND watchlist_id = ? AND title LIKE ?;
+                    WHERE username = ? AND watchlist_id = ? AND title = ?;
                     CALL updateWatchlistIDsForUser2(?);
-                ROLLBACK;
+                COMMIT;
                 `
     // const q = `DELETE FROM watchlist
     //             WHERE username = ? and watchlist_id = ? and title LIKE ?;`

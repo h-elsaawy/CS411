@@ -61,7 +61,7 @@ const Home = () => {
               <div className="category" key={channel.channel_title}>
                 <img className="channelCover" src="\yt_image.png" alt=""/>
                 <h3 id="channelTitle">
-                {sessionStorage.getItem("watchlist") ?
+                {(sessionStorage.getItem("watchlist") != []) ?
                   (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a> ❤️</>) : (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a></>))
                   : (<><a href={`/channel/${channel.channel_title}`}>{channel.channel_title}</a></>)
                 }
@@ -71,7 +71,7 @@ const Home = () => {
                   {channel.num_views} views
                 </p>
                 
-                  {sessionStorage.getItem("username")  ?
+                  {(sessionStorage.getItem("username") && sessionStorage.getItem("watchlist") != [])  ?
                             (sessionStorage.getItem("watchlist").includes(channel.channel_title) ? 
                                     (<><button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>
                                     <button className = "unfollowbutton" onClick={() => handleUnfollow(channel.channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel.channel_title)}>Follow 👆</button>)
@@ -100,7 +100,7 @@ const Home = () => {
                 const url = "http://localhost:8800/getwatchlists/" + username;
                 const res2 = await axios.get(url);
                 const watchlistsData = await res2.data;
-                console.log();
+
                 let all_channels = [];
                 for(let i = 0; i < watchlistsData.length; i++){
                   let channels_list = JSON.parse(watchlistsData[i]["json_arrayagg(channel_id)"]);

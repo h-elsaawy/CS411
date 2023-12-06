@@ -70,8 +70,8 @@ const Register = () => {
         
         } else {
           alert(`Welcome to Creator Capital Index @${sessionStorage.getItem('username')}. 
-You will automatically be directed to the Sign In page.`);
-          return navigate("/login");
+You will automatically be directed to the home page.`);
+          return navigate("/");
         }
       }
     };
