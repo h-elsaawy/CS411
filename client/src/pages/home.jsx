@@ -99,7 +99,7 @@ const Home = () => {
                 setOrders(res.data["order"]);
                 const url = "http://localhost:8800/getwatchlists/" + username;
                 const res2 = await axios.get(url);
-                const watchlistsData = res2.data;
+                const watchlistsData = await res2.data;
                 console.log();
                 let all_channels = [];
                 for(let i = 0; i < watchlistsData.length; i++){
