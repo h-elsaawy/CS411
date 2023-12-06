@@ -71,16 +71,18 @@ const Channel = () => {
 
             <div className="channel">
             <h1>Channel Watch</h1>
-            <Grid  container spacing={2} >
-            <Grid item xs={2}></Grid>
-            <Grid  item xs={3}>
+            <div>
             {sessionStorage.getItem("username")  ?
                             (sessionStorage.getItem("watchlist").includes(channel_title) ? 
                                     (<><button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>
                                     <button className = "unfollowbutton" onClick={() => handleUnfollow(channel_title)}>Unfollow ❌</button></>) : <button className = "followbutton" onClick={() => Follow(channel_title)}>Follow 👆</button>)
                             : <button onClick={unloggedinFollowClick}>Follow 👆</button>}
-            <button onClick={getRandomChannel}>🍀 I'm feelin' lucky! 🍀</button>
-
+            <button onClick={getRandomChannel} style={{float: "right",}} >🍀 I'm feelin' lucky! 🍀</button>
+            </div>
+            <br></br>
+            <Grid  container spacing={2} item style={{width: "1200px"}} >
+            {/* <Grid item xs={2}></Grid> */}
+            <Grid  item xs={4}>
             {channel.map((ch) => (
                 <div key={1}>
                     <>{MediaCard(300, ch.channel_title, ch.subscribers, ch.video_views, ch.uploads, ch.channel_type,ch.region, ch.created_date, ch.created_month, ch.created_year)}</>
@@ -88,37 +90,38 @@ const Channel = () => {
             ))}
             </Grid>
             
-            <Grid item xs={3}>
+            <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={4} >
                     <>{graphCard(90,300, 'Yearly Earnings', 'Highest', 'Lowest',ch.highest_yearly_earnings, ch.lowest_yearly_earnings)}</> 
                 </div>
             ))}
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={4} >
                     <>{graphCard(90, 300, 'Monthly Earnings', 'Highest', 'Lowest',ch.highest_monthly_earnings, ch.lowest_monthly_earnings)}</> 
                 </div>
             ))}
             </Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={3}>
+            {/* <Grid item xs={1}></Grid>
+            <Grid item xs={2}></Grid> */}
+            <br></br>
+            <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={2}>
                     <>{RankCard(300, 'Rankings',ch.country_rank, ch.channel_type_rank,ch.video_views_rank)}</>
                 </div>
             ))}
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={4} >
                     <>{graphCard(90,300, 'Subs for Last 30 Days', 'Current', 'Gained',ch.subscribers, ch.subscribers_for_last_30_days)}</> 
                 </div>
             ))}
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
             {channel.map((ch) => (
                 <div key={4} > {/* left padding, width, labels, data */}
                     <>{graphCard(110, 300, 'Views for Last 30 Days', 'Current', 'Gained',ch.video_views, ch.video_views_for_the_last_30_days)}</> 
