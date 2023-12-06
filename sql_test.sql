@@ -1,10 +1,10 @@
-
 -- Create the variable search procedure
 DROP PROCEDURE IF EXISTS variablesearch2;
 DELIMITER //
 
 CREATE PROCEDURE `variablesearch2`(
     IN searchTerm VARCHAR(255),
+    IN searchCategory VARCHAR(255),
     IN searchType VARCHAR(10)
 )
 BEGIN
@@ -31,9 +31,17 @@ BEGIN
         SELECT DISTINCT channel_title
         FROM (videos JOIN tags USING (video_id))  
         WHERE tags LIKE CONCAT('%', searchTerm, '%');
+
+    ELSEIF searchType = "category" THEN
+        SELECT  channel_title
+        FROM distinct_videos v JOIN categories c using (category_id)
+        WHERE c.title LIKE searchCategory AND v.channel_title LIKE CONCAT('%', searchTerm,'%')
+        GROUP BY channel_title
+        ORDER BY COUNT(video_id) DESC, SUM(views) DESC
+        LIMIT 25;
     END IF;
     
 END //
 
 DELIMITER ;
-CALL variablesearch2('help', 'title');
+CALL variablesearch2('50', 'entertainment', 'category' );

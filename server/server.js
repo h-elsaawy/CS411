@@ -49,20 +49,22 @@ app.get("/randomChannel", (req, res) => {
 app.get("/search/", (req,res) => {
 
     const string = req.query.search; 
-    const type_string = req.query.type
+    const type_string = req.query.type;
+    const cat_string = req.query.category;
     // console.log(req, req.params.string)
 
     console.log(req.query)
 
-    const q = `CALL variablesearch2("${string}", "${type_string}");`
+    const q = `CALL variablesearch2("${string}",  "${cat_string}", "${type_string}");`
 
+    console.log(q)
 
     db.query(q,  (err, data) => {
         if (err) {
             console.log(err);
             return res.json(err)
         } else {            
-            console.log(data[0])
+            // console.log(data[0])
             return res.json(data[0])
         }
     })
