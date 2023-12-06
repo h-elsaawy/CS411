@@ -117,7 +117,7 @@ app.post("/unfollow", (req, res) => {
             return res.json(err);
         } else if (data.affectedRows == 1)  {
             console.log(`@${user}' unfollowed ${channel}`);
-            db.query(`CALL updateWatchlistIDsForUser('${user}')`,(err,data) => {
+            db.query(`CALL updateWatchlistIDsForUser2('${user}')`,(err,data) => {
                 if (err) {
                     console.log(err)
                     return res.json(err);
@@ -201,7 +201,7 @@ app.post("/deleteWatchlist", (req, res) => {
             return res.json(err);
         } else if (data.affectedRows >= 1)  {
             console.log(`@${user}' deleted watchlist ${watchlist_id} - ${watchlist_title}`);
-            db.query(`CALL updateWatchlistIDsForUser('${user}')`,(err,data) => {
+            db.query(`CALL updateWatchlistIDsForUser2('${user}')`,(err,data) => {
                 if (err) {
                     console.log(err)
                     return res.json(err);
