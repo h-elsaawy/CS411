@@ -2,13 +2,31 @@ import { React, useState } from "react"
 import { useNavigate  } from "react-router-dom";
 import axios from 'axios';
 import Navbar from "../container/Navbar";
-import GetRandomChannel from "../functions/getRandomChannel.jsx";
+// import getRandomChannel from "../functions/getRandomChannel.jsx";
 
 const Search = () => {
     const [search_str, setSearchStr] = useState("");
     const [type_str, setTypeStr] = useState("youtuber");
     const [results, setResults] = useState([]);
 
+    const getRandomChannel = async () => {
+        try {
+            // alert("I'm feeling lucky clicked")
+            const response = await axios.get(`http://localhost:8800/randomChannel/`);
+            const result = await response.data;
+
+            console.log(result)
+            // alert("I'm feeling lucky clicked")
+
+            if (result.success) {
+                window.location.href=`http://localhost:3000/channel/${result.youtuber}`;
+            }    
+        }
+        catch (err) {
+            console.log("error editing watchlist name", err)
+    
+        }
+    };
 
     const handleTypeChange = (event) => {
         setTypeStr(event.target.value);
@@ -40,11 +58,13 @@ const Search = () => {
         <div>
             <>{Navbar()}</>
             <br></br>
-                <form>
+                {/* <form> */}
                 <label>Search: <input type="text" autoFocus onChange={e => setSearchStr(e.target.value)} /> </label>
-                <button type="submit" onClick={handleSubmit}>Submit</button>  
-                <button onClick={GetRandomChannel()}>I'm feelin' lucky!</button>
-                </form>
+                <button type="submit" onClick={handleSubmit}>Search 🔎</button>  
+                <button onClick={getRandomChannel}>🍀 I'm feelin' lucky! 🍀</button>
+
+                {/* </form> */}
+
             <br></br>
             <div>
                 <p>Search for:

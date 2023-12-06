@@ -38,7 +38,8 @@ app.get("/randomChannel", (req, res) => {
         if (err){
             return res.json(err);
         }else {
-            return res.json(data[0]);
+            console.log({youtuber: data[0].youtuber, success: true})
+            return res.json({youtuber: data[0].youtuber, success: true});
         }
     })
 })
